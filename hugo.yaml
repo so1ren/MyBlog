@@ -1,16 +1,26 @@
 baseURL: "https://caiyu.life/"
-title: "我的博客"
+title: "solren的网络自留地"
 theme: PaperMod
+languageCode: zh-cn
 
+hasCJKLanguage: true
 enableRobotsTXT: true
 buildDrafts: false
 buildFuture: false
 buildExpired: false
+enableEmoji: true
+defaultContentLanguage: zh
 
 minify:
   disableXML: true
   minifyOutput: true
 
+languages:
+  zh:
+     languageName: "中文"
+     taxonomies:
+      category: categories
+      tag: tags
 outputs:
   home:
     - HTML
@@ -19,33 +29,79 @@ outputs:
 
 params:
   # 主题模式: auto, light, dark
-  defaultTheme: auto
+  defaultTheme: light
   # 显示修改日期
   showPostNavLinks: true
   # 启用代码高亮
   enableHighlight: true
-  # 在主页显示文章摘要
-  description: "这是我的博客"
+  
+  mainSection:
+    - post
+  
+  dateFormat: "2006年01月02日"
+    
+  ShowToc: true
+  TocOpen: true
+  ShowLastMod: true
+  ShowReadingTime: true
 
+  assets:
+      favicon: "me.jpg"
+      favicon16x16: "me.jpg"
+      favicon32x32: "me.jpg"
+      apple_touch_icon: "me.jpg"
+      safari_pinned_tab: "me.jpg"
+
+  profileMode:
+    enabled: true
+    title: "<Title>" # optional default will be site title
+    subtitle: "我思故我在。"
+    imageUrl: "me.png" # optional
+    imageTitle: "I'm solren" # optional
+    imageWidth: 150 # custom size
+    imageHeight: 150 # custom size
+    
+    buttons:
+      - name: 文章
+        url: "/posts/"
+      - name: 关于
+        url: "/about/"
+
+  socialIcons:
+      - name: github
+        url: "https://github.com/so1ren"
+      - name: QQ
+        url: "qq.jpg"
+      - name: email
+        url: "mailto:caiyu2001@126.com"
+  
+  # 搜索
+  fuseOpts:
+    isCaseSensitive: false # 是否大小写敏感
+    shouldSort: true # 是否排序
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0     
+    keys: ["title", "permalink", "summary", "content"]
+    includeMatches: true
+
+          
 menu:
   main:
-    - identifier: categories
-      name: 分类
-      url: /categories/
-      weight: 10
     - identifier: tags
       name: 标签
       url: /tags/
-      weight: 20
+      weight: 10
     - identifier: archives
       name: 归档
       url: /archives/
-      weight: 30
+      weight: 20
     - identifier: search
       name: 搜索
       url: /search/
-      weight: 40
+      weight: 30
     - identifier: about
       name: 关于
       url: /about/
-      weight: 50
+      weight: 40
