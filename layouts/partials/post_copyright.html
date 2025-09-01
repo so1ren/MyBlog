@@ -1,0 +1,40 @@
+<div class="post-copyright">
+    <div class="post-copyright-header">
+        <span class="copyright-icon">©</span>
+        <span>版权声明</span>
+    </div>
+    <div class="post-copyright-content">
+        <div class="copyright-item">
+            <span class="item-label">作品标题：</span>
+            <span class="item-content"><a href="{{ .Permalink }}" target="_blank">{{ .Title }}</a></span>
+        </div>
+        <div class="copyright-item">
+            <span class="item-label">作　　者：</span>
+            <span class="item-content">
+                {{ if .Site.Params.author }}
+                    {{ .Site.Params.author }}
+                {{ else if .Site.Author.name }}
+                    {{ .Site.Author.name }}
+                {{ else }}
+                    {{ .Site.Title }}
+                {{ end }}
+            </span>
+        </div>
+        <div class="copyright-item">
+            <span class="item-label">许可协议：</span>
+            <span class="item-content">
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>
+            </span>
+        </div>
+        <div class="copyright-item">
+            <span class="item-label">转载要求：</span>
+            <span class="item-content">转载请注明原文链接及作者信息</span>
+        </div>
+    </div>
+    <div class="post-copyright-footer">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener noreferrer nofollow">
+            <img src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" alt="知识共享许可协议">
+            <span>查看协议详情</span>
+        </a>
+    </div>
+</div>
