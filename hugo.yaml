@@ -32,7 +32,7 @@ params:
   author: "So1ren"
 
   # 主题模式: auto, light, dark
-  defaultTheme: light
+  defaultTheme: auto
   
   # 显示修改日期
   showPostNavLinks: true
@@ -51,17 +51,19 @@ params:
   ShowReadingTime: true
 
   assets:
-      favicon: "me.jpg"
-      favicon16x16: "me.jpg"
-      favicon32x32: "me.jpg"
-      apple_touch_icon: "me.jpg"
-      safari_pinned_tab: "me.jpg"
+      favicon: "cow.jpg"
+      favicon16x16: "cow.jpg"
+      favicon32x32: "cow.jpg"
+      apple_touch_icon: "cow.jpg"
+      safari_pinned_tab: "cow.jpg"
+
+      disableHLJS: false
 
   profileMode:
     enabled: true
     title: "<Title>" # optional default will be site title
     subtitle: "我思故我在。"
-    imageUrl: "me.png" # optional
+    imageUrl: "cow.jpg" # optional
     imageTitle: "I'm solren" # optional
     imageWidth: 150 # custom size
     imageHeight: 150 # custom size
@@ -110,3 +112,33 @@ menu:
       name: 关于
       url: /about/
       weight: 40
+
+
+markup:
+  highlight:
+    noClasses: false
+    lineNos: true  # 启用行号
+    lineNumbersInTable: false
+    codeFolding: true
+    codeFoldingInit: "fold"
+    style: "github"  # 改为简约的github风格
+    tabWidth: 4 
+    guessSyntax: true
+    # 明确支持的语言
+    hl_Languages: [
+      "yaml", "yml",
+      "bash", "sh", "zsh",
+      "html", "xml",
+      "javascript", "js=javascript",
+      "typescript", "ts=typescript",
+      "css", "scss",
+      "python", "py=python",
+      "go", "golang",
+      "java",
+      "c", "cpp",
+      "rust", "rs=rust",
+      "sql",
+      "dockerfile", "docker",
+      "makefile", "mk=makefile",
+      "ini", "toml"
+    ]

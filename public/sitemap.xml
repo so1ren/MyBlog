@@ -3,10 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2025-08-29T11:26:57+08:00</lastmod>
+    <lastmod>2025-09-01T22:27:46+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2025-08-29T11:26:57+08:00</lastmod>
+    <lastmod>2025-09-01T22:27:46+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/%E5%9F%BA%E4%BA%8Ehugo%E5%92%8Cpapermod%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2025-09-01T22:27:46+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/about/</loc>
     <lastmod>2025-08-28T15:13:50+08:00</lastmod>
