@@ -1,0 +1,20 @@
+/* 增大导航菜单字体 */
+#menu li a {
+    font-size: 1.2rem !important;  /* 原始大小通常为1rem */
+    font-weight: 500;
+}
+
+/* 增大网站标题字体 */
+.logo a {
+    font-size: 1.8rem !important;  /* 原始大小通常为1.25rem */
+}
+
+/* 增大语言切换器字体 */
+.lang-switch li a {
+    font-size: 1rem !important;
+}
+
+/* 调整菜单项间距（可选） */
+#menu li {
+    margin-left: 2rem !important;  /* 增加间距避免文字拥挤 */
+}

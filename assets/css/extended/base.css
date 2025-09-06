@@ -1,0 +1,59 @@
+/* 基础变量定义 */
+:root {
+    /* 颜色变量 */
+    --primary-color: #3182ce;
+    --primary-dark: #2c5282;
+    --text-color: #4a5568;
+    --text-dark: #e2e8f0;
+    --bg-light: #fff;
+    --bg-dark: #2d3748;
+    --accent-light: #a8c6f7;
+    --accent-dark: #4a5568;
+    --border-light: #eaecef;
+    --border-dark: #4a5568;
+    
+    
+    /* 字体大小 */
+    --font-base: 18px;
+    --font-sm: 0.9em;
+    --font-lg: 1.1em;
+    --font-xl: 2.2rem;
+    
+    /* 间距 */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+}
+
+/* 暗色模式变量 */
+.dark {
+    --text-color: var(--text-dark);
+    --bg-light: var(--bg-dark);
+    --accent-light: var(--accent-dark);
+    --border-light: var(--border-dark);
+    
+    /* 代码块暗色模式 */
+    --code-block-bg: var(--code-block-bg-dark);
+    --code-block-border: var(--code-block-border-dark);
+    --code-header-bg: var(--code-header-bg-dark);
+    --code-header-text: var(--code-header-text-dark);
+    --code-text: var(--code-text-dark);
+    --code-lineno: var(--code-lineno-dark);
+}
+
+/* 基础样式 */
+body {
+    font-family: Arial, 'LXGW', sans-serif;
+    font-size: var(--font-base);
+    line-height: 1.8;
+    word-break: break-word;
+    background: var(--theme);
+    color: var(--text-color);
+    font-display: swap;
+}
+
+/* 代码块保持等宽字体 */
+code, pre {
+    font-family: 'Fira Code', 'Source Code Pro', monospace;
+}

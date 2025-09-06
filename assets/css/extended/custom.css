@@ -1,0 +1,16 @@
+/* 
+  自定义样式覆盖
+  此文件用于添加特定样式覆盖或临时修复
+*/
+
+/* 自定义粗体颜色 */ 
+:root { 
+    --bold-color-1: #ff1492; 
+    --bold-color-2: #e74c3c; 
+    --bold-color-3: #9b59b6; 
+    --bold-color-4: #2ecc71; 
+} 
+
+.post-content strong { 
+    color: var(--bold-color-1); 
+}

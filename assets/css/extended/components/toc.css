@@ -1,0 +1,214 @@
+/* 目录容器 */
+.post-toc-float {
+    position: fixed !important;
+    top: 150px;
+    right: 30px;
+    width: 280px;
+    max-height: 70vh;
+    padding: 0;
+    z-index: 999;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* 目录标题 */
+.toc-title {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    padding: 0;
+    color: var(--text-color);
+    background: transparent;
+    border: none;
+}
+
+.toc-title::before {
+    content: "📋📋";
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+/* 目录内容区域 */
+.toc {
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+    list-style-type: none;
+    max-height: 65vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.toc::-webkit-scrollbar {
+    display: none;
+}
+
+/* 移除所有列表标记和左侧内边距 */
+.toc, 
+.toc ul, 
+.toc li {
+    list-style: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* 目录项样式 */
+.toc li {
+    margin-bottom: 0.3rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.toc a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    text-decoration: none !important;
+    color: var(--text-color);
+    border-radius: 4px;
+    font-size: 0.92em;
+    transition: all 0.2s ease;
+    background: transparent;
+    font-weight: 400; /* 默认正常字体 */
+}
+
+.toc a:hover {
+    background: rgba(168, 198, 247, 0.1);
+    color: var(--primary-color);
+    transform: translateX(3px);
+}
+
+/* 阅读内容的目录项 - 加粗显示 */
+.toc a.reading {
+    font-weight: 600 !important;
+    color: var(--primary-color) !important;
+}
+
+/* 暗色模式下阅读目录项的颜色 */
+.dark .toc a.reading {
+    color: #90cdf4 !important; /* 更亮的蓝色，在暗色背景下更清晰 */
+}
+
+/* 活跃目录项 - 加粗显示并与阅读状态保持一致 */
+.toc a.active {
+    background: rgba(168, 198, 247, 0.15) !important;
+    color: var(--primary-dark) !important;
+    font-weight: 600 !important;
+    transform: translateX(5px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 暗色模式下活跃目录项的颜色 */
+.dark .toc a.active {
+    color: #90cdf4 !important; /* 与阅读状态保持一致 */
+}
+
+/* 嵌套层级 */
+.toc ul {
+    padding-left: 0.8rem;
+    margin-left: 0.3rem;
+    border-left: 1px dashed rgba(168, 198, 247, 0.2);
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    transition: all 0.3s ease;
+}
+
+.toc ul ul {
+    padding-left: 0.6rem;
+    margin-left: 0.2rem;
+    border-left-width: 1px;
+}
+
+/* 目录折叠功能 */
+.toc li.collapsed > ul {
+    max-height: 0 !important;
+    opacity: 0;
+    transform: translateY(-5px);
+    overflow: hidden;
+    transition: 
+        max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.toc ul {
+    max-height: 1000px;
+    opacity: 1;
+    overflow: hidden;
+    transition: 
+        max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.4s ease,
+        transform 0.4s ease;
+    transform: translateY(0);
+    will-change: max-height, opacity, transform;
+}
+
+.toc li:has(ul) > a {
+    position: relative;
+    padding-right: 28px !important;
+}
+
+.toc li:has(ul) > a::after {
+    content: "›";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: 
+        transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+        opacity 0.2s ease;
+    font-size: 1.2em;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.toc li.collapsed > a::after {
+    transform: translateY(-50%) rotate(0deg);
+}
+
+.toc li:not(.collapsed) > a::after {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.toc li:has(ul) > a:hover::after {
+    opacity: 1;
+}
+
+/* 响应式调整 */
+@media (max-width: 1449px) {
+    .post-toc-float {
+        position: static !important;
+        width: auto;
+        max-height: none;
+        margin-bottom: 20px;
+    }
+    
+    .toc {
+        max-height: none;
+    }
+    
+    .toc a:hover {
+        transform: none;
+        padding-left: 0.6rem !important;
+    }
+    
+    .toc a.active {
+        padding-left: 0.5rem !important;
+        border-left-width: 2px;
+        transform: none;
+    }
+    
+    .toc a.reading {
+        padding-left: 0.5rem !important;
+        border-left: 2px solid var(--primary-color);
+    }
+    
+    /* 响应式下的暗色模式调整 */
+    .dark .toc a.reading {
+        border-left: 2px solid #90cdf4; /* 使用更亮的蓝色边框 */
+    }
+}

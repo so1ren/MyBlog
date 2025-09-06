@@ -1,0 +1,7 @@
+/* 中文字体定义 */
+@font-face {
+    font-family: 'LXGW';
+    src: url('/fonts/LXGWWenKaiMonoGBScreen.woff2') format('woff2');
+}
+
+@import url("https://at.alicdn.com/t/c/font_4005977_9l6z3e6x5q.css");

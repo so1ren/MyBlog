@@ -1,0 +1,22 @@
+{{- /* Footer custom content area start */ -}}
+{{- /*     Insert any custom code web-analytics, resources, etc. here */ -}}
+{{- /* Footer custom content area end */ -}}
+
+<!-- 引入模块化的JavaScript文件 -->
+<script src="{{ .Site.BaseURL }}js/code-blocks.js"></script>
+<script src="{{ .Site.BaseURL }}js/toc.js"></script>
+<script src="{{ .Site.BaseURL }}js/navbar.js"></script>
+<script src="{{ .Site.BaseURL }}js/main.js"></script>
+
+<!-- 盘古之白脚本 -->
+<script>
+(function(u, c) {
+  var d = document, t = 'script', o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+  o.src = u;
+  if (c) { o.addEventListener('load', function(e) { c(e); }); }
+  s.parentNode.insertBefore(o, s);
+})('//cdn.bootcss.com/pangu/3.3.0/pangu.min.js', function() {
+  pangu.spacingPage();
+});
+</script>
