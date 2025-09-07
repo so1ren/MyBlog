@@ -2,6 +2,8 @@
 date = '2025-09-01T22:27:46+08:00'
 draft = false
 title = '基于Hugo和PaperMod搭建的个人博客'
+tags =  ["Hugo", "PaperMod"]
+categories = ["网站和博客技术"]
 +++
 
 小白写给小白。

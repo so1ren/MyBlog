@@ -1,20 +1,79 @@
-/* 增大导航菜单字体 */
+/* ===== 原有字号 / 间距 ===== */
 #menu li a {
-    font-size: 1.2rem !important;  /* 原始大小通常为1rem */
+    font-size: 1.2rem !important;
     font-weight: 500;
 }
-
-/* 增大网站标题字体 */
 .logo a {
-    font-size: 1.8rem !important;  /* 原始大小通常为1.25rem */
+    font-size: 1.8rem !important;
 }
-
-/* 增大语言切换器字体 */
 .lang-switch li a {
     font-size: 1rem !important;
 }
-
-/* 调整菜单项间距（可选） */
 #menu li {
-    margin-left: 2rem !important;  /* 增加间距避免文字拥挤 */
+    margin-left: 2rem !important;
+}
+
+/* ===== 小巧优美开关 ========== */
+.theme-switch-wrapper {
+    display: inline-flex;
+    align-items: center;
+    margin-left: .5rem;
+}
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 滑轨：亮模式 - 显眼柔和橙 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffb366;        /* 更饱和但不刺眼的橙 */
+    border-radius: 24px;
+    box-shadow:
+        inset 0 1px 2px rgba(0,0,0,0.05),
+        0 2px 4px rgba(0,0,0,0.06);
+    transition: background 0.3s ease;
+}
+
+/* 滑块：亮模式 - 纯白玻璃球 */
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow:
+        0 1px 3px rgba(0,0,0,0.10),
+        inset 0 -0.5px 1px rgba(0,0,0,0.03);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* 暗模式：滑轨 - 柔和亮紫 */
+html.dark .slider {
+    background: #c7b8ea;   /* 提高饱和度的柔和紫 */
+}
+
+/* 暗模式：滑块 - 更亮的象牙白 */
+html.dark .slider::before {
+    background: #f8f5ff;   /* 比纯白更柔和的亮象牙 */
+}
+
+/* 滑动距离 */
+input:checked + .slider::before {
+    transform: translateX(20px);
 }
