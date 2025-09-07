@@ -1,121 +1,112 @@
-/* components/code-blocks.css  仅改变量名，其余保持原样 */
-
-/*========== 变量 ==========*/
+/* ===== 代码块主题变量 ===== */
 :root {
-  /* 基础代码块变量 - 亮色缺省值 */
+  /* 亮色 */
   --code-block-bg: #f8f9fa;
   --code-block-border: #eaecef;
-  --code-header-bg: #f1f3f5;
-  --code-header-text: #4a5568;
+  --code-header-bg: linear-gradient(135deg, #a8c6f7 0%, #c6d8f5 100%);
+  --code-header-text: #2c5282;
   --code-text: #24292e;
   --code-lineno: #6a737d;
 
-  /* Chroma 亮色缺省值 */
-  --chroma-bg: #f8f9fa;
-  --chroma-text: #24292e;
+  --chroma-bg: var(--code-block-bg);
+  --chroma-text: var(--code-text);
   --chroma-keyword: #d73a49;
   --chroma-function: #6f42c1;
   --chroma-string: #032f62;
   --chroma-comment: #6a737d;
   --chroma-type: #005cc5;
   --chroma-literal: #e36209;
-  --chroma-punctuation: #24292e;
+  --chroma-punctuation: var(--code-text);
 }
 
-/* 暗模式：仅重新赋值同名变量 */
+/* 暗色 */
 html.dark {
-  --code-block-bg: #2d3748;          /* 统一用同名变量 */
+  --code-block-bg: #2d3748;
   --code-block-border: #4a5568;
-  --code-header-bg: #374151;
-  --code-header-text: #cbd5e0;
+  --code-header-bg: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+  --code-header-text: #e2e8f0;
   --code-text: #e2e8f0;
   --code-lineno: #8b949e;
-
-  --chroma-bg: #2d3748;
-  --chroma-text: #e2e8f0;
-  --chroma-keyword: #ff7b72;
-  --chroma-function: #d2a8ff;
-  --chroma-string: #a5d6ff;
-  --chroma-comment: #8b949e;
-  --chroma-type: #79c0ff;
-  --chroma-literal: #ffa657;
-  --chroma-punctuation: #c9d1d9;
 }
 
-/*========== 代码块容器 ==========*/
+/* ===== 代码块容器 ===== */
 .post-content .highlight {
   margin: 1.8rem 0;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  background: var(--code-block-bg, var(--chroma-bg));
-  border: 1px solid var(--code-block-border, rgba(0,0,0,0.08));
-  position: relative;
+  background: var(--code-block-bg);
+  border: 1px solid var(--code-block-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
 }
-
 html.dark .post-content .highlight {
-  background: var(--code-block-bg, var(--chroma-bg));
-  border-color: var(--code-block-border, rgba(255,255,255,0.08));
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
 }
-
 .post-content .highlight:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-/*========== 标题栏 ==========*/
+/* ===== 头部 ===== */
 .post-content .code-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.4rem 0.8rem;
-  background: linear-gradient(135deg, #a8c6f7 0%, #c6d8f5 100%);
-  border-bottom: 1px solid #eaecef;
+  background: var(--code-header-bg);
+  color: var(--code-header-text);
   font-size: 0.75em;
-  color: #2c5282;
   min-height: 28px;
-  flex-shrink: 0;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background 0.2s;
 }
-
 .post-content .code-header:hover {
-  background: linear-gradient(135deg, #9ab9f5 0%, #b8cdf4 100%);
+  filter: brightness(0.95);
 }
 
-html.dark .post-content .code-header {
-  background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
-  border-bottom-color: #4a5568;
-  color: #e2e8f0;
+/* ===== 语言标签 ===== */
+.post-content .code-lang {
+  font-family: "LXGW", monospace;
 }
 
-html.dark .post-content .code-header:hover {
-  background: linear-gradient(135deg, #5a6578 0%, #7f8da3 100%);
+/* ===== 按钮 ===== */
+.code-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+.code-btn {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.code-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+html.dark .code-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/*========== 代码内容 ==========*/
+/* ===== 代码内容 ===== */
 .post-content .highlight pre {
   margin: 0;
   padding: 1.2rem;
   overflow-x: auto;
-  background: var(--code-block-bg, #f8f9fa);
-  font-family: 'LXGW', monospace !important;
+  background: var(--code-block-bg);
+  font-family: "LXGW", monospace !important;
   font-size: 0.98em;
   line-height: 1.6;
-  color: var(--code-text, #24292e);
-  max-height: none !important;
-  transition: all 0.3s ease;
-  flex-grow: 1;
+  color: var(--code-text);
+  transition: all 0.3s;
 }
-
-html.dark .post-content .highlight pre {
-  background: var(--code-block-bg, #2d3748);
-  color: var(--code-text, #e2e8f0);
-}
-
 .post-content .highlight code {
   background: transparent;
   padding: 0;
@@ -123,162 +114,68 @@ html.dark .post-content .highlight pre {
   font-family: inherit !important;
 }
 
-/*========== 行号 ==========*/
+/* ===== 折叠状态 ===== */
+.post-content .highlight.collapsed pre {
+  display: none;
+}
+
+/* ===== 行号 ===== */
 .post-content .chroma .ln {
   padding-right: 0.8em;
   margin-right: 0.8em;
-  color: var(--code-lineno, #6a737d);
-  border-right: 1px solid var(--code-border, #eaecef);
+  color: var(--code-lineno);
+  border-right: 1px solid var(--code-block-border);
   user-select: none;
 }
 
-html.dark .post-content .chroma .ln {
-  color: var(--code-lineno, #8b949e);
-  border-right-color: var(--code-block-border, #4a5568);
-}
-
-/*========== 单行代码 ==========*/
+/* ===== 行内代码 ===== */
 .post-content code:not(pre code) {
-  font-family: 'LXGW', monospace;
+  font-family: "LXGW", monospace;
   font-size: 0.95em;
-  background: #f8f9fa;
+  background: var(--code-block-bg);
   color: #d63384;
   border-radius: 6px;
   padding: 0.2em 0.4em;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--code-block-border);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   font-weight: 600;
-  text-shadow: 0 0.5px 0 rgba(0,0,0,0.1);
 }
-
 .post-content code:not(pre code):hover {
   background: #f1f3f5;
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-  color: #c2255c;
-  font-weight: 650;
 }
-
 html.dark .post-content code:not(pre code) {
   background: rgba(45, 55, 72, 0.4);
   color: #f98280;
-  border-color: #4a5568;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  font-weight: 600;
-  text-shadow: 0 0.5px 0 rgba(255,255,255,0.1);
 }
 
-html.dark .post-content code:not(pre code):hover {
-  background: rgba(45, 55, 72, 0.6);
-}
-
-
-/* Chroma语法高亮规则 */
+/* ===== Chroma 高亮（精简） ===== */
 .chroma {
+  background: var(--chroma-bg);
   color: var(--chroma-text);
-  background-color: var(--chroma-bg);
 }
-
-.chroma .c { color: var(--chroma-comment); font-style: italic }
-.chroma .k { color: var(--chroma-keyword) }
-.chroma .s { color: var(--chroma-string) }
-.chroma .nf { color: var(--chroma-function) }
-.chroma .nc { color: var(--chroma-type) }
-.chroma .m { color: var(--chroma-literal) }
-.chroma .p { color: var(--chroma-punctuation) }
-.chroma .o { color: var(--chroma-keyword) }
-
-/* YAML 语法高亮 */
-.chroma .na { color: var(--chroma-keyword) }
-.chroma .s { color: var(--chroma-string) }
-.chroma .c { color: var(--chroma-comment); font-style: italic }
-.chroma .k { color: var(--chroma-function) }
-
-/* Bash/Shell 语法高亮 */
-.chroma .nb { color: var(--chroma-function) }
-.chroma .nv { color: var(--chroma-literal) }
-.chroma .s2 { color: var(--chroma-string) }
-.chroma .se { color: var(--chroma-keyword) }
-.chroma .si { color: var(--chroma-type) }
-
-/* HTML/XML 语法高亮 */
-.chroma .nt { color: var(--chroma-keyword) }
-.chroma .na { color: var(--chroma-function) }
-.chroma .s { color: var(--chroma-string) }
-.chroma .c { color: var(--chroma-comment); font-style: italic }
-.chroma .err { color: #ff5555 }
-
-/* 增强通用语法高亮规则 */
-.chroma .k, .chroma .kd, .chroma .kn, .chroma .kp, .chroma .kr, .chroma .kt {
-  color: var(--chroma-keyword);
-  font-weight: 600;
-}
-
-.chroma .s, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, 
-.chroma .se, .chroma .sh, .chroma .si, .chroma .sx, .chroma .sr, .chroma .s1, 
-.chroma .ss {
-  color: var(--chroma-string);
-  font-weight: 500;
-}
-
-.chroma .c, .chroma .ch, .chroma .cm, .chroma .c1, .chroma .cs {
-  color: var(--chroma-comment);
-  font-style: italic;
-  font-weight: 450;
-}
-
-/* 数字和常量 */
-.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, 
-.chroma .mo {
-  color: var(--chroma-literal);
-}
-
-/* 函数和方法 */
-.chroma .n, .chroma .nb, .chroma .nc, .chroma .nd, .chroma .ne, .chroma .nf, 
-.chroma .nn, .chroma .nx {
-  color: var(--chroma-function);
-}
-
-/* 类型和类名 */
-.chroma .vc, .chroma .vg, .chroma .vi {
-  color: var(--chroma-type);
-}
-
-/* 运算符 */
-.chroma .o, .chroma .ow {
-  color: var(--chroma-punctuation);
-  font-weight: 600;
-}
-
-/* 错误高亮 */
+.chroma .k { color: var(--chroma-keyword); font-weight: 600; }
+.chroma .s { color: var(--chroma-string); font-weight: 500; }
+.chroma .c { color: var(--chroma-comment); font-style: italic; }
+.chroma .nf { color: var(--chroma-function); }
+.chroma .nc { color: var(--chroma-type); }
+.chroma .m { color: var(--chroma-literal); }
 .chroma .err {
   background: rgba(255, 85, 85, 0.15);
   border-bottom: 2px dashed #ff5555;
 }
 
-html.dark .chroma .err {
-  background: rgba(255, 85, 85, 0.25);
-  border-bottom: 2px dashed #ff6b6b;
-}
-
-/* 响应式调整 */
+/* ===== 响应式 ===== */
 @media (max-width: 768px) {
   .post-content .highlight {
     margin: 1.5rem 0;
     border-radius: 8px;
   }
-  
-  .post-content .code-header {
-    padding: 0.3rem 0.6rem;
-    min-height: 24px;
-  }
-  
   .post-content .highlight pre {
     padding: 1rem;
     font-size: 0.95em;
   }
-  
   .code-btn {
     width: 22px;
     height: 22px;

@@ -90,7 +90,7 @@ hugo new content/posts/myfirstpost.md
 
 确保你在 MyBlog 文件夹下，我们需要运行 git 命令，使得 git 能够控制我们的网站项目。使用
 
-```
+```bash
 # 初始化 git ，告诉 git ，你可以控制 MyBlog 文件夹了
 git init
 

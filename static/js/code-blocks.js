@@ -8,149 +8,135 @@ const CODE_BLOCK_CONFIG = {
     }
 };
 
-// 获取语言名称
 function getLanguageName(classes) {
-    const languageClass = classes.find(cls => 
-        cls.startsWith('language-') || 
-        cls.startsWith('chroma-language-') ||
-        cls.startsWith('chroma-')
+    const langClass = classes.find(c =>
+        c.startsWith('language-') ||
+        c.startsWith('chroma-language-') ||
+        c.startsWith('chroma-')
     );
-    
-    let langName = languageClass ? 
-        languageClass.replace('language-', '')
-                    .replace('chroma-language-', '')
-                    .replace('chroma-', '') : 'code';
-    
-    // 应用语言别名
-    if (CODE_BLOCK_CONFIG.languageAliases[langName]) {
-        langName = CODE_BLOCK_CONFIG.languageAliases[langName];
-    }
-    
-    // 特殊处理某些语言名称
-    if (langName === 'html' || langName === 'xml') {
-        return 'HTML';
-    } else if (langName === 'bash') {
-        return 'Bash';
-    } else if (langName === 'yaml') {
-        return 'YAML';
-    } else if (langName.length > 1) {
-        return langName.charAt(0).toUpperCase() + langName.slice(1);
-    }
-    
-    return langName;
+    let name = langClass
+        ? langClass.replace(/^(language|chroma-language|chroma)-/, '')
+        : 'code';
+    if (CODE_BLOCK_CONFIG.languageAliases[name]) name = CODE_BLOCK_CONFIG.languageAliases[name];
+    if (name === 'html' || name === 'xml') return 'HTML';
+    if (name === 'bash') return 'BASH';
+    if (name === 'yaml') return 'YAML';
+    return name.length > 1 ? name.toUpperCase() : name;
 }
 
-// 创建或获取代码块标题栏
-function getOrCreateHeader(codeBlock) {
-    let header = codeBlock.querySelector('.code-header');
-    if (!header) {
-        header = document.createElement('div');
-        header.className = 'code-header';
-        codeBlock.insertBefore(header, codeBlock.firstChild);
+function getOrCreateHeader(block) {
+    let h = block.querySelector('.code-header');
+    if (!h) {
+        h = document.createElement('div');
+        h.className = 'code-header';
+        block.prepend(h);
     }
-    
-    header.innerHTML = '';
-    return header;
+    h.innerHTML = '';
+    return h;
 }
 
-// 创建按钮元素
-function createButton(className, title, innerHTML) {
-    const btn = document.createElement('button');
-    btn.className = `code-btn ${className}`;
-    btn.title = title;
-    btn.innerHTML = innerHTML;
-    return btn;
+function createButton(cls, title, svg) {
+    const b = document.createElement('button');
+    b.className = `code-btn ${cls}`;
+    b.title = title;
+    b.innerHTML = svg;
+    return b;
 }
 
-// 处理单个代码块
-function processCodeBlock(codeBlock) {
-    const codeElement = codeBlock.querySelector('code');
-    const classes = codeElement ? Array.from(codeElement.classList) : [];
-    
-    // 获取语言名称
-    const langName = getLanguageName(classes);
-    
-    // 获取代码文本和行数
-    const codeText = codeElement ? codeElement.textContent : '';
-    const lineCount = codeText.split('\n').length;
-    
-    // 创建或获取标题栏
-    const header = getOrCreateHeader(codeBlock);
-    
-    // 添加语言标签
+function waitAndFill(block) {
+    let lastText = '';
+    let stableTimer = 0;
+    const tick = () => {
+        const codeEl = block.querySelector('code');
+        if (!codeEl) { requestAnimationFrame(tick); return; }
+        const currText = codeEl.textContent;
+        if (currText !== lastText) {
+            lastText = currText;
+            stableTimer = 0;
+            requestAnimationFrame(tick);
+            return;
+        }
+        stableTimer++;
+        if (stableTimer < 3) {
+            requestAnimationFrame(tick);
+            return;
+        }
+        realFill(block, codeEl);
+    };
+    requestAnimationFrame(tick);
+}
+
+function realFill(block, codeEl) {
+    if (block.dataset.filled) return;
+    block.dataset.filled = 'true';
+
+    const classes = Array.from(codeEl.classList);
+    const lang = getLanguageName(classes);
+    const lines = codeEl.textContent.trim().split('\n').length;
+
+    const header = block.querySelector('.code-header');
+    const langSpan = header.querySelector('.code-lang');
+    const foldBtn = header.querySelector('.fold-btn');
+    const copyBtn = header.querySelector('.copy-btn');
+
+    /* 折叠逻辑 */
+    const toggleFold = () => {
+        const collapsed = block.classList.toggle('collapsed');
+        foldBtn.title = collapsed ? '展开代码' : '折叠代码';
+        foldBtn.innerHTML = collapsed
+            ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+            : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+        langSpan.textContent = collapsed ? `${lang} (${lines} 行 - 已折叠)` : `${lang} (${lines} 行)`;
+    };
+
+    foldBtn.addEventListener('click', e => { e.stopPropagation(); toggleFold(); });
+    header.addEventListener('click', toggleFold);
+
+    /* 复制逻辑 */
+    copyBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(codeEl.innerText)
+            .then(() => {
+                const old = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+                setTimeout(() => copyBtn.innerHTML = old, 2000);
+            })
+            .catch(err => console.error('无法复制代码: ', err));
+    });
+
+    /* ✅ 初始折叠：直接设置状态，不调用 toggleFold() */
+    if (lines > CODE_BLOCK_CONFIG.lineThreshold) {
+        block.classList.add('collapsed');
+        foldBtn.title = '展开代码';
+        foldBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+        langSpan.textContent = `${lang} (${lines} 行 - 已折叠)`;
+    } else {
+        langSpan.textContent = `${lang} (${lines} 行)`;
+    }
+}
+
+function processCodeBlock(block) {
+    if (block.dataset.filled) return;
+
+    const header = getOrCreateHeader(block);
     const langSpan = document.createElement('span');
     langSpan.className = 'code-lang';
-    langSpan.textContent = `${langName} (${lineCount-1} 行)`;
+    langSpan.textContent = 'CODE';
+
+    const btnBox = document.createElement('div');
+    btnBox.className = 'code-buttons';
+
+    const foldBtn = createButton('fold-btn', '折叠代码', '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>');
+    const copyBtn = createButton('copy-btn', '复制代码', '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>');
+
+    btnBox.appendChild(foldBtn);
+    btnBox.appendChild(copyBtn);
     header.appendChild(langSpan);
-    
-    // 创建按钮容器
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'code-buttons';
-    
-    // 添加折叠按钮
-    const foldBtn = createButton('fold-btn', '折叠代码', 
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>'
-    );
-    buttonContainer.appendChild(foldBtn);
-    
-    // 添加复制按钮
-    const copyBtn = createButton('copy-btn', '复制代码', 
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
-    );
-    buttonContainer.appendChild(copyBtn);
-    
-    header.appendChild(buttonContainer);
-    
-    // 切换折叠状态函数
-    const toggleFold = function() {
-        codeBlock.classList.toggle('collapsed');
-        if (codeBlock.classList.contains('collapsed')) {
-            foldBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-            foldBtn.title = '展开代码';
-            langSpan.textContent = `${langName} (${lineCount-1} 行)`;
-        } else {
-            foldBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
-            foldBtn.title = '折叠代码';
-            langSpan.textContent = `${langName} (${lineCount-1} 行)`;
-        }
-    };
-    
-    // 折叠按钮事件
-    foldBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleFold();
-    });
-    
-    // 标题栏点击事件
-    header.addEventListener('click', function() {
-        toggleFold();
-    });
-    
-    // 复制按钮事件
-    copyBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const code = codeBlock.querySelector('code').innerText;
-        navigator.clipboard.writeText(code).then(function() {
-            const originalHTML = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
-            setTimeout(function() {
-                copyBtn.innerHTML = originalHTML;
-            }, 2000);
-        }).catch(function(err) {
-            console.error('无法复制代码: ', err);
-        });
-    });
-    
-    // 自动折叠长代码块
-    if (lineCount > CODE_BLOCK_CONFIG.lineThreshold) {
-        codeBlock.classList.add('collapsed');
-        foldBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-        foldBtn.title = '展开代码';
-        langSpan.textContent = `${langName} (${lineCount -1} 行 - 已折叠)`;
-    }
+    header.appendChild(btnBox);
+
+    waitAndFill(block);
 }
 
-// 设置代码块功能
 function setupCodeBlocks() {
     document.querySelectorAll('.highlight').forEach(processCodeBlock);
 }
