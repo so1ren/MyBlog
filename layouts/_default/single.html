@@ -3,6 +3,7 @@
 <article class="post-single">
   <header class="post-header">
     {{ partial "breadcrumbs.html" . }}
+
     <h1 class="post-title entry-hint-parent">
       {{ .Title }}
       {{- if .Draft }}
@@ -11,11 +12,30 @@
       </span>
       {{- end }}
     </h1>
+
+    <!-- 标签：位于标题与元数据之间，带图标 -->
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    {{- with ($.GetTerms $tags) }}
+    <div class="post-tags-between">
+      {{- range $i, $t := . }}
+        {{- if $i }}<span class="tag-sep">&nbsp;</span>{{ end }}
+        <a class="tag-link" href="{{ $t.Permalink }}" title="查看标签: {{ $t.LinkTitle }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+          </svg>
+          <span>{{ $t.LinkTitle }}</span>
+        </a>
+      {{- end }}
+    </div>
+    {{- end }}
+
     {{- if .Description }}
     <div class="post-description">
       {{ .Description }}
     </div>
     {{- end }}
+
     {{- if not (.Param "hideMeta") }}
     {{ if or (eq .Type "posts") (eq .Type "about") }}
     <div class="post-meta">
@@ -29,6 +49,7 @@
     {{ end }}
     {{- end }}
   </header>
+
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
@@ -54,12 +75,6 @@
   {{ end }}
 
   <footer class="post-footer">
-    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
-    <ul class="post-tags">
-      {{- range ($.GetTerms $tags) }}
-      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
-      {{- end }}
-    </ul>
     {{- if (.Param "ShowPostNavLinks") }}
     {{- partial "post_nav_links.html" . }}
     {{- end }}
