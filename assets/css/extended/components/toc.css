@@ -1,9 +1,9 @@
-/* 目录容器 - 完全透明，像少数派那样悬浮文字 */
+/* 目录容器 - 简洁透明文字，像少数派 */
 .post-toc-float {
     position: fixed !important;
-    top: 150px;
-    right: 20px;
-    width: 220px;
+    top: 120px;
+    right: 10px;
+    width: 200px;
     max-height: 70vh;
     padding: 0 !important;
     margin: 0;
@@ -11,11 +11,10 @@
     overflow: visible;
     background: transparent !important;
     border: none !important;
-    border-radius: 0;
     box-shadow: none !important;
 }
 
-/* 目录内部容器 - 彻底透明 */
+/* 彻底去除所有背景 */
 .post-toc-float .toc-container,
 .post-toc-float .toc-wrapper,
 .post-toc-float > * {
@@ -24,29 +23,16 @@
     border: none !important;
 }
 
-/* 目录标题 - 更小更低调 */
+/* 隐藏目录标题 */
 .toc-title {
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin: 0 0 8px 0;
-    padding: 0;
-    color: var(--text-color);
-    background: transparent !important;
-    border: none !important;
-    letter-spacing: 0.3px;
-    font-family: system-ui, -apple-system, sans-serif;
-    opacity: 0.6;
+    display: none;
 }
 
-.toc-title::before {
-    content: none;
-}
-
-/* 目录项 - 简洁文字样式，像少数派 */
+/* 目录内容 */
 .toc {
     padding: 0;
     margin: 0;
-    line-height: 1.8;
+    line-height: 2.0;
     list-style-type: none;
     max-height: calc(70vh - 40px);
     overflow-y: auto;
@@ -59,7 +45,6 @@
     display: none;
 }
 
-/* 移除所有列表标记 */
 .toc, 
 .toc ul, 
 .toc li {
@@ -68,59 +53,57 @@
     padding-left: 0 !important;
 }
 
-/* 目录项 - 简洁文字 */
+/* 目录项 */
 .toc li {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     position: relative;
-    transition: all 0.2s ease;
 }
 
-.toc li:hover {
-    transform: none;
-}
-
+/* 目录链接 - 简洁文字 */
 .toc a {
     display: block;
-    padding: 2px 8px;
+    padding: 2px 0 2px 10px;
     text-decoration: none !important;
     color: var(--text-color);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     transition: all 0.2s ease;
     background: transparent !important;
     font-weight: 400;
-    opacity: 0.5;
+    opacity: 0.55;
     border: none !important;
-    border-left: none !important;
+    border-left: 2px solid transparent !important;
+    position: relative;
 }
 
+/* 悬停效果 */
 .toc a:hover {
     opacity: 1;
     color: var(--primary-color);
-    background: transparent !important;
-    transform: none;
+    border-left-color: var(--primary-color) !important;
 }
 
-/* 阅读中的目录项 */
+/* 阅读中的目录项 - 蓝色竖线 */
 .toc a.reading {
     font-weight: 500 !important;
     color: var(--primary-color) !important;
     opacity: 1;
+    border-left-color: var(--primary-color) !important;
 }
 
-/* 活跃目录项 */
+/* 活跃目录项 - 蓝色竖线 */
 .toc a.active {
     background: transparent !important;
     color: var(--primary-color) !important;
     font-weight: 500 !important;
     opacity: 1;
-    transform: none;
+    border-left-color: var(--primary-color) !important;
 }
 
 /* 嵌套层级 */
 .toc ul {
-    padding-left: 12px;
+    padding-left: 10px;
     margin-left: 4px;
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
     margin-top: 2px;
     margin-bottom: 2px;
 }
@@ -129,7 +112,7 @@ html.dark .toc ul {
     border-left-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 目录折叠功能 - 简化 */
+/* 目录折叠 - 简化 */
 .toc li.collapsed > ul {
     max-height: 0 !important;
     opacity: 0;
@@ -146,16 +129,16 @@ html.dark .toc ul {
     pointer-events: auto;
 }
 
-/* 折叠箭头 - 更小更简单 */
+/* 折叠箭头 */
 .toc li:has(ul) > a {
     position: relative;
-    padding-right: 20px !important;
+    padding-right: 16px !important;
 }
 
 .toc li:has(ul) > a::after {
     content: '';
     position: absolute;
-    right: 6px;
+    right: 2px;
     top: 50%;
     transform: translateY(-50%) rotate(0deg);
     width: 0;
@@ -176,7 +159,7 @@ html.dark .toc ul {
     transform: translateY(-50%) rotate(0deg);
 }
 
-/* 响应式调整 */
+/* 响应式 */
 @media (max-width: 1449px) {
     .post-toc-float {
         position: static !important;
