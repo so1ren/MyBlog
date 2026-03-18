@@ -1,9 +1,9 @@
 /* 目录容器 - 简洁透明文字，像少数派 */
 .post-toc-float {
     position: fixed !important;
-    top: 180px;
-    right: -10px;
-    width: 200px;
+    top: 220px;
+    right: -30px;
+    width: 180px;
     max-height: 60vh;
     padding: 0 !important;
     margin: 0;
@@ -22,22 +22,20 @@
     border: none !important;
 }
 
-/* 隐藏目录标题 - 用 details summary 选择器 */
+/* 隐藏目录标题 - 用最强选择器 */
 .post-toc-float .toc details > summary,
-.toc details > summary {
+.post-toc-float summary,
+.toc details > summary,
+details.toc > summary,
+.post-toc-float details summary,
+.toc summary {
     display: none !important;
-}
-
-.post-toc-float .toc details,
-.toc details {
+    visibility: hidden !important;
+    height: 0 !important;
     padding: 0 !important;
-    background: transparent !important;
-    list-style: none !important;
-}
-
-.post-toc-float .toc details > summary,
-.toc details > summary {
-    display: none !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
 }
 
 /* 目录内容 */
