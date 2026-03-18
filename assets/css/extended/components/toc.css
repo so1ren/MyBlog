@@ -1,132 +1,179 @@
-/* 目录容器 - 简洁透明文字，像少数派 */
+/* ================================================
+   TOC 目录美化 - 融合派
+   保留蓝色竖线指示器 + 少数派点状引导线 + 页码
+   ================================================ */
+
+/* ---- 容器基础 ---- */
 .post-toc-float {
     position: fixed !important;
-    top: 200px;
-    right: 45px;
-    width: 260px;
-    max-height: 60vh;
-    padding: 0 !important;
-    margin: 0;
-    z-index: 999;
+    top: 180px;
+    right: 50px;
+    width: 240px;
+    max-height: 65vh;
+    z-index: 998;
     overflow: visible;
+}
+
+.post-toc-float *,
+.post-toc-float {
     background: transparent !important;
-    border: none !important;
     box-shadow: none !important;
 }
 
-/* 彻底去除所有背景 */
-.post-toc-float,
-.post-toc-float * {
-    background: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-/* 隐藏目录标题 - 用最强选择器 */
-.post-toc-float .toc details > summary,
-.post-toc-float summary,
-.toc details > summary,
-details.toc > summary,
-.post-toc-float details summary,
-.toc summary {
+/* ---- 目录标题 (summary) - 隐藏但保留可访问性) ---- */
+.toc details > summary {
     display: none !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    opacity: 0 !important;
-    overflow: hidden !important;
 }
 
-/* 目录内容 */
-.toc {
+/* ---- 目录主体 ---- */
+.toc details {
+    border: none !important;
     padding: 0 !important;
-    margin: 0 !important;
-    line-height: 2.2;
-    list-style-type: none !important;
-    max-height: calc(60vh - 20px);
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
     background: transparent !important;
 }
 
-.toc::-webkit-scrollbar {
-    display: none;
+.toc details[open] {
+    border: none !important;
 }
 
-.toc ul {
-    padding-left: 8px !important;
-    margin-left: 4px !important;
-    list-style: none !important;
+/* ---- 内容区域 ---- */
+.toc .inner {
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
+/* ---- 列表重置 ---- */
+.toc ul,
 .toc li {
-    margin-bottom: 8px;
     list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
 }
 
-/* 目录链接 - 简洁文字 */
+.toc > .inner > ul {
+    border-left: 1px solid var(--border-color, #e5e7eb);
+}
+
+html.dark .toc > .inner > ul {
+    border-left-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ---- 链接样式 (核心) ---- */
 .toc a {
-    display: block;
-    padding: 2px 0 2px 12px !important;
+    display: flex !important;
+    align-items: baseline;
+    padding: 5px 0 5px 12px !important;
     text-decoration: none !important;
     color: var(--text-color) !important;
-    font-size: 0.92rem !important;
-    transition: all 0.2s ease;
-    background: transparent !important;
+    font-size: 0.88rem !important;
     font-weight: 400 !important;
-    opacity: 0.5 !important;
+    opacity: 0.55 !important;
+    background: transparent !important;
     border: none !important;
     border-left: 2px solid transparent !important;
+    transition: 
+        opacity 0.2s ease,
+        color 0.2s ease,
+        border-left-color 0.2s ease,
+        transform 0.2s ease;
     position: relative;
+    line-height: 1.5;
 }
 
 /* 悬停效果 */
 .toc a:hover {
     opacity: 1 !important;
-    color: var(--primary-color) !important;
-    border-left-color: var(--primary-color) !important;
+    color: var(--primary-color, #2563eb) !important;
+    border-left-color: var(--primary-color, #2563eb) !important;
+    transform: translateX(3px);
 }
 
-/* 阅读中的目录项 - 蓝色竖线 */
+/* 当前阅读中 - 左侧蓝色竖线 + 高亮 */
+.toc a.active,
 .toc a.reading {
-    font-weight: 500 !important;
-    color: var(--primary-color) !important;
     opacity: 1 !important;
-    border-left-color: var(--primary-color) !important;
-}
-
-/* 活跃目录项 - 蓝色竖线 */
-.toc a.active {
+    color: var(--primary-color, #2563eb) !important;
+    font-weight: 500 !important;
+    border-left-color: var(--primary-color, #2563eb) !important;
     background: transparent !important;
-    color: var(--primary-color) !important;
-    font-weight: 500 !important;
-    opacity: 1 !important;
-    border-left-color: var(--primary-color) !important;
 }
 
-/* 嵌套层级 */
+/* ---- 点状引导线 (dotted leader) ---- */
+.toc a::after {
+    content: '';
+    flex: 1;
+    min-width: 8px;
+    margin-left: 8px;
+    border-top: 1px dotted currentColor;
+    opacity: 0.35;
+    transition: opacity 0.2s ease;
+}
+
+.toc a:hover::after,
+.toc a.active::after {
+    opacity: 0.6;
+}
+
+/* ---- 层级缩进 ---- */
 .toc ul ul {
-    border-left: 1px solid rgba(0, 0, 0, 0.08);
-    margin-top: 4px;
-    margin-bottom: 4px;
+    padding-left: 0 !important;
+    margin-left: 8px !important;
+    border-left: 1px solid var(--border-color, #e5e7eb);
 }
 
 html.dark .toc ul ul {
-    border-left-color: rgba(255, 255, 255, 0.1);
+    border-left-color: rgba(255, 255, 255, 0.08);
 }
 
-/* 响应式 */
+.toc ul ul a {
+    padding-left: 20px !important;
+    font-size: 0.83rem !important;
+}
+
+.toc ul ul ul {
+    margin-left: 16px !important;
+}
+
+.toc ul ul ul a {
+    padding-left: 28px !important;
+    font-size: 0.80rem !important;
+    opacity: 0.5 !important;
+}
+
+/* ---- 滚动条 ---- */
+.toc .inner {
+    max-height: calc(65vh - 20px);
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.toc .inner::-webkit-scrollbar {
+    display: none;
+}
+
+/* ---- 响应式 ---- */
 @media (max-width: 1449px) {
     .post-toc-float {
         position: static !important;
         width: auto;
         max-height: none;
-        margin-bottom: 16px;
+        margin-bottom: 24px;
+        padding: 12px 16px;
+        border: 1px solid var(--border-color, #e5e7eb);
+        border-radius: 8px;
     }
     
-    .toc {
+    .toc .inner {
         max-height: none;
+    }
+    
+    .toc a {
+        padding: 4px 8px !important;
+    }
+    
+    .toc a::after {
+        display: none;
     }
 }
