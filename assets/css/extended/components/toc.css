@@ -1,70 +1,65 @@
-/* 目录容器 - 透明悬浮风格 */
+/* 目录容器 - 完全透明，像少数派那样悬浮文字 */
 .post-toc-float {
     position: fixed !important;
     top: 150px;
-    right: 30px;
-    width: 250px;
+    right: 20px;
+    width: 220px;
     max-height: 70vh;
-    padding: 0;
+    padding: 0 !important;
+    margin: 0;
     z-index: 999;
-    overflow: hidden;
-    background: transparent;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform: translateZ(0);
-    will-change: transform, box-shadow;
+    overflow: visible;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0;
+    box-shadow: none !important;
 }
 
-.post-toc-float:hover {
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+/* 目录内部容器 - 彻底透明 */
+.post-toc-float .toc-container,
+.post-toc-float .toc-wrapper,
+.post-toc-float > * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
 }
 
-/* 目录标题 */
+/* 目录标题 - 更小更低调 */
 .toc-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 0;
-    padding: 14px 16px 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    padding: 0;
     color: var(--text-color);
-    background: transparent;
-    border: none;
-    letter-spacing: 0.5px;
+    background: transparent !important;
+    border: none !important;
+    letter-spacing: 0.3px;
     font-family: system-ui, -apple-system, sans-serif;
+    opacity: 0.6;
 }
 
-/* 目录内容区域 */
+.toc-title::before {
+    content: none;
+}
+
+/* 目录项 - 简洁文字样式，像少数派 */
 .toc {
-    padding: 8px 0;
+    padding: 0;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.8;
     list-style-type: none;
-    max-height: calc(70vh - 60px);
+    max-height: calc(70vh - 40px);
     overflow-y: auto;
     -ms-overflow-style: none;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    scrollbar-width: none;
+    background: transparent !important;
 }
 
 .toc::-webkit-scrollbar {
-    width: 3px;
+    display: none;
 }
 
-.toc::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.toc::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 2px;
-}
-
-html.dark .toc::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-/* 移除列表标记 */
+/* 移除所有列表标记 */
 .toc, 
 .toc ul, 
 .toc li {
@@ -73,36 +68,36 @@ html.dark .toc::-webkit-scrollbar-thumb {
     padding-left: 0 !important;
 }
 
-/* 目录项 - 保留悬停位移效果 */
+/* 目录项 - 简洁文字 */
 .toc li {
-    margin-bottom: 2px;
+    margin-bottom: 4px;
     position: relative;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform: translateX(0);
+    transition: all 0.2s ease;
 }
 
 .toc li:hover {
-    transform: translateX(6px);
+    transform: none;
 }
 
 .toc a {
     display: block;
-    padding: 5px 16px;
+    padding: 2px 8px;
     text-decoration: none !important;
     color: var(--text-color);
-    font-size: 0.88rem;
-    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    background: transparent;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    background: transparent !important;
     font-weight: 400;
-    opacity: 0.75;
-    border-left: 3px solid transparent;
+    opacity: 0.5;
+    border: none !important;
+    border-left: none !important;
 }
 
 .toc a:hover {
-    color: var(--primary-color);
     opacity: 1;
-    background: rgba(49, 130, 206, 0.06);
-    border-left-color: rgba(49, 130, 206, 0.3);
+    color: var(--primary-color);
+    background: transparent !important;
+    transform: none;
 }
 
 /* 阅读中的目录项 */
@@ -110,58 +105,36 @@ html.dark .toc::-webkit-scrollbar-thumb {
     font-weight: 500 !important;
     color: var(--primary-color) !important;
     opacity: 1;
-    background: rgba(49, 130, 206, 0.08);
-    border-left-color: var(--primary-color);
-}
-
-html.dark .toc a.reading {
-    background: rgba(49, 130, 206, 0.12);
-    border-left-color: #63b3ed;
 }
 
 /* 活跃目录项 */
 .toc a.active {
-    background: rgba(49, 130, 206, 0.1) !important;
-    color: var(--primary-dark) !important;
+    background: transparent !important;
+    color: var(--primary-color) !important;
     font-weight: 500 !important;
-    border-left-color: var(--primary-color);
-    transform: translateX(6px);
     opacity: 1;
-}
-
-html.dark .toc a.active {
-    background: rgba(49, 130, 206, 0.15) !important;
-    border-left-color: #63b3ed;
+    transform: none;
 }
 
 /* 嵌套层级 */
 .toc ul {
     padding-left: 12px;
     margin-left: 4px;
-    border-left: 1px solid var(--border-light);
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
-
-.toc ul ul {
-    padding-left: 10px;
-    border-left-color: rgba(49, 130, 206, 0.15);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 html.dark .toc ul {
-    border-left-color: var(--border-dark);
+    border-left-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 目录折叠功能 - 保留原有动画 */
+/* 目录折叠功能 - 简化 */
 .toc li.collapsed > ul {
     max-height: 0 !important;
     opacity: 0;
-    transform: translateY(-8px);
     overflow: hidden;
-    transition: 
-        max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        opacity 0.3s ease,
-        transform 0.3s ease;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
     pointer-events: none;
 }
 
@@ -169,36 +142,30 @@ html.dark .toc ul {
     max-height: 1000px;
     opacity: 1;
     overflow: hidden;
-    transition: 
-        max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        opacity 0.4s ease,
-        transform 0.4s ease;
-    transform: translateY(0);
-    will-change: max-height, opacity, transform;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
     pointer-events: auto;
 }
 
-/* 折叠箭头 */
+/* 折叠箭头 - 更小更简单 */
 .toc li:has(ul) > a {
     position: relative;
-    padding-right: 32px !important;
+    padding-right: 20px !important;
 }
 
 .toc li:has(ul) > a::after {
     content: '';
     position: absolute;
-    right: 14px;
+    right: 6px;
     top: 50%;
     transform: translateY(-50%) rotate(0deg);
     width: 0;
     height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid var(--text-color);
-    opacity: 0.4;
-    transition: 
-        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-        opacity 0.2s ease;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 4px solid currentColor;
+    opacity: 0.3;
+    transition: transform 0.2s ease;
+    font-size: 0;
 }
 
 .toc li.collapsed > a::after {
@@ -209,30 +176,16 @@ html.dark .toc ul {
     transform: translateY(-50%) rotate(0deg);
 }
 
-.toc li:has(ul) > a:hover::after {
-    opacity: 0.7;
-    border-top-color: var(--primary-color);
-}
-
 /* 响应式调整 */
 @media (max-width: 1449px) {
     .post-toc-float {
         position: static !important;
         width: auto;
         max-height: none;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
     }
     
     .toc {
         max-height: none;
-    }
-    
-    .toc li:hover,
-    .toc a:hover {
-        transform: none;
-    }
-    
-    .toc a.active {
-        transform: none;
     }
 }
