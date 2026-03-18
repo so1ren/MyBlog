@@ -1,4 +1,4 @@
-/* 目录容器 - 简洁卡片风格 */
+/* 目录容器 - 透明悬浮风格 */
 .post-toc-float {
     position: fixed !important;
     top: 150px;
@@ -8,29 +8,17 @@
     padding: 0;
     z-index: 999;
     overflow: hidden;
-    background: var(--bg-light);
-    border: 1px solid var(--border-light);
+    background: transparent;
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform: translateZ(0);
     will-change: transform, box-shadow;
 }
 
 .post-toc-float:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-}
-
-/* 暗色模式 */
-html.dark .post-toc-float {
-    background: var(--bg-dark);
-    border-color: var(--border-dark);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-}
-
-html.dark .post-toc-float:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 /* 目录标题 */
@@ -42,13 +30,8 @@ html.dark .post-toc-float:hover {
     color: var(--text-color);
     background: transparent;
     border: none;
-    border-bottom: 1px solid var(--border-light);
     letter-spacing: 0.5px;
     font-family: system-ui, -apple-system, sans-serif;
-}
-
-html.dark .toc-title {
-    border-bottom-color: var(--border-dark);
 }
 
 /* 目录内容区域 */
