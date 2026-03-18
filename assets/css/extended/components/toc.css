@@ -1,8 +1,8 @@
 /* 目录容器 - 简洁透明文字，像少数派 */
 .post-toc-float {
     position: fixed !important;
-    top: 220px;
-    right: -30px;
+    top: 200px;
+    right: 20px;
     width: 180px;
     max-height: 60vh;
     padding: 0 !important;
