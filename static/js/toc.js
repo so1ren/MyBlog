@@ -148,9 +148,10 @@ function setupTocHover() {
                 const targetElement = document.getElementById(decodeURIComponent(targetId));
 
                 if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 100,
-                        behavior: 'smooth'
+                    // 使用 scrollIntoView 配合 CSS scroll-margin-top 实现精确滚动
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
 
                     tocLinks.forEach(l => l.classList.remove('active'));
@@ -176,9 +177,10 @@ function setupTocClickAnimation() {
             if (targetElement) {
                 e.preventDefault();
 
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
+                // 使用 scrollIntoView 配合 CSS scroll-margin-top 实现精确滚动
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
 
                 tocLinks.forEach(l => l.classList.remove('active'));

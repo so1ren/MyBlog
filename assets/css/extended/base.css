@@ -69,6 +69,11 @@ html {
     scroll-padding-top: 0;
 }
 
+/* 标题元素滚动时与顶部的间距为0（配合 scrollIntoView） */
+h1, h2, h3, h4, h5, h6 {
+    scroll-margin-top: 0;
+}
+
 /* 链接平滑过渡 */
 a {
     transition: color var(--transition-fast), opacity var(--transition-fast);
