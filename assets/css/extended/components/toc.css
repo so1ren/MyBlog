@@ -12,12 +12,26 @@
     max-height: 65vh;
     z-index: 998;
     overflow: visible;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
 
 .post-toc-float *,
 .post-toc-float {
     background: transparent !important;
     box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* ---- TOC 整体去边框 ---- */
+.toc {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
 
 /* ---- 目录标题 (summary) - 隐藏但保留可访问性) ---- */
@@ -58,7 +72,7 @@
     color: var(--text-color) !important;
     font-size: 0.88rem !important;
     font-weight: 400 !important;
-    opacity: 0.55 !important;
+    opacity: 0.8 !important;
     background: transparent !important;
     border: none !important;
     border-left: 2px solid transparent !important;
@@ -112,7 +126,7 @@ html.dark .toc ul ul {
 .toc ul ul ul a {
     padding-left: 28px !important;
     font-size: 0.80rem !important;
-    opacity: 0.5 !important;
+    opacity: 0.7 !important;
 }
 
 /* ---- 滚动条 ---- */
@@ -134,9 +148,9 @@ html.dark .toc ul ul {
         width: auto;
         max-height: none;
         margin-bottom: 24px;
-        padding: 12px 16px;
-        border: 1px solid var(--border-color, #e5e7eb);
-        border-radius: 8px;
+        padding: 0;
+        border: none !important;
+        border-radius: 0 !important;
     }
     
     .toc .inner {
