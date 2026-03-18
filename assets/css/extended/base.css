@@ -66,7 +66,7 @@ code, pre {
 /* 全局丝滑效果 */
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+    scroll-padding-top: 0;
 }
 
 /* 链接平滑过渡 */
