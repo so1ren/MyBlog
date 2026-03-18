@@ -1,51 +1,104 @@
-/* 目录容器 */
+/* 目录容器 - 玻璃拟态效果 */
 .post-toc-float {
     position: fixed !important;
     top: 150px;
     right: 30px;
-    width: 280px;
+    width: 260px;
     max-height: 70vh;
-    padding: 0;
+    padding: 1rem;
     z-index: 999;
     overflow: hidden;
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.08),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+}
+
+.post-toc-float:hover {
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 2px 8px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+/* 暗色模式 */
+html.dark .post-toc-float {
+    background: rgba(45, 55, 72, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+html.dark .post-toc-float:hover {
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* 目录标题 */
 .toc-title {
-    font-size: 1.05em;
+    font-size: 0.95rem;
     font-weight: 600;
-    margin: 0 0 10px 0;
-    padding: 0;
+    margin: 0 0 12px 0;
+    padding: 0 0 8px 0;
     color: var(--text-color);
     background: transparent;
     border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+html.dark .toc-title {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .toc-title::before {
-    content: "📋📋";
-    margin-right: 10px;
-    font-size: 1.2em;
+    content: "目录";
+    margin-right: 8px;
+    font-size: 0.85em;
+    opacity: 0.7;
 }
 
 /* 目录内容区域 */
 .toc {
     padding: 0;
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.6;
     list-style-type: none;
-    max-height: 65vh;
+    max-height: calc(70vh - 60px);
     overflow-y: auto;
     -ms-overflow-style: none;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
     background: transparent;
     transition: all 0.3s ease;
 }
 
 .toc::-webkit-scrollbar {
-    display: none;
+    width: 4px;
+}
+
+.toc::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+}
+
+html.dark .toc::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* 移除所有列表标记和左侧内边距 */
@@ -57,82 +110,126 @@
     padding-left: 0 !important;
 }
 
-/* 目录项样式 */
+/* 目录项样式 - 更加精致的交互 */
 .toc li {
-    margin-bottom: 0.3rem;
+    margin-bottom: 2px;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateX(0);
+}
+
+.toc li:hover {
+    transform: translateX(4px);
 }
 
 .toc a {
     display: block;
-    padding: 0.4rem 0.6rem;
+    padding: 6px 10px;
     text-decoration: none !important;
     color: var(--text-color);
-    border-radius: 4px;
-    font-size: 0.92em;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background: transparent;
-    font-weight: 400; /* 默认正常字体 */
+    font-weight: 400;
+    opacity: 0.75;
+    position: relative;
+    overflow: hidden;
+}
+
+.toc a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 0 2px 2px 0;
+    opacity: 0;
+    transform: scaleY(0);
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .toc a:hover {
-    background: rgba(168, 198, 247, 0.1);
+    background: rgba(49, 130, 206, 0.08);
     color: var(--primary-color);
-    transform: translateX(3px);
+    opacity: 1;
+    transform: translateX(4px);
+    padding-left: 14px;
 }
 
-/* 阅读内容的目录项 - 加粗显示 */
+.toc a:hover::before {
+    opacity: 1;
+    transform: scaleY(1);
+}
+
+/* 阅读内容的目录项 */
 .toc a.reading {
-    font-weight: 600 !important;
+    font-weight: 500 !important;
     color: var(--primary-color) !important;
+    opacity: 1;
+    background: rgba(49, 130, 206, 0.08);
 }
 
-/* 暗色模式下阅读目录项的颜色 */
-.dark .toc a.reading {
-    color: #90cdf4 !important; /* 更亮的蓝色，在暗色背景下更清晰 */
+/* 暗色模式下阅读目录项 */
+html.dark .toc a.reading {
+    background: rgba(144, 205, 244, 0.1);
+    color: #90cdf4 !important;
 }
 
-/* 活跃目录项 - 加粗显示并与阅读状态保持一致 */
+/* 活跃目录项 */
 .toc a.active {
-    background: rgba(168, 198, 247, 0.15) !important;
+    background: rgba(49, 130, 206, 0.12) !important;
     color: var(--primary-dark) !important;
-    font-weight: 600 !important;
-    transform: translateX(5px);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 500 !important;
+    transform: translateX(6px);
+    opacity: 1;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* 暗色模式下活跃目录项的颜色 */
-.dark .toc a.active {
-    color: #90cdf4 !important; /* 与阅读状态保持一致 */
+.toc a.active::before {
+    opacity: 1;
+    transform: scaleY(1);
+    width: 4px;
 }
 
-/* 嵌套层级 */
+html.dark .toc a.active {
+    background: rgba(144, 205, 244, 0.15) !important;
+    color: #90cdf4 !important;
+}
+
+/* 嵌套层级 - 更精致的缩进线 */
 .toc ul {
-    padding-left: 0.8rem;
-    margin-left: 0.3rem;
-    border-left: 1px dashed rgba(168, 198, 247, 0.2);
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
+    padding-left: 0.75rem;
+    margin-left: 0.25rem;
+    border-left: 1px solid rgba(49, 130, 206, 0.15);
+    margin-top: 4px;
+    margin-bottom: 4px;
     transition: all 0.3s ease;
 }
 
 .toc ul ul {
     padding-left: 0.6rem;
     margin-left: 0.2rem;
-    border-left-width: 1px;
+    border-left-color: rgba(49, 130, 206, 0.1);
 }
 
-/* 目录折叠功能 */
+html.dark .toc ul {
+    border-left-color: rgba(144, 205, 244, 0.12);
+}
+
+/* 目录折叠功能 - 更流畅的动画 */
 .toc li.collapsed > ul {
     max-height: 0 !important;
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     overflow: hidden;
     transition: 
         max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         opacity 0.3s ease,
         transform 0.3s ease;
+    pointer-events: none;
 }
 
 .toc ul {
@@ -145,37 +242,43 @@
         transform 0.4s ease;
     transform: translateY(0);
     will-change: max-height, opacity, transform;
+    pointer-events: auto;
 }
 
+/* 折叠箭头 - 更精致的样式 */
 .toc li:has(ul) > a {
     position: relative;
-    padding-right: 28px !important;
+    padding-right: 32px !important;
 }
 
 .toc li:has(ul) > a::after {
-    content: "›";
+    content: '';
     position: absolute;
     right: 12px;
     top: 50%;
     transform: translateY(-50%) rotate(0deg);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    opacity: 0.4;
     transition: 
-        transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
         opacity 0.2s ease;
-    font-size: 1.2em;
-    opacity: 0.6;
-    pointer-events: none;
+    font-size: 0;
 }
 
 .toc li.collapsed > a::after {
-    transform: translateY(-50%) rotate(0deg);
+    transform: translateY(-50%) rotate(-90deg);
 }
 
 .toc li:not(.collapsed) > a::after {
-    transform: translateY(-50%) rotate(90deg);
+    transform: translateY(-50%) rotate(0deg);
 }
 
 .toc li:has(ul) > a:hover::after {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 /* 响应式调整 */
@@ -184,31 +287,29 @@
         position: static !important;
         width: auto;
         max-height: none;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        padding: 1rem;
     }
     
     .toc {
         max-height: none;
     }
     
+    .toc li:hover,
     .toc a:hover {
         transform: none;
-        padding-left: 0.6rem !important;
+    }
+    
+    .toc a:hover {
+        padding-left: 10px !important;
     }
     
     .toc a.active {
-        padding-left: 0.5rem !important;
-        border-left-width: 2px;
+        padding-left: 10px !important;
         transform: none;
     }
     
     .toc a.reading {
-        padding-left: 0.5rem !important;
-        border-left: 2px solid var(--primary-color);
-    }
-    
-    /* 响应式下的暗色模式调整 */
-    .dark .toc a.reading {
-        border-left: 2px solid #90cdf4; /* 使用更亮的蓝色边框 */
+        padding-left: 10px !important;
     }
 }
