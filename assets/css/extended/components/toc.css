@@ -51,18 +51,8 @@
     background: transparent !important;
 }
 
-.toc > .inner > ul {
-    border-left: 1px solid var(--border-color, #e5e7eb);
-}
-
-html.dark .toc > .inner > ul {
-    border-left-color: rgba(255, 255, 255, 0.12);
-}
-
-/* ---- 链接样式 (核心) ---- */
 .toc a {
-    display: flex !important;
-    align-items: baseline;
+    display: block !important;
     padding: 5px 0 5px 12px !important;
     text-decoration: none !important;
     color: var(--text-color) !important;
@@ -97,22 +87,6 @@ html.dark .toc > .inner > ul {
     font-weight: 500 !important;
     border-left-color: var(--primary-color, #2563eb) !important;
     background: transparent !important;
-}
-
-/* ---- 点状引导线 (dotted leader) ---- */
-.toc a::after {
-    content: '';
-    flex: 1;
-    min-width: 8px;
-    margin-left: 8px;
-    border-top: 1px dotted currentColor;
-    opacity: 0.35;
-    transition: opacity 0.2s ease;
-}
-
-.toc a:hover::after,
-.toc a.active::after {
-    opacity: 0.6;
 }
 
 /* ---- 层级缩进 ---- */
@@ -171,9 +145,5 @@ html.dark .toc ul ul {
     
     .toc a {
         padding: 4px 8px !important;
-    }
-    
-    .toc a::after {
-        display: none;
     }
 }
