@@ -13,58 +13,118 @@
     margin-left: 2rem !important;
 }
 
-/* ===== 移动端导航菜单优化 ===== */
+/* ===== 移动端导航菜单优化 (重新设计) ===== */
 @media (max-width: 768px) {
+    .header {
+        padding: 0.6rem 0;
+    }
+    
+    .nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .logo {
+        flex-shrink: 0;
+    }
+    
+    .logo a {
+        font-size: 1.3rem !important;
+    }
+    
+    /* 导航容器 - 横向滚动 + 分隔线风格 */
     #menu {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        gap: 0.5rem;
-        padding: 0.5rem 0;
+        gap: 0;
+        padding: 0;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        background: rgba(0, 0, 0, 0.03);
+        border-radius: 10px;
+        padding: 4px;
+        gap: 4px;
     }
     #menu::-webkit-scrollbar {
         display: none;
     }
+    
+    html.dark #menu {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
     #menu li {
-        margin-left: 0 !important;
+        margin: 0 !important;
         flex-shrink: 0;
     }
+    
     #menu li a {
         font-size: 1rem !important;
-        padding: 0.3rem 0.6rem;
+        font-weight: 600 !important;
+        padding: 0.5rem 0.9rem !important;
+        border-radius: 8px;
+        color: var(--text-color) !important;
+        background: transparent;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        position: relative;
     }
     
-    /* Logo 缩小 */
-    .logo a {
-        font-size: 1.4rem !important;
+    #menu li a:hover,
+    #menu li a.active {
+        background: var(--primary-color) !important;
+        color: #fff !important;
     }
     
-    /* 主题开关缩小 */
+    /* 当前页面指示器 */
+    #menu li a.active::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 16px;
+        height: 2px;
+        background: #fff;
+        border-radius: 1px;
+    }
+    
+    /* Logo 旁的导航开关 */
+    .nav > div:last-child {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+    
+    /* 主题开关适配 */
+    .theme-switch-wrapper {
+        margin-left: 0;
+    }
     .theme-switch {
-        width: 36px;
-        height: 20px;
+        width: 40px;
+        height: 22px;
     }
     .slider::before {
-        height: 14px;
-        width: 14px;
+        height: 16px;
+        width: 16px;
     }
     input:checked + .slider::before {
-        transform: translateX(16px);
+        transform: translateX(18px);
     }
 }
 
 @media (max-width: 480px) {
-    #menu {
-        gap: 0.3rem;
-    }
     #menu li a {
-        font-size: 0.9rem !important;
-        padding: 0.25rem 0.5rem;
+        font-size: 0.95rem !important;
+        padding: 0.45rem 0.75rem !important;
     }
+    
     .logo a {
-        font-size: 1.2rem !important;
+        font-size: 1.15rem !important;
     }
 }
 
