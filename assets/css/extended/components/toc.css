@@ -1,46 +1,65 @@
-/* 目录容器 - 玻璃拟态效果 */
+/* 目录容器 - 左侧带彩色边条 */
 .post-toc-float {
     position: fixed !important;
     top: 150px;
     right: 30px;
     width: 260px;
     max-height: 70vh;
-    padding: 1rem;
+    padding: 0;
     z-index: 999;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 
-        0 4px 24px rgba(0, 0, 0, 0.08),
-        0 1px 2px rgba(0, 0, 0, 0.04);
+        0 4px 24px rgba(0, 0, 0, 0.1),
+        0 1px 3px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform: translateZ(0);
     will-change: transform, box-shadow;
 }
 
+/* 左侧彩色边条 */
+.post-toc-float::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #3182ce 0%, #63b3ed 100%);
+    border-radius: 12px 0 0 12px;
+}
+
 .post-toc-float:hover {
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        0 2px 8px rgba(0, 0, 0, 0.06);
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
 }
 
 /* 暗色模式 */
 html.dark .post-toc-float {
-    background: rgba(45, 55, 72, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(45, 55, 72, 0.95);
     box-shadow: 
-        0 4px 24px rgba(0, 0, 0, 0.3),
-        0 1px 2px rgba(0, 0, 0, 0.2);
+        0 4px 24px rgba(0, 0, 0, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+html.dark .post-toc-float::before {
+    background: linear-gradient(180deg, #63b3ed 0%, #90cdf4 100%);
 }
 
 html.dark .post-toc-float:hover {
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        0 2px 8px rgba(0, 0, 0, 0.3);
+        0 8px 32px rgba(0, 0, 0, 0.45),
+        0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* 内部容器 - 左侧 padding 给边条留空间 */
+.post-toc-inner {
+    padding: 1rem 1rem 1rem 1.25rem;
 }
 
 /* 目录标题 */
@@ -56,6 +75,7 @@ html.dark .post-toc-float:hover {
     letter-spacing: 0.5px;
     text-transform: uppercase;
     font-family: system-ui, -apple-system, sans-serif;
+    padding-left: 4px;
 }
 
 html.dark .toc-title {
@@ -71,7 +91,7 @@ html.dark .toc-title {
 
 /* 目录内容区域 */
 .toc {
-    padding: 0;
+    padding: 0 4px;
     margin: 0;
     line-height: 1.6;
     list-style-type: none;
