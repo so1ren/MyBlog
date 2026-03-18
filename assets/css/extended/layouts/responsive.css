@@ -5,7 +5,23 @@
     }
     
     .post-title {
-        font-size: 1.8rem !important;
+        font-size: 1.6rem !important;
+    }
+    
+    .post-content {
+        padding: 0 1rem;
+    }
+    
+    .post-content h1 {
+        font-size: 1.6rem;
+    }
+    
+    .post-content h2 {
+        font-size: 1.4rem;
+    }
+    
+    .post-content h3 {
+        font-size: 1.2rem;
     }
 }
 

@@ -176,8 +176,14 @@ html.dark .post-content code:not(pre code) {
     padding: 1rem;
     font-size: 0.95em;
   }
+}
+
+/* 移动端触摸目标尺寸优化 */
+@media (max-width: 768px) {
   .code-btn {
-    width: 22px;
-    height: 22px;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
   }
 }

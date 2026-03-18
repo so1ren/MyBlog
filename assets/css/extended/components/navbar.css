@@ -13,6 +13,61 @@
     margin-left: 2rem !important;
 }
 
+/* ===== 移动端导航菜单优化 ===== */
+@media (max-width: 768px) {
+    #menu {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    #menu::-webkit-scrollbar {
+        display: none;
+    }
+    #menu li {
+        margin-left: 0 !important;
+        flex-shrink: 0;
+    }
+    #menu li a {
+        font-size: 1rem !important;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    /* Logo 缩小 */
+    .logo a {
+        font-size: 1.4rem !important;
+    }
+    
+    /* 主题开关缩小 */
+    .theme-switch {
+        width: 36px;
+        height: 20px;
+    }
+    .slider::before {
+        height: 14px;
+        width: 14px;
+    }
+    input:checked + .slider::before {
+        transform: translateX(16px);
+    }
+}
+
+@media (max-width: 480px) {
+    #menu {
+        gap: 0.3rem;
+    }
+    #menu li a {
+        font-size: 0.9rem !important;
+        padding: 0.25rem 0.5rem;
+    }
+    .logo a {
+        font-size: 1.2rem !important;
+    }
+}
+
 /* ===== 小巧优美开关 ========== */
 .theme-switch-wrapper {
     display: inline-flex;

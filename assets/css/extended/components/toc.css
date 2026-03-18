@@ -141,16 +141,31 @@ html.dark .toc ul ul {
     display: none;
 }
 
-/* ---- 响应式 ---- */
-@media (max-width: 1449px) {
+/* ---- 响应式 - 平板 (1200px 以下) ---- */
+@media (max-width: 1200px) {
+    .post-toc-float {
+        top: 160px;
+        right: 30px;
+        width: 220px;
+    }
+}
+
+/* ---- 响应式 - 移动端 (768px 以下) ---- */
+@media (max-width: 768px) {
     .post-toc-float {
         position: static !important;
-        width: auto;
+        width: 100%;
         max-height: none;
-        margin-bottom: 24px;
-        padding: 0;
-        border: none !important;
-        border-radius: 0 !important;
+        margin-bottom: 20px;
+        padding: 12px;
+        border: 1px solid var(--border-color, #e5e7eb) !important;
+        border-radius: 8px !important;
+        background: var(--c-bg, rgba(255,255,255,0.05)) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    }
+    
+    html.dark .post-toc-float {
+        background: rgba(42, 48, 64, 0.8) !important;
     }
     
     .toc .inner {
@@ -158,6 +173,29 @@ html.dark .toc ul ul {
     }
     
     .toc a {
-        padding: 4px 8px !important;
+        padding: 6px 10px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .toc ul ul {
+        margin-left: 4px !important;
+    }
+    
+    .toc ul ul a {
+        padding-left: 20px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* ---- 响应式 - 小屏 (480px 以下) ---- */
+@media (max-width: 480px) {
+    .post-toc-float {
+        margin-bottom: 16px;
+        padding: 10px;
+    }
+    
+    .toc a {
+        padding: 5px 8px !important;
+        font-size: 0.88rem !important;
     }
 }

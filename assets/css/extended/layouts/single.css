@@ -3,6 +3,13 @@
     font-size: var(--font-xl) !important;
 }
 
+/* 文章内图片响应式 */
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* 文章内容标题字体大小调整 */
 .post-content h1 {
     font-size: 1.9rem;

@@ -149,3 +149,10 @@ html.dark .header.scrolled {
     background: rgba(49, 130, 206, 0.3);
     color: inherit;
 }
+
+/* 移动端：防止水平滚动 */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+}
