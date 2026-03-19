@@ -1,0 +1,41 @@
+# Hugo build output
+public/
+resources/
+
+# Hugo outputs to root when misconfigured (should not happen, but safety net)
+/index.html
+/404.html
+/robots.txt
+/sitemap.xml
+/archives/
+/categories/
+/tags/
+/posts/
+/css/
+/js/
+/fonts/
+/search/
+
+# Image caches in Hugo builds
+*. whale*
+*.css.map
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.#*
+
+# OS directories
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+
+# Lock files
+.hugo_build.lock
