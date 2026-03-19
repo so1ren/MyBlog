@@ -6,8 +6,22 @@
     <description>Recent content in Posts on Solren的网络自留地</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 01 Sep 2025 22:27:46 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://caiyu.life/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenClaw 渠道与通信</title>
+      <link>https://caiyu.life/posts/2026-03-19_openclaw_%E6%B8%A0%E9%81%93%E4%B8%8E%E9%80%9A%E4%BF%A1/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/posts/2026-03-19_openclaw_%E6%B8%A0%E9%81%93%E4%B8%8E%E9%80%9A%E4%BF%A1/</guid>
+      <description>OpenClaw 渠道与通信</description>
+    </item>
+    <item>
+      <title>OpenClaw 入门与安装</title>
+      <link>https://caiyu.life/posts/2026-03-19_openclaw_%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/posts/2026-03-19_openclaw_%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AE%89%E8%A3%85/</guid>
+      <description>OpenClaw 入门与安装</description>
+    </item>
     <item>
       <title>基于Hugo和PaperMod搭建的个人博客</title>
       <link>https://caiyu.life/posts/%E5%9F%BA%E4%BA%8Ehugo%E5%92%8Cpapermod%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
