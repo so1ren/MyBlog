@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>OpenClaw on Solren的网络自留地</title>
+    <link>https://caiyu.life/tags/openclaw/</link>
+    <description>Recent content in OpenClaw on Solren的网络自留地</description>
+    <generator>Hugo -- 0.157.0</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://caiyu.life/tags/openclaw/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenClaw 入门与安装</title>
+      <link>https://caiyu.life/posts/2026-03-19_openclaw_%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/posts/2026-03-19_openclaw_%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AE%89%E8%A3%85/</guid>
+      <description>OpenClaw 入门与安装</description>
+    </item>
+  </channel>
+</rss>
