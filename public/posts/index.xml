@@ -23,6 +23,14 @@
       <description>OpenClaw 入门与安装</description>
     </item>
     <item>
+      <title>学习笔记（案例驱动版）</title>
+      <link>https://caiyu.life/posts/2026-03-19_openclaw_%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/posts/2026-03-19_openclaw_%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/</guid>
+      <description>&lt;h1 id=&#34;gateway-架构---学习笔记&#34;&gt;Gateway 架构 - 学习笔记&lt;/h1&gt;
+&lt;p&gt;这篇文档讲的是如何设计一个统一的消息网关，它能同时管理 WhatsApp、Telegram、Slack 等一堆聊天软件，并且让各种客户端（比如手机App、电脑软件）都能通过它来收发消息。想象一下，你有一个超级管家，帮你打理所有社交账号，而这篇文档就是这位管家的“建筑设计图”。&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>基于Hugo和PaperMod搭建的个人博客</title>
       <link>https://caiyu.life/posts/%E5%9F%BA%E4%BA%8Ehugo%E5%92%8Cpapermod%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
       <pubDate>Mon, 01 Sep 2025 22:27:46 +0800</pubDate>
