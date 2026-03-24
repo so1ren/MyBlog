@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Drafts on Solren的网络自留地</title>
+    <link>https://caiyu.life/draft/</link>
+    <description>Recent content in Drafts on Solren的网络自留地</description>
+    <generator>Hugo -- 0.157.0</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://caiyu.life/draft/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenClaw Discord 快速接入（系列二）</title>
+      <link>https://caiyu.life/draft/2026-03-19_openclaw_s2_discord/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/draft/2026-03-19_openclaw_s2_discord/</guid>
+      <description>把 AI 接入真实聊天平台</description>
+    </item>
+    <item>
+      <title>OpenClaw 从零到一（系列一）</title>
+      <link>https://caiyu.life/draft/2026-03-19_openclaw_s1_getting_started/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/draft/2026-03-19_openclaw_s1_getting_started/</guid>
+      <description>&lt;h1 id=&#34;openclaw-入门---学习笔记&#34;&gt;OpenClaw 入门 - 学习笔记&lt;/h1&gt;
+&lt;p&gt;你是不是也想过，要是能有个自己的 AI 助手，能通过微信、Telegram 这些你常用的 App 和你聊天，还能帮你查资料、写代码，那该多好？但一想到要自己搭服务器、写接口、处理各种 API 调用，头就大了。别急，OpenClaw 就是来解决这个问题的。这篇笔记，就是我带你从零开始，在 5 分钟内把这个“梦想助手”跑起来的全过程。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>OpenClaw 定时自动化（系列三）</title>
+      <link>https://caiyu.life/draft/2026-03-19_openclaw_s3_cron_heartbeat/</link>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://caiyu.life/draft/2026-03-19_openclaw_s3_cron_heartbeat/</guid>
+      <description>&lt;h1 id=&#34;cron-vs-heartbeat什么时候该用哪个---学习笔记&#34;&gt;Cron vs Heartbeat：什么时候该用哪个？ - 学习笔记&lt;/h1&gt;
+&lt;p&gt;上回我们把 AI 接入了 Discord，让它能像个真正的 Bot 一样在频道里聊天。现在，我们想让这个 AI 助手变得更“主动”一点，比如每天早上自动给我发个简报，或者每隔半小时帮我看看有没有重要邮件。这时候，OpenClaw 给了我们两个选择：Cron 和 Heartbeat。这篇笔记，就是来聊聊这俩“定时器”到底有啥区别，以及我该怎么选。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
