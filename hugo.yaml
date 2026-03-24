@@ -119,6 +119,8 @@ menu:
 
 
 markup:
+  math:
+    enable: true
   highlight:
     noClasses: false
     lineNos: true  # 启用行号
