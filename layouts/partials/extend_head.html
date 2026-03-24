@@ -43,10 +43,11 @@ document.addEventListener("DOMContentLoaded", function() {
             {left: '\\(', right: '\\)', display: false},
             {left: '\\[', right: '\\]', display: true}
         ],
-        macros: {
-            "\\ce": "\\mathrm{#1}"
-        },
         throwOnError: false
     });
 });
 </script>
+<style>
+.katex { font-family: Arial, sans-serif !important; }
+.katex .mord { font-family: Arial, sans-serif !important; }
+</style>
