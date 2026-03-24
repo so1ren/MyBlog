@@ -1,7 +1,7 @@
 ---
 title: "公式渲染测试"
 date: 2026-03-24
-draft: true
+draft: false
 categories: [测试]
 tags: [LaTeX, KaTeX, 化学方程式]
 math: true
