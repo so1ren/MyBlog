@@ -175,8 +175,8 @@ Heartbeat 和 Cron 不是谁替代谁的关系，而是**互补的黄金搭档**
 
 ## 课后自学
 
-- [[[OpenClaw 官方文档：Heartbeat](https://docs.openclaw.ai/concepts/heartbeat) - 深入了解 Heartbeat 的所有配置选项，比如如何设置不同的目标频道、非活跃时段等。
-- [[[OpenClaw 官方文档：Cron Jobs](https://docs.openclaw.ai/guides/cron-jobs) - 查看 Cron 命令的完整 CLI 参考，学习更多高级参数如 `--thinking`、`--stagger` 的用法。
-- [[[Cron 表达式在线生成器](https://crontab.guru/) - 一个非常实用的工具，当你对 `0 9 * * 1` 这种表达式感到困惑时，用它来验证和生成。
+- [[OpenClaw 官方文档：Heartbeat](https://docs.openclaw.ai/concepts/heartbeat) - 深入了解 Heartbeat 的所有配置选项，比如如何设置不同的目标频道、非活跃时段等。
+- [[OpenClaw 官方文档：Cron Jobs](https://docs.openclaw.ai/guides/cron-jobs) - 查看 Cron 命令的完整 CLI 参考，学习更多高级参数如 `--thinking`、`--stagger` 的用法。
+- [[Cron 表达式在线生成器](https://crontab.guru/) - 一个非常实用的工具，当你对 `0 9 * * 1` 这种表达式感到困惑时，用它来验证和生成。
 - **下一步学什么**：文档中多次提到了 **Lobster**，这是一个用于构建确定性、多步骤、可审批工作流的工具。如果你发现有些自动化需要一连串操作（比如“监控到错误 -> 拉取日志 -> 分析 -> 创建工单 -> 通知负责人”），那么 Lobster 就是你的下一站。
 这就是本篇的全部内容。如果觉得有收获，可以分享给需要的朋友。

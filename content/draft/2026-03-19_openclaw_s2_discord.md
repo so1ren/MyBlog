@@ -68,7 +68,7 @@ source = "https://docs.openclaw.ai/channels/discord"
 理论说再多，不如动手做一遍。下面是我的实操笔记，你可以跟着走。
 
 ### 第一步：在 Discord 开发者门户“造”出你的机器人
-1.  访问 **[[[Discord Developer Portal](https://discord.com/developers/applications)**，点击右上角 “New Application”。给你的应用起个名，比如 “MyOpenClawAssistant”。
+1.  访问 **[[Discord Developer Portal](https://discord.com/developers/applications)**，点击右上角 “New Application”。给你的应用起个名，比如 “MyOpenClawAssistant”。
 2.  进入应用后，在左侧菜单点击 **“Bot”**。
 3.  在 Bot 页面，你可以设置机器人的头像和用户名（这个名字会显示在 Discord 里）。我设成了 “Claw助手”。
 4.  **关键一步**：在 Bot 页面往下翻，找到 **“Privileged Gateway Intents”** 区域。把这三个开关都打开：

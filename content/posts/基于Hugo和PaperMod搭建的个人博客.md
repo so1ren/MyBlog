@@ -18,15 +18,15 @@ Hugo是由Go编写的现代静态网站生成器，中文文档中提到 Git、G
 
 > Hugo有两个版本：标准版和扩展版。扩展版可以:
 > 
-> - 在[[[处理图像](https://hugo.opendocs.io/content-management/image-processing/)时，将图像编码为WebP格式。无论您使用哪个版本，都可以解码WebP图像。
-> - 使用内置的LibSass转译器，[[[将Sass转译为CSS](https://hugo.opendocs.io/hugo-pipes/transpile-sass-to-css/)。使用 [[[Dart Sass](https://hugo.opendocs.io/hugo-pipes/transpile-sass-to-css/#dart-sass) 转译器时不需要扩展版。
+> - 在[处理图像](https://hugo.opendocs.io/content-management/image-processing/)时，将图像编码为WebP格式。无论您使用哪个版本，都可以解码WebP图像。
+> - 使用内置的LibSass转译器，[将Sass转译为CSS](https://hugo.opendocs.io/hugo-pipes/transpile-sass-to-css/)。使用 [Dart Sass](https://hugo.opendocs.io/hugo-pipes/transpile-sass-to-css/#dart-sass) 转译器时不需要扩展版。
 > 
 
 看不懂，但看得出来扩展版包含了 Dart Sass 的功能。推荐使用扩展版，所以我们安装拓展版。
 
 Hugo 有三种安装方式：包管理器、从源代码构建和预编译二进制文件。我们小白选择**预编译二进制文件**，全程窗口化操作，不需要打代码。
 
-首先我们需要下载预编译二进制文件，进入 [[[Hugo 的 release 页面](https://github.com/gohugoio/hugo/releases/ "可能需要魔法")，目前最新的版本是 v0.149.0，看到 `Assets` ，找到对应的文件，我使用的是 [[[hugo_extended_0.149.0_windows-amd64.zip](https://github.com/gohugoio/hugo/releases/download/v0.149.0/hugo_extended_0.149.0_windows-amd64.zip)，下载。
+首先我们需要下载预编译二进制文件，进入 [Hugo 的 release 页面](https://github.com/gohugoio/hugo/releases/ "可能需要魔法")，目前最新的版本是 v0.149.0，看到 `Assets` ，找到对应的文件，我使用的是 [hugo_extended_0.149.0_windows-amd64.zip](https://github.com/gohugoio/hugo/releases/download/v0.149.0/hugo_extended_0.149.0_windows-amd64.zip)，下载。
 
 之后，创建一个名为 Hugo 的文件夹，Hugo 文件夹中再创建 sites 和 bin 两个文件夹。我们将下载好的 .zip 文件解压 bin 文件夹中，打开 bin 文件夹，你可以看到有 `hugo.exe` ，复制好 `hugo.exe` 的文件路径，文件路径最好全为英文。现在我们把 Hugo 程序拷贝到了我们的电脑上，但是当我们想要使用 Hugo 时 Windows 系统不知道 Hugo 程序在哪，因此我们需要在 Windows 系统中指定 Hugo 文件的位置，即设置 Windows 系统的 PATH环境变量。
 
@@ -46,13 +46,13 @@ Hugo 有三种安装方式：包管理器、从源代码构建和预编译二进
 
 ## 1.2 安装 Git
 
-Git 是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。在这里，我们利用这个系统将我们的网站上传到 [[[Github 网站](https://github.com)上，理论上只要能够访问到 github 就能够访问到我们的博客。
+Git 是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。在这里，我们利用这个系统将我们的网站上传到 [Github 网站](https://github.com)上，理论上只要能够访问到 github 就能够访问到我们的博客。
 
-现在点击下载 [[[Git](https://github.com/git-for-windows/git/releases/download/v2.51.0.windows.1/Git-2.51.0-64-bit.exe), 下载好后直接双击运行 exe 文件。除了修改安装路径，剩下基本就是默认，具体的操作可以参考这篇[[[文章](https://zhuanlan.zhihu.com/p/242540359)。在开始菜单中看到Git的三个启动图标（Git Bash、Git CMD(Deprecated)、Git GUI）就说明安装好了。
+现在点击下载 [Git](https://github.com/git-for-windows/git/releases/download/v2.51.0.windows.1/Git-2.51.0-64-bit.exe), 下载好后直接双击运行 exe 文件。除了修改安装路径，剩下基本就是默认，具体的操作可以参考这篇[文章](https://zhuanlan.zhihu.com/p/242540359)。在开始菜单中看到Git的三个启动图标（Git Bash、Git CMD(Deprecated)、Git GUI）就说明安装好了。
 
 # 2 安装及个性化 PaperMod 主题
 
-我喜欢简洁大方的风格，这款 [[[PaperMod 主题](https://github.com/adityatelange/hugo-PaperMod)就很对我的口味。简约不失奢华，奢华中又有一丝认真，认真中又透着些许优雅，非常适合我这种敏感肌的宝宝使用。
+我喜欢简洁大方的风格，这款 [PaperMod 主题](https://github.com/adityatelange/hugo-PaperMod)就很对我的口味。简约不失奢华，奢华中又有一丝认真，认真中又透着些许优雅，非常适合我这种敏感肌的宝宝使用。
 
 ## 2.1 建立博客并安装 PaperMod 主题
 
@@ -283,9 +283,9 @@ menu:
 
 ### 2.3.1 自定义字体
 
-简洁的博客多是一些文字，字体的选择就变得很重要。我在这里使用[[[霞鹜文楷屏幕阅读版](https://github.com/lxgw/LxgwWenKai-Screen)作为中文字体，Arial 作为英文字体。
+简洁的博客多是一些文字，字体的选择就变得很重要。我在这里使用[霞鹜文楷屏幕阅读版](https://github.com/lxgw/LxgwWenKai-Screen)作为中文字体，Arial 作为英文字体。
 
-我们首先需要下载这款字体，点击[[[霞鹜文楷屏幕阅读版](https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.520/LXGWWenKaiGBScreen.ttf)下载 `ttf` 文件。中文字体文件通常很大，直接使用 `ttf` 文件可能会严重影响网站加载速度。我们需要将它转换为 `woff2` 格式，点击[[[转化](https://www.youcompress.com/zh-cn/ttf/)，上传 `ttf` 文件，下载转化后的 `woff2` 文件，放到 `static\fonts\` 中，没有 `fonts` 文件夹就新建。
+我们首先需要下载这款字体，点击[霞鹜文楷屏幕阅读版](https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.520/LXGWWenKaiGBScreen.ttf)下载 `ttf` 文件。中文字体文件通常很大，直接使用 `ttf` 文件可能会严重影响网站加载速度。我们需要将它转换为 `woff2` 格式，点击[转化](https://www.youcompress.com/zh-cn/ttf/)，上传 `ttf` 文件，下载转化后的 `woff2` 文件，放到 `static\fonts\` 中，没有 `fonts` 文件夹就新建。
 
 现在我们需要将下载的字体文件应用到网站。上面提到 `CSS` 文件主要控制样式，因此我们需要创建一个 `CSS` 文件。好在 PaperMod 主题帮我们创建好了 `CSS` 文件，位于 `themes\PaperMod\assets\css\extended \blank.css `，按路径找到 `blank.css`，打开。在 `blank.css` 中加入
 
@@ -612,7 +612,7 @@ git publish "你的提交信息"
 
 ## 3.2 提交网站到 Cloudflare Pages
 
-过程非常简单，你可以参考[[[这篇文章](https://0x8.net/post/deploy-the-hugo-site-to-cloudflare-pages/)。
+过程非常简单，你可以参考[这篇文章](https://0x8.net/post/deploy-the-hugo-site-to-cloudflare-pages/)。
 
 # 4 写在最后
 
@@ -628,13 +628,13 @@ git publish "你的提交信息"
 
 通过 VS Code 和人工智能的帮助，我们可以很轻松地个性化自己的网站。
 
-点击[[[这里](https://code.visualstudio.com/)来下载 VS Code，[[[这篇文章](https://zhuanlan.zhihu.com/p/698865320)可以指导你正确安装并配置。
+点击[这里](https://code.visualstudio.com/)来下载 VS Code，[这篇文章](https://zhuanlan.zhihu.com/p/698865320)可以指导你正确安装并配置。
 
-VS code 和人工智能结合是我们小白的大救星，这里有一篇[[[文章](https://zhuanlan.zhihu.com/p/20847227026)可以指导你学会在 VS Code 中使用 DeepSeek。
+VS code 和人工智能结合是我们小白的大救星，这里有一篇[文章](https://zhuanlan.zhihu.com/p/20847227026)可以指导你学会在 VS Code 中使用 DeepSeek。
 
 ## 5.2 参考文献
 
-- [[[Hugo 官方文档](https://gohugo.io/documentation/)
-- [[[PaperMod 官方文档](https://github.com/adityatelange/hugo-PaperMod/wiki)
-- [[[国产大模型 Deepseek](https://chat.deepseek.com/)
+- [Hugo 官方文档](https://gohugo.io/documentation/)
+- [PaperMod 官方文档](https://github.com/adityatelange/hugo-PaperMod/wiki)
+- [国产大模型 Deepseek](https://chat.deepseek.com/)
 这就是本篇的全部内容。如果觉得有收获，可以分享给需要的朋友。

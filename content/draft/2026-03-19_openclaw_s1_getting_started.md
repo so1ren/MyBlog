@@ -146,9 +146,9 @@ openclaw dashboard
 
 现在你的 AI 助手已经在本地跑起来了，但只能通过浏览器聊天。接下来，是让它真正“走入生活”的时候。
 
--   **[[[连接真实渠道](https://docs.openclaw.ai/channels)** - 这是最激动人心的部分。看看如何将你刚刚搭建好的核心，连接到 WhatsApp、Telegram、Discord、甚至是 iMessage（macOS）上。文档说 Telegram 是最快上手的，可以从这里开始。
--   **[[[配置权限认证](https://docs.openclaw.ai/auth)** - 当你的助手能对外服务时，你需要决定谁可以和它聊天。学习如何配置简单的 API 密钥认证，或者更复杂的身份验证方式，控制访问权限。
--   **[[[探索核心配置](https://docs.openclaw.ai/configuration)** - 深入了解模型设置、工具调用、沙箱环境等高级配置。比如，让你的助手不仅能聊天，还能执行代码、搜索网页。
--   **[[[为助手添加能力](https://docs.openclaw.ai/tools)** - 查看 OpenClaw 支持哪些开箱即用的工具（如浏览器操作、命令行执行、自定义技能），让你助手的能力从“聊天”扩展到“行动”。
+-   **[[连接真实渠道](https://docs.openclaw.ai/channels)** - 这是最激动人心的部分。看看如何将你刚刚搭建好的核心，连接到 WhatsApp、Telegram、Discord、甚至是 iMessage（macOS）上。文档说 Telegram 是最快上手的，可以从这里开始。
+-   **[[配置权限认证](https://docs.openclaw.ai/auth)** - 当你的助手能对外服务时，你需要决定谁可以和它聊天。学习如何配置简单的 API 密钥认证，或者更复杂的身份验证方式，控制访问权限。
+-   **[[探索核心配置](https://docs.openclaw.ai/configuration)** - 深入了解模型设置、工具调用、沙箱环境等高级配置。比如，让你的助手不仅能聊天，还能执行代码、搜索网页。
+-   **[[为助手添加能力](https://docs.openclaw.ai/tools)** - 查看 OpenClaw 支持哪些开箱即用的工具（如浏览器操作、命令行执行、自定义技能），让你助手的能力从“聊天”扩展到“行动”。
 
 好了，你的 AI 助手核心已经苏醒，正在本地待命。接下来，该为它打开通往世界的大门了。
