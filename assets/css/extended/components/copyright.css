@@ -67,12 +67,16 @@
     color: var(--primary-color);
     font-weight: 500;
     text-decoration: none;
-    transition: color 0.2s ease;
+    padding: 0.1em 0.4em;
+    margin: 0 -0.4em;
+    border-radius: 5px;
+    transition: background 0.2s ease, color 0.2s ease;
+    display: inline;
 }
 
 .post-copyright-content a:hover {
+    background: rgba(49, 130, 206, 0.1);
     color: var(--primary-dark);
-    text-decoration: underline;
 }
 
 .post-copyright-footer {
@@ -90,10 +94,14 @@
     text-decoration: none;
     color: #718096;
     font-size: 12px;
-    transition: color 0.2s ease;
+    padding: 0.2em 0.5em;
+    margin: 0 -0.5em;
+    border-radius: 5px;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .post-copyright-footer a:hover {
+    background: rgba(49, 130, 206, 0.1);
     color: var(--primary-color);
 }
 
@@ -133,6 +141,7 @@
 }
 
 .dark .post-copyright-content a:hover {
+    background: rgba(99, 179, 237, 0.12);
     color: #90cdf4;
 }
 
@@ -146,6 +155,7 @@
 }
 
 .dark .post-copyright-footer a:hover {
+    background: rgba(99, 179, 237, 0.12);
     color: #63b3ed;
 }
 
