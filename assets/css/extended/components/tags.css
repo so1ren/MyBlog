@@ -28,8 +28,10 @@
 }
 
 .post-tags-between .tag-link:hover{
-  border-color:rgba(232, 121, 160, 0.5);
+  border-color:rgba(232, 121, 160, 0.6);
+  border-style:solid;
   color:#c2356b;
+  transform:scale(1.03);
 }
 
 /* 暗色模式 */
