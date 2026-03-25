@@ -150,6 +150,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    color: var(--c-meta);
     transition: color 0.15s ease;
 }
 .meta-item:hover { color: var(--c-meta-hover); }
@@ -161,6 +162,14 @@
     stroke: currentColor;
     stroke-width: 2;
 }
+
+/* 分类链接默认颜色 */
+a.meta-category {
+    color: var(--c-meta);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+a.meta-category:hover { color: var(--c-meta-hover); }
 
 .meta-sep { color: #d1d5db; }
 
