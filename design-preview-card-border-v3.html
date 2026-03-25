@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卡片边框动画 v3</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background: #f8fafc;
+      color: #4a5568;
+      padding: 3rem 2rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; }
+    .preview-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9b59b6; margin-bottom: 0.5rem; }
+    h1 { font-size: 1.3rem; font-weight: 600; color: #1a202c; margin-bottom: 2rem; }
+    .option { margin-bottom: 3rem; }
+    .option-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9b59b6; margin-bottom: 0.4rem; }
+    .option-desc { font-size: 0.8rem; color: #aaa; margin-bottom: 0.75rem; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.4rem;
+      border: 2px solid #eaecef;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin-bottom: 0.75rem;
+      cursor: default;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    h2 { font-size: 1.1rem; font-weight: 600; color: #1a202c; margin-bottom: 0.4rem; }
+    p { font-size: 0.9rem; color: #718096; }
+
+    /* ===== A: 边框颜色渐变 ===== */
+    .card-a:hover {
+      border-color: #93c5fd;
+      border-image: linear-gradient(135deg, #60a5fa, #3b82f6, #818cf8) 1;
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+    }
+
+    /* ===== B: 彩色边框替换 ===== */
+    .card-b:hover {
+      border-color: #3182ce;
+      box-shadow: 0 6px 20px rgba(49, 130, 206, 0.15);
+    }
+
+    /* ===== C: 边框 + 内发光 ===== */
+    .card-c:hover {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12), 0 6px 20px rgba(59, 130, 246, 0.1);
+    }
+
+    /* ===== D: 边框颜色从左滑入 ===== */
+    .card-d {
+      border: 2px solid transparent;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(to right, #93c5fd, #3b82f6) border-box;
+      transition: background 0.3s ease;
+    }
+    .card-d:hover {
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.12);
+    }
+
+    /* ===== E: 边框动态渐变 ===== */
+    .card-e:hover {
+      border-color: #60a5fa;
+      box-shadow: 0 8px 24px rgba(96, 165, 250, 0.2);
+    }
+
+    /* ===== F: 蓝色描边加粗 ===== */
+    .card-f {
+      border-width: 2px;
+      transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-f:hover {
+      border-color: #3b82f6;
+      border-width: 2.5px;
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+    }
+
+    /* ===== G: 整卡蓝色描边 ===== */
+    .card-g:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2), 0 0 0 1px rgba(37, 99, 235, 0.05);
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="preview-label">卡片边框动画 v3</div>
+  <h1>hover 看效果，选编号告诉我</h1>
+
+  <div class="option">
+    <div class="option-label">方案 A — 渐变色边框</div>
+    <div class="option-desc">hover 时边框变成蓝紫渐变色，最显眼</div>
+    <div class="card card-a">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 B — 纯蓝边框</div>
+    <div class="option-desc">hover 时边框直接变蓝色，最直接</div>
+    <div class="card card-b">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 C — 边框 + 外发光</div>
+    <div class="option-desc">hover 时边框变蓝 + 四周散出一圈光晕</div>
+    <div class="card card-c">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 D — 渐变边框始终可见</div>
+    <div class="option-desc">边框始终是渐变色，hover 时阴影加深，更高调</div>
+    <div class="card card-d">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 E — 深蓝边框 + 强阴影</div>
+    <div class="option-desc">hover 时边框变深蓝，阴影更强烈</div>
+    <div class="card card-e">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 F — 边框加粗</div>
+    <div class="option-desc">hover 时边框变蓝 + 变粗 0.5px</div>
+    <div class="card card-f">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 G — 深蓝描边</div>
+    <div class="option-desc">hover 时边框变深蓝，配合阴影，像描边卡片</div>
+    <div class="card card-g">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
