@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>博客设计预览 - Apple 极简浅蓝风</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Apple-inspired light blue palette */
+      --bg: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --text-secondary: #86868b;
+      --text-tertiary: #acacb0;
+      --border: #d2d2d7;
+      --border-subtle: #e5e5e5;
+
+      /* Apple blue accent */
+      --accent: #007AFF;
+      --accent-light: #e5f1ff;
+      --accent-hover: #005CC6;
+
+      /* Code block */
+      --code-bg: #1e1e1e;
+      --code-header-bg: #2d2d2d;
+      --code-text: #d4d4d4;
+      --code-lang-bg: #007AFF;
+      --code-lang-text: #ffffff;
+
+      /* Typography */
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-mono: 'Fira Code', 'SF Mono', 'Fira Code', monospace;
+
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+
+      /* Transitions */
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      padding: 3rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ===== HEADER ===== */
+    .site-header {
+      padding-bottom: var(--space-lg);
+      margin-bottom: var(--space-xl);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .site-title {
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: var(--space-lg);
+      margin-top: var(--space-sm);
+    }
+
+    .site-nav a {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 150ms var(--ease);
+    }
+
+    .site-nav a:hover { color: var(--accent); }
+
+    /* ===== ARTICLE META ===== */
+    .article-title {
+      font-family: var(--font-sans);
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: var(--space-md);
+    }
+
+    .article-meta {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      font-weight: 400;
+    }
+
+    /* ===== TAGS ===== */
+    .post-tags-between {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xl);
+    }
+
+    .tag-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 100px;
+      transition: background 150ms var(--ease), color 150ms var(--ease);
+    }
+
+    .tag-link:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .tag-link svg { width: 11px; height: 11px; }
+
+    /* ===== TYPOGRAPHY ===== */
+    h2 {
+      font-family: var(--font-sans);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.015em;
+      margin: var(--space-2xl) 0 var(--space-md);
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: var(--space-xl) 0 var(--space-sm);
+    }
+
+    p {
+      margin-bottom: var(--space-md);
+      color: var(--text);
+    }
+
+    /* ===== LINKS ===== */
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 150ms var(--ease);
+    }
+
+    a:hover { color: var(--accent-hover); }
+
+    /* ===== BOLD ===== */
+    strong { font-weight: 600; color: var(--text); }
+
+    /* ===== BLOCKQUOTE ===== */
+    blockquote {
+      margin: var(--space-xl) 0;
+      padding: var(--space-lg) var(--space-xl);
+      border-left: 3px solid var(--accent);
+      background: var(--bg-secondary);
+      border-radius: 0 8px 8px 0;
+      position: relative;
+    }
+
+    blockquote::before {
+      content: '"';
+      position: absolute;
+      left: 0.75rem;
+      top: 0.5rem;
+      font-family: var(--font-serif);
+      font-size: 3.5rem;
+      color: var(--accent);
+      opacity: 0.3;
+      line-height: 1;
+    }
+
+    blockquote p {
+      margin: 0;
+      font-size: 1.0625rem;
+      color: var(--text);
+      font-style: normal;
+    }
+
+    blockquote strong { color: var(--accent); }
+
+    /* ===== CODE BLOCK ===== */
+    .highlight {
+      margin: var(--space-xl) 0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--code-bg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* Code header */
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      background: var(--code-header-bg);
+      min-height: 36px;
+    }
+
+    .code-lang {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--code-lang-text);
+      background: var(--code-lang-bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.03em;
+    }
+
+    .code-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-btn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 150ms var(--ease), color 150ms var(--ease);
+    }
+
+    .code-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* Code content */
+    .highlight pre {
+      margin: 0;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      background: var(--code-bg);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--code-text);
+    }
+
+    .highlight code { background: transparent; padding: 0; color: inherit; font-family: inherit; }
+
+    .ln { color: #5c6370; padding-right: 1em; margin-right: 0.75em; border-right: 1px solid #3e3e3e; user-select: none; }
+    .k { color: #c678dd; font-weight: 500; }
+    .s { color: #98c379; }
+    .c { color: #5c6370; font-style: italic; }
+    .nf { color: #61afef; }
+    .nb { color: #e5c07b; }
+    .nc { color: #e5c07b; font-weight: 500; }
+    .m { color: #d19a66; }
+
+    /* Inline code */
+    :not(pre) > code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      background: var(--bg-secondary);
+      color: var(--accent);
+      border-radius: 5px;
+      padding: 0.15em 0.4em;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ===== TOC ===== */
+    .toc-wrapper {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: var(--space-lg);
+      margin: var(--space-xl) 0;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .toc-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toc-list li a {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: block;
+      padding: 3px 0;
+      border-left: 2px solid transparent;
+      padding-left: 10px;
+      margin-left: -10px;
+      transition: color 150ms var(--ease), border-color 150ms var(--ease);
+    }
+
+    .toc-list li a:hover, .toc-list li a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+
+    .toc-list .toc-h3 a { padding-left: 22px; margin-left: -10px; }
+
+    /* ===== INTRO LABEL ===== */
+    .intro {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .intro .label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+    }
+
+    .intro p { font-size: 0.9375rem; color: var(--text-secondary); margin: 4px 0 0; }
+
+    /* ===== FOOTER ===== */
+    .post-footer {
+      margin-top: var(--space-2xl);
+      padding-top: var(--space-xl);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-meta {
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="site-title">Solren的网络自留地</div>
+    <nav class="site-nav">
+      <a href="#">文章</a>
+      <a href="#">分类</a>
+      <a href="#">关于</a>
+    </nav>
+  </header>
+
+  <!-- Intro -->
+  <div class="intro">
+    <div class="label">Design Preview · Apple Minimal Blue</div>
+    <p>极简浅蓝调 · 保留原文所有好设计 · 无动画 · 无毛玻璃</p>
+  </div>
+
+  <!-- Article -->
+  <article>
+    <h1 class="article-title">Python 基础：廖雪峰第1课</h1>
+    <div class="post-tags-between">
+      <a class="tag-link" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag-link" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+    </div>
+    <div class="article-meta">2026年03月25日 · 预计阅读8分钟 · 共3200字</div>
+
+    <!-- TOC -->
+    <div class="toc-wrapper">
+      <div class="toc-title">目录</div>
+      <ul class="toc-list">
+        <li><a href="#">什么是变量？</a></li>
+        <li class="toc-h3"><a href="#">变量的命名规则</a></li>
+        <li><a href="#">数据类型</a></li>
+        <li class="toc-h3"><a href="#">字符串详解</a></li>
+        <li><a href="#">条件语句</a></li>
+      </ul>
+    </div>
+
+    <h2>什么是变量？</h2>
+
+    <p>
+      变量是编程中最基本的概念之一。你可以把它想象成一个<strong>贴了标签的盒子</strong>，
+      盒子里面装着数据，标签上写着变量的名字。
+      关于这一点，<a href="#">廖雪峰老师的教程</a>里有更详细的解释。
+    </p>
+
+    <h3>变量的命名规则</h3>
+
+    <p>变量名必须遵循以下规则：</p>
+
+    <blockquote>
+      <p>变量名必须以字母或下划线开头，后面跟任意数量的字母、数字或下划线。<strong>Python 区分大小写</strong>，所以 <code>Name</code> 和 <code>name</code> 是两个不同的变量。</p>
+    </blockquote>
+
+    <p>来看一个具体例子：</p>
+
+    <div class="highlight">
+      <div class="code-header">
+        <span class="code-lang">python</span>
+        <div class="code-buttons">
+          <button class="code-btn" title="复制代码" onclick="navigator.clipboard.writeText(this.closest('.highlight').querySelector('code').innerText)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+          <button class="code-btn" title="折叠代码" onclick="this.closest('.highlight').classList.toggle('collapsed')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+          </button>
+        </div>
+      </div>
+      <pre><code><span class="ln">1</span><span class="k">name</span> <span class="nb">=</span> <span class="s">"Alice"</span>
+<span class="ln">2</span><span class="k">age</span> <span class="nb">=</span> <span class="m">25</span>
+<span class="ln">3</span><span class="k">is_student</span> <span class="nb">=</span> <span class="k">False</span>
+<span class="ln">4</span><span class="nf">print</span>(<span class="s">f"{name} is {age} years old"</span>)</code></pre>
+    </div>
+
+    <h2>数据类型</h2>
+
+    <p>
+      Python 内置了丰富的数据类型。了解每种类型的特点是写出好代码的基础。
+      详细内容可以参考<a href="#">官方文档</a>。
+    </p>
+
+    <blockquote>
+      <p>Python 是<strong>动态类型语言</strong>，这意味着你不需要显式声明变量的类型，Python 会自动推断。</p>
+    </blockquote>
+
+    <footer class="post-footer">
+      <div class="footer-meta">© 2026 Solren · 使用 Hugo + PaperMod 构建</div>
+    </footer>
+
+  </article>
+</div>
+
+</body>
+</html>

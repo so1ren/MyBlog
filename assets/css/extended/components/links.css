@@ -5,48 +5,29 @@
     border-bottom: none !important;
     background-image: none !important;
     box-shadow: none !important;
-    transition: color 0.25s ease;
     position: relative;
     font-weight: 500;
-    padding: 0.1em 0.3em;
-    margin: 0 -0.3em;
+    /* Option 5: 背景色淡入 */
+    padding: 0.1em 0.4em;
+    margin: 0 -0.4em;
+    border-radius: 5px;
+    transition: background 0.2s ease, color 0.2s ease;
     outline: none;
 }
 
-/* 悬停动画 */
-.post-content a::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    width: 0;
-    height: 2px;
-    background: currentColor;
-    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    z-index: 1;
-    opacity: 0;
-}
-
 .post-content a:hover {
+    background: rgba(49, 130, 206, 0.1);
     color: var(--primary-dark);
 }
 
-.post-content a:hover::before {
-    width: 100%;
-    opacity: 1;
-}
-
-/* 暗色模式适配 - 从 blank.css 提取 */
+/* 暗色模式适配 */
 .dark .post-content a {
     color: #63b3ed;
 }
 
 .dark .post-content a:hover {
+    background: rgba(99, 179, 237, 0.12);
     color: #90cdf4;
-}
-
-.dark .post-content a::before {
-    background: currentColor;
 }
 
 /* 标题链接特殊处理 */
@@ -55,16 +36,12 @@
 .post-content h3 a {
     padding: 0;
     margin: 0;
+    border-radius: 0;
 }
 
 .post-content h1 a:hover,
 .post-content h2 a:hover,
 .post-content h3 a:hover {
+    background: none;
     color: inherit;
-}
-
-.post-content h1 a::before,
-.post-content h2 a::before,
-.post-content h3 a::before {
-    display: none !important;
 }

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>博客改进预览 - 最小化改动</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=LXGW+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* 保留原配置 */
+      --primary-color: #3182ce;
+      --primary-dark: #2c5282;
+      --text-color: #4a5568;
+      --text-dark: #e2e8f0;
+      --bg-light: #fff;
+      --bg-dark: #2d3748;
+      --accent-light: #a8c6f7;
+      --accent-dark: #4a5568;
+      --border-light: #eaecef;
+      --border-dark: #4a5568;
+
+      /* 粉色保留 */
+      --bold-color-1: #ff1492;
+
+      /* 字体 */
+      --font-base: 18px;
+      --font-sm: 0.9em;
+      --font-lg: 1.1em;
+
+      --transition-fast: 0.15s ease;
+      --transition-smooth: 0.2s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, 'LXGW', sans-serif;
+      font-size: var(--font-base);
+      line-height: 1.8;
+      word-break: break-word;
+      background: var(--bg-light);
+      color: var(--text-color);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ===== 标题 ===== */
+    .article-title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      color: #1a202c;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ===== 标签（改进：去掉上浮和阴影） ===== */
+    .post-tags-between {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.8rem 0 1.2rem;
+      font-size: 0.85em;
+    }
+
+    .post-tags-between .tag-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255, 245, 250, 0.7);
+      color: #ff6b9c;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 110, 156, 0.2);
+      /* 改进：去掉 translateY 和 box-shadow，只保留颜色过渡 */
+      transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .post-tags-between .tag-link svg {
+      width: 12px;
+      height: 12px;
+      margin-right: 0.3rem;
+    }
+
+    .post-tags-between .tag-link:hover {
+      /* 改进：只变边框和颜色，不上浮 */
+      color: #ff4d8a;
+      border-color: rgba(255, 77, 138, 0.4);
+    }
+
+    .dark .post-tags-between .tag-link {
+      background: rgba(95, 55, 75, 0.5);
+      color: #ff8cb9;
+      border-color: rgba(255, 110, 156, 0.15);
+    }
+
+    /* ===== 元数据 ===== */
+    .post-meta {
+      font-size: var(--font-lg);
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 1rem;
+    }
+
+    /* ===== 链接（改进：简化下划线） ===== */
+    .post-content a {
+      color: var(--primary-color);
+      text-decoration: none;
+      border-bottom: none;
+      font-weight: 500;
+      /* 改进：去掉花哨的 ::before 下划线动画 */
+      transition: color var(--transition-fast);
+    }
+
+    .post-content a:hover {
+      color: var(--primary-dark);
+    }
+
+    /* ===== 加粗（保留粉色） ===== */
+    .post-content strong {
+      color: var(--bold-color-1);
+      font-weight: 600;
+    }
+
+    /* ===== 引用块（保留原设计） ===== */
+    .post-content blockquote {
+      margin: 1.8rem 0;
+      padding: 1.2rem 1.5rem 1.2rem 3.5rem;
+      border-left: 4px solid var(--accent-light);
+      border-radius: 0 8px 8px 0;
+      background: rgba(248, 250, 252, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    .post-content blockquote::before {
+      content: "“";
+      position: absolute;
+      left: 1rem;
+      top: 0.8rem;
+      font-size: 3.5rem;
+      font-family: Georgia, serif;
+      color: var(--accent-light);
+      line-height: 1;
+      font-weight: bold;
+      opacity: 0.6;
+    }
+
+    .post-content blockquote:hover {
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      border-left-color: #4c7dfe;
+    }
+
+    .post-content blockquote p {
+      margin: 0.8rem 0;
+      color: #374151;
+      font-size: 1.05em;
+      line-height: 1.7;
+    }
+
+    /* ===== 代码块（保留原设计） ===== */
+    .post-content .highlight {
+      margin: 1.8rem 0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #2d3748;
+      border: 1px solid #4a5568;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+      min-height: 36px;
+    }
+
+    .code-lang {
+      font-family: 'LXGW Mono', monospace;
+      font-size: 0.7rem;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .code-buttons { display: flex; gap: 6px; }
+
+    .code-btn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .code-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .highlight pre {
+      margin: 0;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      background: #2d3748;
+      font-family: 'Fira Code', 'LXGW Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+    }
+
+    .ln { color: #6a737d; padding-right: 1em; margin-right: 0.75em; border-right: 1px solid #3e3e3e; user-select: none; }
+    .k { color: #c678dd; font-weight: 500; }
+    .s { color: #98c379; }
+    .c { color: #6a737d; font-style: italic; }
+    .nf { color: #61afef; }
+    .nb { color: #e5c07b; }
+
+    .highlight code { background: transparent; padding: 0; color: inherit; font-family: inherit; }
+
+    :not(pre) > code {
+      font-family: 'LXGW Mono', monospace;
+      font-size: 0.9em;
+      background: rgba(45, 55, 72, 0.1);
+      color: #d63384;
+      border-radius: 5px;
+      padding: 0.15em 0.4em;
+      border: 1px solid var(--border-light);
+    }
+
+    /* ===== TOC（保留原设计） ===== */
+    .toc-wrapper {
+      background: rgba(248, 250, 252, 0.4);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .toc-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-list li a {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+      text-decoration: none;
+      display: block;
+      padding: 2px 0;
+      border-left: 2px solid transparent;
+      padding-left: 8px;
+      margin-left: -8px;
+      transition: border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .toc-list li a:hover {
+      color: var(--primary-dark);
+      border-left-color: var(--primary-color);
+    }
+
+    /* ===== 标题 ===== */
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 2rem 0 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; }
+
+    /* ===== 改动说明 ===== */
+    .changelog {
+      background: #fff;
+      border: 1px solid #eaecef;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .changelog .label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6a737d;
+      margin-bottom: 0.75rem;
+    }
+
+    .changelog ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .changelog li {
+      font-size: 0.9rem;
+      color: #4a5568;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .changelog li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: #9b59b6;
+    }
+
+    .changelog .kept {
+      color: #27ae60;
+      font-weight: 500;
+    }
+
+    .changelog .kept::before { content: '✓'; color: #27ae60; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="changelog">
+    <div class="label">改进说明</div>
+    <ul>
+      <li class="kept">代码块（折叠+复制按钮）保留</li>
+      <li class="kept">引用块（大引号+hover）保留</li>
+      <li class="kept">目录 hover 效果保留</li>
+      <li class="kept">粉色加粗 #ff1492 保留</li>
+      <li>删除了 fadeInUp 入场动画</li>
+      <li>标签 hover 去掉上浮和阴影</li>
+      <li>去掉 header 毛玻璃效果</li>
+      <li>链接下划线动画去掉，只保留颜色变化</li>
+    </ul>
+  </div>
+
+  <h1 class="article-title">Python 基础：廖雪峰第1课</h1>
+
+  <div class="post-tags-between">
+    <a class="tag-link" href="#">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+      Python
+    </a>
+    <a class="tag-link" href="#">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+      编程入门
+    </a>
+  </div>
+
+  <div class="post-meta">2026年03月25日 · 预计阅读8分钟 · 共3200字</div>
+
+  <!-- TOC -->
+  <div class="toc-wrapper">
+    <div class="toc-title">目录</div>
+    <ul class="toc-list">
+      <li><a href="#">什么是变量？</a></li>
+      <li><a href="#">变量的命名规则</a></li>
+      <li><a href="#">数据类型</a></li>
+    </ul>
+  </div>
+
+  <h2>什么是变量？</h2>
+
+  <p>
+    变量是编程中最基本的概念之一。你可以把它想象成一个<strong>贴了标签的盒子</strong>，
+    盒子里面装着数据，标签上写着变量的名字。
+    关于这一点，<a href="#">廖雪峰老师的教程</a>里有更详细的解释。
+  </p>
+
+  <h3>变量的命名规则</h3>
+
+  <p>变量名必须遵循以下规则：</p>
+
+  <blockquote>
+    <p>变量名必须以字母或下划线开头，后面跟任意数量的字母、数字或下划线。<strong>Python 区分大小写</strong>，所以 <code>Name</code> 和 <code>name</code> 是两个不同的变量。</p>
+  </blockquote>
+
+  <p>来看一个具体例子：</p>
+
+  <div class="highlight">
+    <div class="code-header">
+      <span class="code-lang">python</span>
+      <div class="code-buttons">
+        <button class="code-btn" title="复制代码">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+        <button class="code-btn" title="折叠代码">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+        </button>
+      </div>
+    </div>
+    <pre><code><span class="ln">1</span><span class="k">name</span> <span class="nb">=</span> <span class="s">"Alice"</span>
+<span class="ln">2</span><span class="k">age</span> <span class="nb">=</span> <span class="m">25</span>
+<span class="ln">3</span><span class="k">is_student</span> <span class="nb">=</span> <span class="k">False</span>
+<span class="ln">4</span><span class="nf">print</span>(<span class="s">f"{name} is {age} years old"</span>)</code></pre>
+  </div>
+
+  <h2>数据类型</h2>
+
+  <p>
+    Python 内置了丰富的数据类型。了解每种类型的特点是写出好代码的基础。
+    详细内容可以参考<a href="#">官方文档</a>。
+  </p>
+
+  <blockquote>
+    <p>Python 是<strong>动态类型语言</strong>，这意味着你不需要显式声明变量的类型，Python 会自动推断。</p>
+  </blockquote>
+
+</div>
+</body>
+</html>
