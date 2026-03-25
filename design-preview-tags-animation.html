@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标签动画方案预览</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background: #fff;
+      color: #4a5568;
+      padding: 3rem 2rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; }
+
+    h1 { font-size: 1.4rem; font-weight: 600; color: #1a202c; margin-bottom: 0.5rem; }
+    .intro { font-size: 0.875rem; color: #aaa; margin-bottom: 2.5rem; }
+
+    .option { margin-bottom: 2.5rem; }
+    .option-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9b59b6; margin-bottom: 0.4rem; }
+    .option-desc { font-size: 0.8rem; color: #aaa; margin-bottom: 0.75rem; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 20px;
+      border: 1px solid rgba(232, 121, 160, 0.2);
+      background: #fff0f6;
+      color: #e879a0;
+      transition: all 0.15s ease;
+      cursor: default;
+    }
+
+    .tag svg { width: 11px; height: 11px; }
+
+    /* ===== A: 只有颜色变化 ===== */
+    .tag-a:hover {
+      border-color: rgba(232, 121, 160, 0.5);
+      color: #c2356b;
+      background: #fff0f6;
+    }
+
+    /* ===== B: 背景加深 ===== */
+    .tag-b:hover {
+      background: #ffe4ef;
+      border-color: rgba(232, 121, 160, 0.4);
+      color: #c2356b;
+    }
+
+    /* ===== C: 背景 + 文字同步加深 ===== */
+    .tag-c:hover {
+      background: #fde8f2;
+      border-color: rgba(232, 121, 160, 0.5);
+      color: #a02558;
+    }
+
+    /* ===== D: 无 hover 效果 ===== */
+    .tag-d { cursor: default; }
+
+    /* ===== E: 边框变实 + 轻微放大 ===== */
+    .tag-e:hover {
+      border-color: rgba(232, 121, 160, 0.6);
+      border-style: solid;
+      color: #c2356b;
+      transform: scale(1.03);
+    }
+
+    /* ===== F: 背景填充 + 颜色变深 ===== */
+    .tag-f:hover {
+      background: #ffd9e8;
+      border-color: rgba(232, 121, 160, 0.4);
+      color: #b81e5c;
+    }
+
+    /* ===== G: 文字加粗 ===== */
+    .tag-g:hover {
+      font-weight: 700;
+      color: #c2356b;
+      border-color: rgba(232, 121, 160, 0.4);
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>标签动画方案</h1>
+  <p class="intro">hover 看效果，选编号告诉我。</p>
+
+  <div class="option">
+    <div class="option-label">方案 A — 只有颜色变化</div>
+    <div class="option-desc">最简洁，只有边框和文字颜色变化</div>
+    <div class="tags">
+      <a class="tag tag-a" href="#">Python</a>
+      <a class="tag tag-a" href="#">编程入门</a>
+      <a class="tag tag-a" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 B — 背景加深</div>
+    <div class="option-desc">hover 时背景微微变深，有按压感</div>
+    <div class="tags">
+      <a class="tag tag-b" href="#">Python</a>
+      <a class="tag tag-b" href="#">编程入门</a>
+      <a class="tag tag-b" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 C — 背景 + 文字同步加深</div>
+    <div class="option-desc">背景和文字同时变深，层次感更强</div>
+    <div class="tags">
+      <a class="tag tag-c" href="#">Python</a>
+      <a class="tag tag-c" href="#">编程入门</a>
+      <a class="tag tag-c" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 D — 无 hover 效果</div>
+    <div class="option-desc">纯静态，纯色背景</div>
+    <div class="tags">
+      <a class="tag tag-d" href="#">Python</a>
+      <a class="tag tag-d" href="#">编程入门</a>
+      <a class="tag tag-d" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 E — 轻微放大</div>
+    <div class="option-desc">hover 时整体轻微放大 3%，有选中感</div>
+    <div class="tags">
+      <a class="tag tag-e" href="#">Python</a>
+      <a class="tag tag-e" href="#">编程入门</a>
+      <a class="tag tag-e" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 F — 背景填充更多</div>
+    <div class="option-desc">背景从淡粉变成更饱和的粉</div>
+    <div class="tags">
+      <a class="tag tag-f" href="#">Python</a>
+      <a class="tag tag-f" href="#">编程入门</a>
+      <a class="tag tag-f" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 G — 文字加粗</div>
+    <div class="option-desc">hover 时字加粗，没有位移</div>
+    <div class="tags">
+      <a class="tag tag-g" href="#">Python</a>
+      <a class="tag tag-g" href="#">编程入门</a>
+      <a class="tag tag-g" href="#">廖雪峰</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
