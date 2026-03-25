@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>列表页美化预览</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background: #f8fafc;
+      color: #4a5568;
+      padding: 2rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .preview-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9b59b6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ===== 卡片 ===== */
+    .post-entry {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid #eaecef;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-entry::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%; width: 3px;
+      background: #dbeafe;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ===== 标题 ===== */
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    h2 a { color: inherit; text-decoration: none; }
+
+    /* ===== 摘要 ===== */
+    .entry-content p {
+      color: #718096;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ===== 标签（方案E: 柔和粉 + 轻微放大） ===== */
+    .entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      background: #fff0f6;
+      color: #e879a0;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 20px;
+      border: 1px solid rgba(232, 121, 160, 0.2);
+      transition: border-color .15s ease, color .15s ease, background .15s ease;
+    }
+
+    .tag-link:hover {
+      border-color: rgba(232, 121, 160, 0.6);
+      border-style: solid;
+      color: #c2356b;
+      transform: scale(1.03);
+    }
+
+    /* ===== 元数据栏 ===== */
+    .entry-footer {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      color: #a0aec0;
+      padding-top: 0.75rem;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .meta-item svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .meta-item:hover { color: #3182ce; }
+
+    .meta-sep { color: #d1d5db; }
+
+    /* ===== 分隔 ===== */
+    hr { border: none; border-top: 1px solid #eaecef; margin: 2.5rem 0; }
+
+    /* ===== 方案说明 ===== */
+    .changelog {
+      background: #fff;
+      border: 1px solid #eaecef;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+    }
+
+    .changelog ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .changelog li { color: #4a5568; padding-left: 1rem; position: relative; }
+    .changelog li::before { content: '—'; position: absolute; left: 0; color: #9b59b6; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="preview-label">列表页美化预览 · 方案</div>
+
+  <div class="changelog">
+    <ul>
+      <li>标签：统一柔和粉 + hover 轻微放大（与文章页一致）</li>
+      <li>元数据：去掉所有彩色背景，只留图标 + 灰字，hover 变蓝</li>
+      <li>卡片左边框：统一蓝色细线</li>
+      <li>整体：更轻量、更干净</li>
+    </ul>
+  </div>
+
+  <!-- 卡片1 -->
+  <article class="post-entry">
+    <div class="entry-tags">
+      <a class="tag-link" href="#">Python</a>
+      <a class="tag-link" href="#">编程入门</a>
+    </div>
+    <h2><a href="#">Python 基础：廖雪峰第1课</a></h2>
+    <div class="entry-content">
+      <p>变量是编程中最基本的概念之一。你可以把它想象成一个贴了标签的盒子，盒子里面装着数据。</p>
+    </div>
+    <footer class="entry-footer">
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        2026-03-25
+      </span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        8分钟
+      </span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        3200字
+      </span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        网站和博客技术
+      </span>
+    </footer>
+  </article>
+
+  <!-- 卡片2 -->
+  <article class="post-entry">
+    <div class="entry-tags">
+      <a class="tag-link" href="#">Hugo</a>
+      <a class="tag-link" href="#">PaperMod</a>
+      <a class="tag-link" href="#">建站</a>
+    </div>
+    <h2><a href="#">基于 Hugo 和 PaperMod 搭建的个人博客</a></h2>
+    <div class="entry-content">
+      <p>小白写给小白。这篇文章记录了我从零开始搭建博客的全过程，包括 Hugo 安装、主题配置和部署。</p>
+    </div>
+    <footer class="entry-footer">
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        2026-03-20
+      </span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        12分钟
+      </span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        4800字
+      </span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        网站和博客技术
+      </span>
+    </footer>
+  </article>
+
+</div>
+</body>
+</html>
