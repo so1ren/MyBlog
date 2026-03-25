@@ -86,7 +86,7 @@
     padding: 0.25rem 0.75rem;
     background: #fff0f6;
     color: #e879a0;
-    font-size: 0.82rem;
+    font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
     border-radius: 20px;
@@ -112,7 +112,7 @@
 
 /*  ------------  标题 & 摘要  ------------  */
 .entry-header h2 {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: #1a202c;
     margin: 0 0 0.6rem 0;
@@ -123,7 +123,7 @@
 
 .entry-content p {
     color: #718096;
-    font-size: 0.95rem;
+    font-size: 1rem;
     line-height: 1.6;
     margin: 0;
     display: -webkit-box;
@@ -139,7 +139,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 0.5rem;
-    font-size: 0.82rem;
+    font-size: 0.875rem;
     color: var(--c-meta);
     padding-top: 0.75rem;
     border-top: 1px solid var(--c-border);
@@ -207,7 +207,7 @@ a.meta-category:hover { color: var(--c-meta-hover); }
     color: #4a5568;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     border: 1px solid #eaecef;
     transition: all 0.2s ease;
 }
