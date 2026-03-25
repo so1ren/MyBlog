@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卡片美化方案</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background: #f8fafc;
+      color: #4a5568;
+      padding: 3rem 2rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; }
+
+    .preview-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9b59b6; margin-bottom: 0.5rem; }
+    h1 { font-size: 1.3rem; font-weight: 600; color: #1a202c; margin-bottom: 2rem; }
+    .option { margin-bottom: 3rem; }
+    .option-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9b59b6; margin-bottom: 0.4rem; }
+    .option-desc { font-size: 0.8rem; color: #aaa; margin-bottom: 0.75rem; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.4rem;
+      border: 1px solid #eaecef;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin-bottom: 0.75rem;
+      cursor: default;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    h2 { font-size: 1.1rem; font-weight: 600; color: #1a202c; margin-bottom: 0.4rem; }
+    p { font-size: 0.9rem; color: #718096; }
+
+    /* ===== A: 阴影加深 ===== */
+    .card-a:hover {
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.1);
+      border-color: #bfdbfe;
+    }
+
+    /* ===== B: 背景淡蓝染色 ===== */
+    .card-b {
+      transition: background 0.25s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .card-b:hover {
+      background: #f0f7ff;
+      border-color: #bfdbfe;
+    }
+
+    /* ===== C: 整卡轻微上浮 ===== */
+    .card-c {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card-c:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    /* ===== D: 标题下划线滑入 ===== */
+    .card-d { position: relative; }
+    .card-d h2 a { text-decoration: none; color: inherit; }
+    .card-d h2 {
+      position: relative;
+      display: inline;
+    }
+    .card-d h2::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 0; height: 2px;
+      background: #3182ce;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 1px;
+    }
+    .card-d:hover h2::after { width: 100%; }
+    .card-d:hover {
+      box-shadow: 0 4px 14px rgba(49, 130, 206, 0.08);
+      border-color: #dbeafe;
+    }
+
+    /* ===== E: 底部边框滑入 ===== */
+    .card-e { position: relative; overflow: hidden; }
+    .card-e::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, #93c5fd, #3b82f6);
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-e:hover::after { width: 100%; }
+    .card-e:hover {
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.08);
+    }
+
+    /* ===== F: 柔和阴影 + 边框同步变化 ===== */
+    .card-f {
+      transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+    }
+    .card-f:hover {
+      box-shadow: 0 8px 24px rgba(59, 130, 206, 0.12);
+      border-color: #93c5fd;
+      transform: translateY(-1px);
+    }
+
+    /* ===== G: 背景微变 + 左侧细线 ===== */
+    .card-g {
+      position: relative;
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-g:hover {
+      border-left-color: #3b82f6;
+      background: #fafbff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.06);
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="preview-label">卡片美化方案</div>
+  <h1>hover 看效果，选编号告诉我</h1>
+
+  <div class="option">
+    <div class="option-label">方案 A — 阴影加深</div>
+    <div class="option-desc">hover 时阴影变蓝紫色，有立体感</div>
+    <div class="card card-a">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 B — 背景淡蓝染色</div>
+    <div class="option-desc">hover 时整卡背景微微变蓝，像选中</div>
+    <div class="card card-b">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 C — 整卡上浮</div>
+    <div class="option-desc">hover 时卡片整体上浮 3px，有层次感</div>
+    <div class="card card-c">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 D — 标题下划线滑入</div>
+    <div class="option-desc">hover 时标题下方出一条蓝色下划线</div>
+    <div class="card card-d">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 E — 底部边框渐变滑入</div>
+    <div class="option-desc">hover 时底部蓝色渐变线从左滑入</div>
+    <div class="card card-e">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 F — 柔和阴影 + 轻微上浮</div>
+    <div class="option-desc">阴影加深 + 边框变蓝 + 微微上浮，最温和</div>
+    <div class="card card-f">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 G — 左侧细线 + 背景染色</div>
+    <div class="option-desc">去掉底部左边框，改成 hover 时左侧出现蓝色细线 + 背景微蓝</div>
+    <div class="card card-g">
+      <h2>Python 基础：廖雪峰第1课</h2>
+      <p>2026-03-25 · 8分钟 · 3200字</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
