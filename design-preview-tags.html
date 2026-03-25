@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标签配色方案预览</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.8;
+      background: #fff;
+      color: #4a5568;
+      padding: 3rem 2rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .intro {
+      font-size: 0.875rem;
+      color: #aaa;
+      margin-bottom: 2.5rem;
+    }
+
+    .option { margin-bottom: 2.5rem; }
+
+    .option-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9b59b6;
+      margin-bottom: 0.4rem;
+    }
+
+    .option-desc {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-bottom: 0.75rem;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 20px;
+      border: 1px solid;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      cursor: default;
+    }
+
+    .tag svg { width: 11px; height: 11px; }
+
+    /* ===== A: 蓝色系 ===== */
+    .tag-a {
+      background: #dbeafe;
+      color: #3182ce;
+      border-color: rgba(49, 130, 206, 0.2);
+    }
+    .tag-a:hover {
+      border-color: rgba(49, 130, 206, 0.5);
+      color: #2c5282;
+    }
+
+    /* ===== B: 紫色系 ===== */
+    .tag-b {
+      background: #f3e8ff;
+      color: #7c3aed;
+      border-color: rgba(124, 58, 237, 0.2);
+    }
+    .tag-b:hover {
+      border-color: rgba(124, 58, 237, 0.5);
+      color: #5b21b6;
+    }
+
+    /* ===== C: 绿色系 ===== */
+    .tag-c {
+      background: #f0fdf4;
+      color: #16a34a;
+      border-color: rgba(22, 163, 74, 0.2);
+    }
+    .tag-c:hover {
+      border-color: rgba(22, 163, 74, 0.5);
+      color: #15803d;
+    }
+
+    /* ===== D: 金黄系 ===== */
+    .tag-d {
+      background: #fef9c3;
+      color: #ca8a04;
+      border-color: rgba(202, 138, 4, 0.2);
+    }
+    .tag-d:hover {
+      border-color: rgba(202, 138, 4, 0.5);
+      color: #a16207;
+    }
+
+    /* ===== E: 柔和粉色系 ===== */
+    .tag-e {
+      background: #fff0f6;
+      color: #e879a0;
+      border-color: rgba(232, 121, 160, 0.2);
+    }
+    .tag-e:hover {
+      border-color: rgba(232, 121, 160, 0.5);
+      color: #c2356b;
+    }
+
+    /* ===== F: 灰蓝中性 ===== */
+    .tag-f {
+      background: #f1f5f9;
+      color: #475569;
+      border-color: rgba(71, 85, 105, 0.2);
+    }
+    .tag-f:hover {
+      border-color: rgba(71, 85, 105, 0.4);
+      color: #1e293b;
+    }
+
+    /* ===== G: 蓝绿渐变调 ===== */
+    .tag-g {
+      background: #ecfeff;
+      color: #0891b2;
+      border-color: rgba(8, 145, 178, 0.2);
+    }
+    .tag-g:hover {
+      border-color: rgba(8, 145, 178, 0.5);
+      color: #0e7490;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #eaecef;
+      margin: 3rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>标签配色方案</h1>
+  <p class="intro">点击标签可查看 hover 效果，选一个编号告诉我。</p>
+
+  <div class="option">
+    <div class="option-label">方案 A — 蓝色系</div>
+    <div class="option-desc">和链接、代码头部一致的蓝色调</div>
+    <div class="tags">
+      <a class="tag tag-a" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-a" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-a" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 B — 紫色系</div>
+    <div class="option-desc">柔和，有活力</div>
+    <div class="tags">
+      <a class="tag tag-b" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-b" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-b" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 C — 绿色系</div>
+    <div class="option-desc">清新，自然</div>
+    <div class="tags">
+      <a class="tag tag-c" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-c" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-c" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 D — 金黄色系</div>
+    <div class="option-desc">温暖，像便利贴</div>
+    <div class="tags">
+      <a class="tag tag-d" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-d" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-d" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 E — 柔和粉色系</div>
+    <div class="option-desc">保留粉色，但更柔和耐看</div>
+    <div class="tags">
+      <a class="tag tag-e" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-e" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-e" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 F — 灰蓝中性</div>
+    <div class="option-desc">最百搭，适合多类内容混排</div>
+    <div class="tags">
+      <a class="tag tag-f" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-f" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-f" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+  <div class="option">
+    <div class="option-label">方案 G — 蓝绿色系</div>
+    <div class="option-desc">清新科技感</div>
+    <div class="tags">
+      <a class="tag tag-g" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        Python
+      </a>
+      <a class="tag tag-g" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        编程入门
+      </a>
+      <a class="tag tag-g" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        廖雪峰
+      </a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
