@@ -75,14 +75,20 @@
           {{- if ne (.Param "hideSummary") true }}
             <div class="entry-content">
               {{- $summary := "" }}
-              {{- $content := .Content }}
-              {{- $firstHeader := findRE "<h[1-6][^>]*>.*?</h[1-6]>" $content 1 }}
-              {{- if $firstHeader }}
-                {{- $headerTag := index $firstHeader 0 }}
-                {{- $parts := split $content $headerTag }}
-                {{- $summary = index $parts 0 | plainify | htmlUnescape | truncate 200 }}
+              {{- /* 优先使用 front matter list_intro（显式摘要），其次用正文第一段 */ -}}
+              {{- $summary := "" }}
+              {{- if .Param "list_intro" }}
+                {{- $summary = .Param "list_intro" }}
               {{- else }}
-                {{- $summary = .Summary | plainify | htmlUnescape }}
+                {{- $content := .Content }}
+                {{- $firstHeader := findRE "<h[1-6][^>]*>.*?</h[1-6]>" $content 1 }}
+                {{- if $firstHeader }}
+                  {{- $headerTag := index $firstHeader 0 }}
+                  {{- $parts := split $content $headerTag }}
+                  {{- $summary = index $parts 0 | plainify | htmlUnescape | truncate 200 }}
+                {{- else }}
+                  {{- $summary = .Summary | plainify | htmlUnescape }}
+                {{- end }}
               {{- end }}
               <p>{{ $summary }}{{ if gt (len $summary) 200 }}...{{ end }}</p>
             </div>
