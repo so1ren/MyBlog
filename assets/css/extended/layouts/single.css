@@ -93,19 +93,19 @@
    ========================================== */
 
 @media (min-width: 1024px) {
-    /* 双栏布局：左侧导航 + 右侧内容 */
+    /* Flexbox 双栏：固定左侧导航 + 自适应内容 */
     .post-main-wrapper {
-        display: grid;
-        grid-template-columns: 140px 1fr;
-        gap: 32px;
-        align-items: start;
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
     }
 
-    /* 侧边导航：垂直 sticky */
+    /* 侧边导航：固定宽度 + sticky */
     .post-side-nav {
+        width: 80px;
+        flex-shrink: 0;
         position: sticky;
         top: 30vh;
-        height: fit-content;
     }
 
     /* 重置 paginav 样式（去掉底部边框等） */
@@ -119,7 +119,7 @@
 
     .post-side-nav .paginav a {
         display: block;
-        padding: 10px 0;
+        padding: 8px 0;
         border: none;
         background: transparent;
         border-radius: 0;
@@ -164,7 +164,7 @@
     }
 }
 
-/* 移动端：隐藏侧边导航，paginav 保留在 footer（已移除，此处保险） */
+/* 移动端：隐藏侧边导航 */
 @media (max-width: 1023px) {
     .post-main-wrapper {
         display: block;

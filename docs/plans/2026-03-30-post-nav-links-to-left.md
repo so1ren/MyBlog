@@ -93,7 +93,7 @@
 
 ## 步骤
 
-- [ ] 1. 修改 `single.html` — 重构布局 + 迁移 nav
-- [ ] 2. 新增 `post-side-nav` CSS 样式
-- [ ] 3. 本地构建验证 `hugo`
-- [ ] 4. commit
+- [x] 1. 修改 `single.html` — 重构布局 + 迁移 nav
+- [x] 2. 新增 `post-side-nav` CSS 样式
+- [x] 3. 本地构建验证 `hugo`
+- [x] 4. commit ✅ (71ef695)
