@@ -53,20 +53,28 @@
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
-  <div class="post-content-toc-wrapper" style="position:relative;">
-    {{- if .Content }}
-    <div class="post-content">
-      {{- if not (.Param "disableAnchoredHeadings") }}
-      {{- partial "anchored_headings.html" .Content -}}
-      {{- else }}{{ .Content }}{{ end }}
-    </div>
-    {{- end }}
-
-    {{- if (.Param "ShowToc") }}
-    <aside class="post-toc-float">
-      {{- partial "toc.html" . }}
+  <div class="post-main-wrapper">
+    {{- if (.Param "ShowPostNavLinks") }}
+    <aside class="post-side-nav">
+      {{- partial "post_nav_links.html" . }}
     </aside>
     {{- end }}
+
+    <div class="post-content-toc-wrapper" style="position:relative;">
+      {{- if .Content }}
+      <div class="post-content">
+        {{- if not (.Param "disableAnchoredHeadings") }}
+        {{- partial "anchored_headings.html" .Content -}}
+        {{- else }}{{ .Content }}{{ end }}
+      </div>
+      {{- end }}
+
+      {{- if (.Param "ShowToc") }}
+      <aside class="post-toc-float">
+        {{- partial "toc.html" . }}
+      </aside>
+      {{- end }}
+    </div>
   </div>
 
   <!-- 只在文章和关于页面显示版权声明 -->
@@ -75,9 +83,6 @@
   {{ end }}
 
   <footer class="post-footer">
-    {{- if (.Param "ShowPostNavLinks") }}
-    {{- partial "post_nav_links.html" . }}
-    {{- end }}
     {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
     {{- partial "share_icons.html" . -}}
     {{- end }}

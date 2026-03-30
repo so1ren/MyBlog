@@ -87,3 +87,89 @@
         order: -1;
     }
 }
+
+/* ==========================================
+   左侧上下页导航（桌面端）
+   ========================================== */
+
+@media (min-width: 1024px) {
+    /* 双栏布局：左侧导航 + 右侧内容 */
+    .post-main-wrapper {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 32px;
+        align-items: start;
+    }
+
+    /* 侧边导航：垂直 sticky */
+    .post-side-nav {
+        position: sticky;
+        top: 30vh;
+        height: fit-content;
+    }
+
+    /* 重置 paginav 样式（去掉底部边框等） */
+    .post-side-nav .paginav {
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .post-side-nav .paginav a {
+        display: block;
+        padding: 10px 0;
+        border: none;
+        background: transparent;
+        border-radius: 0;
+        text-align: left;
+    }
+
+    .post-side-nav .paginav a:hover {
+        background: transparent;
+    }
+
+    .post-side-nav .paginav .title {
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--secondary);
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .post-side-nav .paginav span {
+        font-size: 13px;
+        color: var(--primary);
+        line-height: 1.4;
+        display: block;
+    }
+
+    .post-side-nav .paginav .prev {
+        order: -1;
+    }
+
+    .post-side-nav .paginav .next {
+        order: 1;
+    }
+
+    /* prev/next 之间的分隔线 */
+    .post-side-nav .paginav .prev::after {
+        content: '';
+        display: block;
+        border-top: 1px solid var(--border);
+        margin: 8px 0 0 0;
+        opacity: 0.5;
+    }
+}
+
+/* 移动端：隐藏侧边导航，paginav 保留在 footer（已移除，此处保险） */
+@media (max-width: 1023px) {
+    .post-main-wrapper {
+        display: block;
+    }
+    .post-side-nav {
+        display: none;
+    }
+}
