@@ -89,26 +89,22 @@
 }
 
 /* ==========================================
-   左侧上下页导航（桌面端）
+   左侧上下页导航 — 与 TOC 同样原理，position: fixed 浮层
    ========================================== */
 
+/* 桌面端：固定在左侧，不占文档流空间 */
 @media (min-width: 1024px) {
-    /* Flexbox 双栏：固定左侧导航 + 自适应内容 */
-    .post-main-wrapper {
-        display: flex;
-        align-items: flex-start;
-        gap: 24px;
-    }
-
-    /* 侧边导航：固定宽度 + sticky */
     .post-side-nav {
-        width: 80px;
-        flex-shrink: 0;
-        position: sticky;
+        position: fixed !important;
+        left: 50px;
         top: 30vh;
+        width: 80px;
+        z-index: 998;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
     }
 
-    /* 重置 paginav 样式（去掉底部边框等） */
     .post-side-nav .paginav {
         display: flex;
         flex-direction: column;
@@ -164,12 +160,9 @@
     }
 }
 
-/* 移动端：隐藏侧边导航 */
-@media (max-width: 1023px) {
-    .post-main-wrapper {
-        display: block;
-    }
+/* 移动端 ≤768px：隐藏侧边导航（与 TOC 相同断点） */
+@media (max-width: 768px) {
     .post-side-nav {
-        display: none;
+        display: none !important;
     }
 }
