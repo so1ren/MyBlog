@@ -89,52 +89,60 @@
 }
 
 /* ==========================================
-   紧凑上下页导航 — 内容区边缘贴靠
+   上下章导航 — 左侧固定浮层，与右侧 TOC 对称
    ========================================== */
 
 /* 移动端隐藏 */
 @media (max-width: 768px) {
-    .post-nav-float {
+    .post-nav-fixed {
         display: none;
     }
 }
 
-/* 桌面端：绝对定位贴靠内容区左/右边缘 */
+/* 桌面端：左侧固定浮层，垂直堆叠 */
 @media (min-width: 769px) {
-    .post-content-toc-wrapper {
-        position: relative;
+    .post-nav-fixed {
+        position: fixed;
+        left: 50px;
+        top: 180px;
+        width: 200px;
+        z-index: 998;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: transparent;
     }
 
-    .post-nav-float {
-        position: absolute;
-        top: 0;
-        width: 38%;
-        z-index: 10;
+    .post-nav-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
     }
 
-    .post-nav-prev {
-        left: 0;
-        text-align: left;
-    }
-
-    .post-nav-next {
-        right: 0;
-        text-align: right;
-    }
-
-    .post-nav-float a {
-        display: block;
-        font-size: 13px;
+    .post-nav-label {
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
         color: var(--secondary);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.6;
+    }
+
+    .post-nav-title {
+        font-size: 13px;
+        color: var(--primary);
+        line-height: 1.5;
+        word-break: break-word;
         transition: color 0.2s;
     }
 
-    .post-nav-float a:hover {
-        color: var(--primary);
+    .post-nav-title:hover {
+        color: var(--link-color);
         text-decoration: underline;
+    }
+}
+
+/* 大屏：右侧 TOC 很宽时，左侧导航适当右移避让内容 */
+@media (min-width: 1400px) {
+    .post-nav-fixed {
+        left: calc(50% - 340px);
     }
 }

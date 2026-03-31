@@ -53,23 +53,27 @@
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
-  <div class="post-content-toc-wrapper">
-    {{- if (.Param "ShowPostNavLinks") }}
-    {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-    {{- if and (gt (len $pages) 1) (in $pages .) }}
-    <div class="post-nav-float post-nav-prev">
+  {{- if (.Param "ShowPostNavLinks") }}
+  {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+  {{- if and (gt (len $pages) 1) (in $pages .) }}
+  <div class="post-nav-fixed">
+    <div class="post-nav-item">
       {{- with .Prev }}
-      <a href="{{ .Permalink }}" title="{{ .Name }}">← {{ .Name }}</a>
+      <span class="post-nav-label">← 上一章</span>
+      <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
       {{- end }}
     </div>
-    <div class="post-nav-float post-nav-next">
+    <div class="post-nav-item">
       {{- with .Next }}
-      <a href="{{ .Permalink }}" title="{{ .Name }}">{{ .Name }} →</a>
+      <span class="post-nav-label">下一章 →</span>
+      <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
       {{- end }}
     </div>
-    {{- end }}
-    {{- end }}
+  </div>
+  {{- end }}
+  {{- end }}
 
+  <div class="post-content-toc-wrapper">
     {{- if .Content }}
     <div class="post-content">
       {{- if not (.Param "disableAnchoredHeadings") }}
