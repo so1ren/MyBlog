@@ -130,7 +130,7 @@
 @media (min-width: 1200px) {
     .post-nav-left {
         position: fixed;
-        top: 220px;
+        bottom: 40px;
         left: 50px;
         width: 180px;
         z-index: 9;
@@ -175,19 +175,19 @@ html.dark .post-nav-left .post-nav-item:hover {
 
 /* ---- 导航标签 ---- */
 .post-nav-left .post-nav-label {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--primary-color, #3182ce);
-    opacity: 0.75;
+    opacity: 0.8;
 }
 
 /* ---- 导航标题 ---- */
 .post-nav-left .post-nav-title {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--text-color);
     line-height: 1.5;
     word-break: break-word;
-    opacity: 0.8;
+    opacity: 0.85;
     transition: opacity 0.2s ease, color 0.2s ease;
 }
 
