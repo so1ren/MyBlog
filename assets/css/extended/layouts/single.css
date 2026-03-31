@@ -98,33 +98,33 @@
         position: fixed !important;
         left: 50px;
         top: 30vh;
-        width: 120px;
+        width: 160px;
         z-index: 998;
         background: transparent !important;
         box-shadow: none !important;
         border: none !important;
     }
 
-    .post-side-nav .paginav {
-        display: flex;
-        flex-direction: column;
-        background: transparent;
-        border: none;
-        padding: 0;
+    .post-side-nav > nav.paginav {
+        display: flex !important;
+        flex-direction: column !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
     }
 
     .post-side-nav .paginav a {
-        display: block;
-        padding: 10px 8px;
-        border: none;
-        background: transparent;
-        border-radius: 0;
-        text-align: left;
-        line-height: 1.4;
+        display: block !important;
+        padding: 10px 8px !important;
+        border: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        text-align: left !important;
+        line-height: 1.4 !important;
     }
 
     .post-side-nav .paginav a:hover {
-        background: transparent;
+        background: transparent !important;
     }
 
     .post-side-nav .paginav .title {
