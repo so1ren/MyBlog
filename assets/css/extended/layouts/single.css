@@ -89,7 +89,7 @@
 }
 
 /* ==========================================
-   上下章导航 — 左侧浮块，绝对定位对齐内容区左边缘
+   上下章导航 — 左侧浮动块，文字绕排
    ========================================== */
 
 /* 移动端隐藏 */
@@ -99,21 +99,21 @@
     }
 }
 
-/* 桌面端：绝对定位在内容区左边缘，与 TOC 对称 */
+/* 桌面端：float 左侧，文字绕排 */
 @media (min-width: 769px) {
     .post-nav-block {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 180px;
-        z-index: 10;
+        float: left;
+        width: 160px;
+        margin-right: 20px;
+        margin-bottom: 16px;
         display: flex;
         flex-direction: column;
         gap: 12px;
         background: var(--code-bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 14px 14px;
+        border-left: 3px solid var(--link-color, #2563eb);
+        border-radius: 0 6px 6px 0;
+        padding: 12px 14px;
+        clear: left;
     }
 
     .post-nav-block-item {
