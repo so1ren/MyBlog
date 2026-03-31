@@ -98,7 +98,7 @@
         position: fixed !important;
         left: 50px;
         top: 30vh;
-        width: 80px;
+        width: 120px;
         z-index: 998;
         background: transparent !important;
         box-shadow: none !important;
@@ -115,11 +115,12 @@
 
     .post-side-nav .paginav a {
         display: block;
-        padding: 8px 0;
+        padding: 10px 8px;
         border: none;
         background: transparent;
         border-radius: 0;
         text-align: left;
+        line-height: 1.4;
     }
 
     .post-side-nav .paginav a:hover {
@@ -132,7 +133,7 @@
         text-transform: uppercase;
         color: var(--secondary);
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
     }
 
     .post-side-nav .paginav span {
@@ -140,6 +141,7 @@
         color: var(--primary);
         line-height: 1.4;
         display: block;
+        word-break: break-all;
     }
 
     .post-side-nav .paginav .prev {
