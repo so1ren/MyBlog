@@ -54,21 +54,33 @@
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
   <div class="post-with-nav">
-    {{- if (.Param "ShowPostNavLinks") }}
-    {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-    {{- if and (gt (len $pages) 1) (in $pages .) }}
+    {{- if and (.Param "ShowPostNavLinks") (eq .Type "posts") }}
+    {{- $section := .CurrentSection }}
+    {{- $pages := $section.RegularPages.ByDate }}
+    {{- if gt (len $pages) 1 }}
+    {{- $current := . }}
     <nav class="post-nav-left">
-      {{- with .Prev }}
-      <div class="post-nav-item">
-        <span class="post-nav-label">← 上一章</span>
-        <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
-      </div>
+      {{- /* 上一章：在正向列表中，当前页之前的项 */ -}}
+      {{- range $index, $elem := $pages }}
+        {{- if eq $elem.Permalink $current.Permalink }}
+          {{- with (index $pages (sub $index 1)) }}
+            <div class="post-nav-item">
+              <span class="post-nav-label">← 上一章</span>
+              <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
+            </div>
+          {{- end }}
+        {{- end }}
       {{- end }}
-      {{- with .Next }}
-      <div class="post-nav-item">
-        <span class="post-nav-label">下一章 →</span>
-        <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
-      </div>
+      {{- /* 下一章：在正向列表中，当前页之后的项 */ -}}
+      {{- range $index, $elem := $pages }}
+        {{- if eq $elem.Permalink $current.Permalink }}
+          {{- with (index $pages (add $index 1)) }}
+            <div class="post-nav-item">
+              <span class="post-nav-label">下一章 →</span>
+              <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
+            </div>
+          {{- end }}
+        {{- end }}
       {{- end }}
     </nav>
     {{- end }}
