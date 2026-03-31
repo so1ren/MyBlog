@@ -65,7 +65,7 @@
         {{- if eq $elem.Permalink $current.Permalink }}
           {{- with (index $pages (sub $index 1)) }}
             <div class="post-nav-item">
-              <span class="post-nav-label">← 上一章</span>
+              <span class="post-nav-label">← 上一页</span>
               <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
             </div>
           {{- end }}
@@ -76,7 +76,7 @@
         {{- if eq $elem.Permalink $current.Permalink }}
           {{- with (index $pages (add $index 1)) }}
             <div class="post-nav-item">
-              <span class="post-nav-label">下一章 →</span>
+              <span class="post-nav-label">下一页 →</span>
               <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
             </div>
           {{- end }}
