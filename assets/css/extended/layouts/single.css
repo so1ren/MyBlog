@@ -98,7 +98,7 @@
         position: fixed !important;
         left: 50px;
         top: 30vh;
-        width: 160px;
+        width: 200px;
         z-index: 998;
         background: transparent !important;
         box-shadow: none !important;
@@ -111,16 +111,19 @@
         background: transparent !important;
         border: none !important;
         padding: 0 !important;
+        gap: 0 !important;
     }
 
     .post-side-nav .paginav a {
-        display: block !important;
-        padding: 10px 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 12px 10px !important;
         border: none !important;
         background: transparent !important;
         border-radius: 0 !important;
         text-align: left !important;
-        line-height: 1.4 !important;
+        line-height: 1.5 !important;
+        gap: 4px !important;
     }
 
     .post-side-nav .paginav a:hover {
@@ -133,15 +136,15 @@
         text-transform: uppercase;
         color: var(--secondary);
         display: block;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
-    .post-side-nav .paginav span {
-        font-size: 13px;
+    .post-side-nav .paginav span:not(.title) {
+        font-size: 14px;
         color: var(--primary);
-        line-height: 1.4;
+        line-height: 1.5;
         display: block;
-        word-break: break-all;
+        word-break: break-word;
     }
 
     .post-side-nav .paginav .prev {
