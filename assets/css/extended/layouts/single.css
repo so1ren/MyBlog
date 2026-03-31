@@ -89,7 +89,7 @@
 }
 
 /* ==========================================
-   上下章导航 — 左侧栏，Grid 布局与内容并排
+   上下章导航 — 左侧 sticky，不挤占内容宽度
    ========================================== */
 
 /* 移动端隐藏 */
@@ -99,34 +99,27 @@
     }
 }
 
-/* 桌面端：Grid 三区域并排，左导航 | 内容 | (TOC 浮动在内容内右侧) */
+/* 桌面端：flex 并排，导航固定宽度，内容 flex-grow */
 @media (min-width: 769px) {
-    .post-single {
-        display: grid !important;
-        grid-template-columns: 160px 1fr;
-        grid-template-areas: "header header" "nav content";
-        align-items: start;
-        gap: 0 24px;
-    }
-
-    .post-header {
-        grid-area: header;
+    .post-with-nav {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
     }
 
     .post-nav-left {
-        grid-area: nav;
+        width: 120px;
+        flex-shrink: 0;
         position: sticky;
         top: 30vh;
-        width: 160px;
         display: flex;
         flex-direction: column;
         gap: 16px;
     }
 
     .post-content-toc-wrapper {
-        grid-area: content;
-        display: flex;
-        flex-direction: column;
+        flex: 1;
+        min-width: 0;
     }
 
     /* 导航项样式 */

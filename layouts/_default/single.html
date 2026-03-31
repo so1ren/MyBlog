@@ -53,40 +53,42 @@
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
-  {{- if (.Param "ShowPostNavLinks") }}
-  {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-  {{- if and (gt (len $pages) 1) (in $pages .) }}
-  <nav class="post-nav-left">
-    {{- with .Prev }}
-    <div class="post-nav-item">
-      <span class="post-nav-label">← 上一章</span>
-      <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
-    </div>
+  <div class="post-with-nav">
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+    {{- if and (gt (len $pages) 1) (in $pages .) }}
+    <nav class="post-nav-left">
+      {{- with .Prev }}
+      <div class="post-nav-item">
+        <span class="post-nav-label">← 上一章</span>
+        <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
+      </div>
+      {{- end }}
+      {{- with .Next }}
+      <div class="post-nav-item">
+        <span class="post-nav-label">下一章 →</span>
+        <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
+      </div>
+      {{- end }}
+    </nav>
     {{- end }}
-    {{- with .Next }}
-    <div class="post-nav-item">
-      <span class="post-nav-label">下一章 →</span>
-      <a href="{{ .Permalink }}" class="post-nav-title">{{ .Name }}</a>
-    </div>
-    {{- end }}
-  </nav>
-  {{- end }}
-  {{- end }}
-
-  <div class="post-content-toc-wrapper">
-    {{- if .Content }}
-    <div class="post-content">
-      {{- if not (.Param "disableAnchoredHeadings") }}
-      {{- partial "anchored_headings.html" .Content -}}
-      {{- else }}{{ .Content }}{{ end }}
-    </div>
     {{- end }}
 
-    {{- if (.Param "ShowToc") }}
-    <aside class="post-toc-float">
-      {{- partial "toc.html" . }}
-    </aside>
-    {{- end }}
+    <div class="post-content-toc-wrapper">
+      {{- if .Content }}
+      <div class="post-content">
+        {{- if not (.Param "disableAnchoredHeadings") }}
+        {{- partial "anchored_headings.html" .Content -}}
+        {{- else }}{{ .Content }}{{ end }}
+      </div>
+      {{- end }}
+
+      {{- if (.Param "ShowToc") }}
+      <aside class="post-toc-float">
+        {{- partial "toc.html" . }}
+      </aside>
+      {{- end }}
+    </div>
   </div>
 
   <!-- 只在文章和关于页面显示版权声明 -->
