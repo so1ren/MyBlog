@@ -107,16 +107,6 @@
         gap: 24px;
     }
 
-    .post-nav-left {
-        width: 120px;
-        flex-shrink: 0;
-        position: sticky;
-        top: 30vh;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
     .post-content-toc-wrapper {
         flex: 1;
         min-width: 0;
@@ -147,5 +137,31 @@
     .post-nav-title:hover {
         color: var(--link-color);
         text-decoration: underline;
+    }
+}
+
+/* ==========================================
+   上下章导航 — 左侧 fixed 定位，与右侧 TOC 对称
+   ========================================== */
+
+@media (min-width: 1200px) {
+    .post-nav-left {
+        position: fixed;
+        top: 30vh;
+        left: 0;
+        width: 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 9;
+    }
+}
+
+@media (max-width: 1199px) {
+    /* 中等屏幕：回到 flex 流内，不单独定位 */
+    .post-nav-left {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
 }
