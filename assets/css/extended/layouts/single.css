@@ -89,44 +89,47 @@
 }
 
 /* ==========================================
-   上下章导航 — 左侧固定浮层，与右侧 TOC 对称
+   上下章导航 — 左侧浮块，绝对定位对齐内容区左边缘
    ========================================== */
 
 /* 移动端隐藏 */
 @media (max-width: 768px) {
-    .post-nav-fixed {
+    .post-nav-block {
         display: none;
     }
 }
 
-/* 桌面端：左侧固定浮层，垂直堆叠 */
+/* 桌面端：绝对定位在内容区左边缘，与 TOC 对称 */
 @media (min-width: 769px) {
-    .post-nav-fixed {
-        position: fixed;
-        left: 50px;
-        top: 180px;
-        width: 200px;
-        z-index: 998;
+    .post-nav-block {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 180px;
+        z-index: 10;
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        background: transparent;
+        gap: 12px;
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px 14px;
     }
 
-    .post-nav-item {
+    .post-nav-block-item {
         display: flex;
         flex-direction: column;
         gap: 4px;
     }
 
-    .post-nav-label {
+    .post-nav-block-label {
         font-size: 11px;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         color: var(--secondary);
     }
 
-    .post-nav-title {
+    .post-nav-block-title {
         font-size: 13px;
         color: var(--primary);
         line-height: 1.5;
@@ -134,15 +137,8 @@
         transition: color 0.2s;
     }
 
-    .post-nav-title:hover {
+    .post-nav-block-title:hover {
         color: var(--link-color);
         text-decoration: underline;
-    }
-}
-
-/* 大屏：右侧 TOC 很宽时，左侧导航适当右移避让内容 */
-@media (min-width: 1400px) {
-    .post-nav-fixed {
-        left: calc(50% - 340px);
     }
 }
