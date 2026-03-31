@@ -89,85 +89,52 @@
 }
 
 /* ==========================================
-   左侧上下页导航 — 与 TOC 同样原理，position: fixed 浮层
+   紧凑上下页导航 — 内容区边缘贴靠
    ========================================== */
 
-/* 桌面端：固定在左侧，不占文档流空间 */
-@media (min-width: 1024px) {
-    .post-side-nav {
-        position: fixed !important;
-        left: 50px;
-        top: 30vh;
-        width: 200px;
-        z-index: 998;
-        background: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
-
-    .post-side-nav > nav.paginav {
-        display: flex !important;
-        flex-direction: column !important;
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        gap: 0 !important;
-    }
-
-    .post-side-nav .paginav a {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 12px 10px !important;
-        border: none !important;
-        background: transparent !important;
-        border-radius: 0 !important;
-        text-align: left !important;
-        line-height: 1.5 !important;
-        gap: 4px !important;
-    }
-
-    .post-side-nav .paginav a:hover {
-        background: transparent !important;
-    }
-
-    .post-side-nav .paginav .title {
-        font-size: 11px;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        color: var(--secondary);
-        display: block;
-        margin-bottom: 2px;
-    }
-
-    .post-side-nav .paginav span:not(.title) {
-        font-size: 14px;
-        color: var(--primary);
-        line-height: 1.5;
-        display: block;
-        word-break: break-word;
-    }
-
-    .post-side-nav .paginav .prev {
-        order: -1;
-    }
-
-    .post-side-nav .paginav .next {
-        order: 1;
-    }
-
-    /* prev/next 之间的分隔线 */
-    .post-side-nav .paginav .prev::after {
-        content: '';
-        display: block;
-        border-top: 1px solid var(--border);
-        margin: 8px 0 0 0;
-        opacity: 0.5;
+/* 移动端隐藏 */
+@media (max-width: 768px) {
+    .post-nav-float {
+        display: none;
     }
 }
 
-/* 移动端 ≤768px：隐藏侧边导航（与 TOC 相同断点） */
-@media (max-width: 768px) {
-    .post-side-nav {
-        display: none !important;
+/* 桌面端：绝对定位贴靠内容区左/右边缘 */
+@media (min-width: 769px) {
+    .post-content-toc-wrapper {
+        position: relative;
+    }
+
+    .post-nav-float {
+        position: absolute;
+        top: 0;
+        width: 38%;
+        z-index: 10;
+    }
+
+    .post-nav-prev {
+        left: 0;
+        text-align: left;
+    }
+
+    .post-nav-next {
+        right: 0;
+        text-align: right;
+    }
+
+    .post-nav-float a {
+        display: block;
+        font-size: 13px;
+        color: var(--secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.6;
+        transition: color 0.2s;
+    }
+
+    .post-nav-float a:hover {
+        color: var(--primary);
+        text-decoration: underline;
     }
 }

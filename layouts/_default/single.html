@@ -53,13 +53,23 @@
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
-  {{- if (.Param "ShowPostNavLinks") }}
-  <aside class="post-side-nav">
-    {{- partial "post_nav_links.html" . }}
-  </aside>
-  {{- end }}
+  <div class="post-content-toc-wrapper">
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+    {{- if and (gt (len $pages) 1) (in $pages .) }}
+    <div class="post-nav-float post-nav-prev">
+      {{- with .Prev }}
+      <a href="{{ .Permalink }}" title="{{ .Name }}">← {{ .Name }}</a>
+      {{- end }}
+    </div>
+    <div class="post-nav-float post-nav-next">
+      {{- with .Next }}
+      <a href="{{ .Permalink }}" title="{{ .Name }}">{{ .Name }} →</a>
+      {{- end }}
+    </div>
+    {{- end }}
+    {{- end }}
 
-  <div class="post-content-toc-wrapper" style="position:relative;">
     {{- if .Content }}
     <div class="post-content">
       {{- if not (.Param "disableAnchoredHeadings") }}
