@@ -89,47 +89,61 @@
 }
 
 /* ==========================================
-   上下章导航 — 左侧浮动块，文字绕排
+   上下章导航 — 左侧栏，Grid 布局与内容并排
    ========================================== */
 
 /* 移动端隐藏 */
 @media (max-width: 768px) {
-    .post-nav-block {
+    .post-nav-left {
         display: none;
     }
 }
 
-/* 桌面端：float 左侧，文字绕排 */
+/* 桌面端：Grid 三区域并排，左导航 | 内容 | (TOC 浮动在内容内右侧) */
 @media (min-width: 769px) {
-    .post-nav-block {
-        float: left;
-        width: 160px;
-        margin-right: 20px;
-        margin-bottom: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        background: var(--code-bg);
-        border-left: 3px solid var(--link-color, #2563eb);
-        border-radius: 0 6px 6px 0;
-        padding: 12px 14px;
-        clear: left;
+    .post-single {
+        display: grid !important;
+        grid-template-columns: 160px 1fr;
+        grid-template-areas: "header header" "nav content";
+        align-items: start;
+        gap: 0 24px;
     }
 
-    .post-nav-block-item {
+    .post-header {
+        grid-area: header;
+    }
+
+    .post-nav-left {
+        grid-area: nav;
+        position: sticky;
+        top: 30vh;
+        width: 160px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .post-content-toc-wrapper {
+        grid-area: content;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 导航项样式 */
+    .post-nav-item {
         display: flex;
         flex-direction: column;
         gap: 4px;
     }
 
-    .post-nav-block-label {
+    .post-nav-label {
         font-size: 11px;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         color: var(--secondary);
     }
 
-    .post-nav-block-title {
+    .post-nav-title {
         font-size: 13px;
         color: var(--primary);
         line-height: 1.5;
@@ -137,7 +151,7 @@
         transition: color 0.2s;
     }
 
-    .post-nav-block-title:hover {
+    .post-nav-title:hover {
         color: var(--link-color);
         text-decoration: underline;
     }
