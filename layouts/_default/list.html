@@ -1,147 +1,122 @@
-{{- /* Hugo + PaperMod 文章列表重构版：保留全部视觉与功能，仅做结构优化 */ -}}
 {{- define "main" }}
 
-{{- /* 1. 首页 Profile 模式兼容 */ -}}
-{{- if and site.Params.profileMode.enabled .IsHome }}
-  {{- partial "index_profile.html" . }}
-{{- else }}
-  {{- /* 2. 页面内容（若有） */ -}}
-  {{- if .Content }}
-    <div class="post-content">
-      {{- if not (.Param "disableAnchoredHeadings") }}
-        {{- partial "anchored_headings.html" .Content -}}
-      {{- else }}
-        {{ .Content }}
-      {{- end }}
-    </div>
-  {{- end }}
+{{- if (and site.Params.profileMode.enabled .IsHome) }}
+{{- partial "index_profile.html" . }}
+{{- else }} {{/* if not profileMode */}}
 
-  {{- /* 3. 构建文章列表数据集 */ -}}
-  {{- $pages := union .RegularPages .Sections }}
-  {{- if .IsHome }}
-    {{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
-    {{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true" }}
-  {{- end }}
-  {{- $paginator := .Paginate $pages }}
-
-  {{- /* 4. 缺失变量补定义：标签页判断用 */ -}}
-  {{- $term := .Data.Term }}
-
-  {{- /* 5. 首页信息块（仅首页第一页） */ -}}
-  {{- if and .IsHome site.Params.homeInfoParams (eq $paginator.PageNumber 1) }}
-    {{- partial "home_info.html" . }}
-  {{- end }}
-
-  {{- /* 6. 文章卡片网格 */ -}}
-  <div class="post-entries">
-    {{- range $index, $page := $paginator.Pages }}
-      {{- /* 6-1 动态卡片类：首篇特殊 / 标签页 / 普通 */ -}}
-      {{- $cardClass := "post-entry" }}
-      {{- $userPref  := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
-      {{- if and $.IsHome (eq $paginator.PageNumber 1) (eq $index 0) (not $userPref) }}
-        {{- $cardClass = "first-entry" }}
-      {{- else if $term }}
-        {{- $cardClass = "post-entry tag-entry" }}
-      {{- end }}
-
-      <article class="{{ $cardClass }}">
-        {{- /* 6-2 封面图 */ -}}
-        {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
-        {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
-
-        {{- /* 6-3 标签组（可点击） */ -}}
-        {{- with .Params.tags }}
-          <div class="entry-tags">
-            {{- range first 3 . }}
-              <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag-link" title="查看标签: {{ . }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                  <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                </svg>
-                <span>{{ . }}</span>
-              </a>
-            {{- end }}
-          </div>
-        {{- end }}
-
-        {{- /* 6-4 标题+摘要（点击跳转文章） */ -}}
-        <a class="entry-link-area" href="{{ .Permalink }}" aria-label="post link to {{ .Title | plainify }}">
-          <header class="entry-header">
-            <h2 class="entry-hint-parent">
-              {{ .Title }}
-              {{- if .Draft }}<span class="entry-hint" title="Draft"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></span>{{- end }}
-            </h2>
-          </header>
-          {{- if ne (.Param "hideSummary") true }}
-            <div class="entry-content">
-              {{- $summary := "" }}
-              {{- /* 优先使用 front matter list_intro（显式摘要），其次用正文第一段 */ -}}
-              {{- $summary := "" }}
-              {{- if .Param "list_intro" }}
-                {{- $summary = .Param "list_intro" }}
-              {{- else }}
-                {{- $content := .Content }}
-                {{- $firstHeader := findRE "<h[1-6][^>]*>.*?</h[1-6]>" $content 1 }}
-                {{- if $firstHeader }}
-                  {{- $headerTag := index $firstHeader 0 }}
-                  {{- $parts := split $content $headerTag }}
-                  {{- $summary = index $parts 0 | plainify | htmlUnescape | truncate 200 }}
-                {{- else }}
-                  {{- $summary = .Summary | plainify | htmlUnescape }}
-                {{- end }}
-              {{- end }}
-              <p>{{ $summary }}{{ if gt (len $summary) 200 }}...{{ end }}</p>
-            </div>
-          {{- end }}
-        </a>
-
-        {{- /* 6-5 元数据栏 */ -}}
-        {{- if not (.Param "hideMeta") }}
-          <footer class="entry-footer">
-            <span class="meta-item meta-date">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y="10" x2="21" y2="10"></line></svg>
-              <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
-            </span>
-
-            <span class="meta-item meta-reading-time">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              预计阅读{{ .ReadingTime }}分钟
-            </span>
-
-            <span class="meta-item meta-word-count">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-              {{ .WordCount }}字
-            </span>
-
-            {{- with .Params.categories }}
-              <a class="meta-item meta-category" href="{{ "/categories/" | relURL }}{{ index . 0 | urlize }}" title="查看分类: {{ index . 0 }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                {{ index . 0 }}
-              </a>
-            {{- end }}
-          </footer>
-        {{- end }}
-      </article>
+{{- if not .IsHome | and .Title }}
+<header class="page-header">
+  {{- partial "breadcrumbs.html" . }}
+  <h1>
+    {{ .Title }}
+    {{- if and (or (eq .Kind `term`) (eq .Kind `section`)) (.Param "ShowRssButtonInSectionTermList") }}
+    {{- with .OutputFormats.Get "rss" }}
+    <a href="{{ .RelPermalink }}" title="RSS" aria-label="RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" height="23">
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </svg>
+    </a>
     {{- end }}
+    {{- end }}
+  </h1>
+  {{- if .Description }}
+  <div class="post-description">
+    {{ .Description | markdownify }}
   </div>
-
-  {{- /* 7. 分页导航 */ -}}
-  {{- if gt $paginator.TotalPages 1 }}
-    <footer class="page-footer">
-      <nav class="pagination">
-        {{- if $paginator.HasPrev }}
-          <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
-            «&nbsp;{{ i18n "prev_page" }}&nbsp;{{- if (.Param "ShowPageNums") }}{{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}{{- end }}
-          </a>
-        {{- end }}
-        {{- if $paginator.HasNext }}
-          <a class="next" href="{{ $paginator.Next.URL | absURL }}">
-            {{- i18n "next_page" }}&nbsp;{{- if (.Param "ShowPageNums") }}{{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}{{- end }}&nbsp;»
-          </a>
-        {{- end }}
-      </nav>
-    </footer>
   {{- end }}
+</header>
 {{- end }}
+
+{{- if .Content }}
+<div class="post-content">
+  {{- if not (.Param "disableAnchoredHeadings") }}
+  {{- partial "anchored_headings.html" .Content -}}
+  {{- else }}{{ .Content }}{{ end }}
+</div>
+{{- end }}
+
+{{- $pages := union .RegularPages .Sections }}
+
+{{- if .IsHome }}
+{{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true"  }}
+{{- end }}
+
+{{- $paginator := .Paginate ($pages.ByDate) }}
+
+{{- if and .IsHome site.Params.homeInfoParams (eq $paginator.PageNumber 1) }}
+{{- partial "home_info.html" . }}
+{{- end }}
+
+{{- $term := .Data.Term }}
+{{- range $index, $page := $paginator.Pages }}
+
+{{- $class := "post-entry" }}
+
+{{- $user_preferred := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
+{{- if (and $.IsHome (eq $paginator.PageNumber 1) (eq $index 0) (not $user_preferred)) }}
+{{- $class = "first-entry" }}
+{{- else if $term }}
+{{- $class = "post-entry tag-entry" }}
+{{- end }}
+
+<article class="{{ $class }}">
+  {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">
+      {{- .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+      {{- end }}
+    </h2>
+  </header>
+  {{- if (ne ($page.Param "hideSummary") true) }}
+  <div class="entry-content">
+    {{- $sum := $page.Param "list_intro" | default ($page.Description) | default ($page.Param "description") -}}
+    <p>{{ $sum }}{{ if $page.Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+  {{- if not (.Param "hideMeta") }}
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
+  </footer>
+  {{- end }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+
+{{- if gt $paginator.TotalPages 1 }}
+<footer class="page-footer">
+  <nav class="pagination">
+    {{- if $paginator.HasPrev }}
+    <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
+      «&nbsp;{{ i18n "prev_page" }}&nbsp;
+      {{- if (.Param "ShowPageNums") }}
+      {{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}
+      {{- end }}
+    </a>
+    {{- end }}
+    {{- if $paginator.HasNext }}
+    <a class="next" href="{{ $paginator.Next.URL | absURL }}">
+      {{- i18n "next_page" }}&nbsp;
+      {{- if (.Param "ShowPageNums") }}
+      {{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}
+      {{- end }}&nbsp;»
+    </a>
+    {{- end }}
+  </nav>
+</footer>
+{{- end }}
+
+{{- end }}{{/* end profileMode */}}
 
 {{- end }}{{- /* end main */ -}}
