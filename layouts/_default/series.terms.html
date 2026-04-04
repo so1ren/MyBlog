@@ -1,0 +1,114 @@
+{{- /* Series index — clean, minimal list of all series */ -}}
+{{- define "main" }}
+
+<header class="page-header series-index-header">
+  <h1 class="series-index-title">{{ .Title }}</h1>
+  <p class="series-index-subtitle">按主题整理的系列文章</p>
+</header>
+
+<div class="seriesTOC">
+  {{- range site.Taxonomies.series }}
+    <a href="{{ .Page.Permalink }}" class="seriesTOC-item">
+      <div class="seriesTOC-num">
+        {{- $count := len .Pages -}}
+        <span class="seriesTOC-count">{{ $count }}</span>
+        <span class="seriesTOC-count-label">篇</span>
+      </div>
+      <div class="seriesTOC-body">
+        <h2 class="seriesTOC-name">{{ .Page.Title }}</h2>
+        {{- with .Page.Description }}
+        <p class="seriesTOC-desc">{{ . }}</p>
+        {{- end }}
+      </div>
+      <div class="seriesTOC-arrow">→</div>
+    </a>
+  {{- end }}
+</div>
+
+<style>
+.series-index-header {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.series-index-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+.series-index-subtitle {
+  color: var(--secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.seriesTOC {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.seriesTOC-item {
+  display: grid;
+  grid-template-columns: 4rem 1fr 2rem;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+.seriesTOC-item:hover {
+  background: var(--entry);
+  margin: 0 -1rem;
+  padding: 1.5rem 1rem;
+  border-radius: 8px;
+}
+.seriesTOC-item:last-child {
+  border-bottom: none;
+}
+.seriesTOC-num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.seriesTOC-count {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--primary);
+}
+.seriesTOC-count-label {
+  font-size: 0.7rem;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.seriesTOC-body {
+  min-width: 0;
+}
+.seriesTOC-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: var(--primary);
+}
+.seriesTOC-desc {
+  font-size: 0.875rem;
+  color: var(--secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+.seriesTOC-arrow {
+  color: var(--tertiary);
+  font-size: 1.25rem;
+  transition: transform 0.15s, color 0.15s;
+}
+.seriesTOC-item:hover .seriesTOC-arrow {
+  transform: translateX(4px);
+  color: var(--primary);
+}
+</style>
+
+{{- end }}{{- /* end main */ -}}

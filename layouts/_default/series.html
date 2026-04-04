@@ -1,86 +1,136 @@
-{{- /* Hugo series page — uses PaperMod post-entry classes for seamless styling */ -}}
+{{- /* Series page — editorial table-of-contents layout */ -}}
 {{- define "main" }}
 
-<header class="page-header">
-  <h1>{{ .Title }}</h1>
+{{- $entries := where .Data.Pages "Params.series" "!=" nil }}
+{{- $entries := sort $entries "File.BaseFileName" }}
+
+<header class="series-header">
+  <p class="series-header-label">系列</p>
+  <h1 class="series-header-title">{{ .Title }}</h1>
   {{- with .Description }}
-  <div class="post-description">
-    {{ . }}
-  </div>
+  <p class="series-header-desc">{{ . }}</p>
   {{- end }}
+  <p class="series-header-meta">共 {{ len $entries }} 讲</p>
 </header>
 
-<div class="post-entries">
-  {{- $allPages := .Pages }}
-  {{- $postPages := where $allPages "Kind" "page" }}
-  {{- range sort $postPages "File.BaseFileName" }}
+<div class="seriesList">
+  {{- range $entries }}
     {{- $filename := .File.BaseFileName }}
     {{- $seq := "" }}
     {{- $match := findRE `_(\d{2})_` $filename }}
     {{- if $match }}
       {{- $seq = trim (index $match 0) "_" }}
     {{- end }}
-    <article class="post-entry">
-      {{- /* cover image if present */ -}}
-      {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
-      {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
-
-      {{- /* tags */ -}}
-      {{- with .Params.tags }}
-        <div class="entry-tags">
-          {{- range first 3 . }}
-            <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag-link" title="查看标签: {{ . }}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                <line x1="7" y1="7" x2="7.01" y2="7"></line>
-              </svg>
-              <span>{{ . }}</span>
-            </a>
-          {{- end }}
-        </div>
-      {{- end }}
-
-      {{- /* title + link */ -}}
-      <a class="entry-link-area" href="{{ .Permalink }}" aria-label="post link to {{ .Title | plainify }}">
-        <header class="entry-header">
-          <h2 class="entry-hint-parent">
-            {{- with $seq }}<span class="series-num">{{ . }}. </span>{{ end -}}
-            {{ .Title }}
-          </h2>
-        </header>
-
-        {{- if ne (.Param "hideSummary") true }}
-          <div class="entry-content">
-            <p>{{ or (.Param "list_intro") .Summary | plainify | htmlUnescape | truncate 200 }}{{ if gt (len (.Param "list_intro" | default .Summary | plainify)) 200 }}…{{ end }}</p>
-          </div>
-        {{- end }}
-      </a>
-
-      {{- /* meta footer */ -}}
-      {{- if not (.Param "hideMeta") }}
-        <footer class="entry-footer">
-          <span class="meta-item meta-date">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
-          </span>
-          <span class="meta-item meta-reading-time">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            阅读约 {{ .ReadingTime }} 分钟
-          </span>
-          <span class="meta-item meta-word-count">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-            {{ .WordCount }}字
-          </span>
-          {{- with .Params.categories }}
-            <a class="meta-item meta-category" href="{{ "/categories/" | relURL }}{{ index . 0 | urlize }}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-              {{ index . 0 }}
-            </a>
-          {{- end }}
-        </footer>
-      {{- end }}
-    </article>
+    <a href="{{ .Permalink }}" class="seriesList-item">
+      <span class="seriesList-num">{{ $seq }}</span>
+      <span class="seriesList-sep"></span>
+      <span class="seriesList-body">
+        <span class="seriesList-title">{{ .Title }}</span>
+        <span class="seriesList-meta">
+          {{ .Date.Format "2006-01-02" }}
+          ·
+          阅读约 {{ .ReadingTime }} 分钟
+          ·
+          {{ with .Params.categories }}{{ index . 0 }}{{ end }}
+        </span>
+      </span>
+    </a>
   {{- end }}
 </div>
+
+<style>
+.series-header {
+  padding: 3rem 0 2.5rem;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 0;
+}
+.series-header-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--secondary);
+  margin: 0 0 0.75rem;
+}
+.series-header-title {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 0.75rem;
+  color: var(--primary);
+}
+.series-header-desc {
+  font-size: 1rem;
+  color: var(--secondary);
+  margin: 0 0 0.75rem;
+  max-width: 55ch;
+  line-height: 1.6;
+}
+.series-header-meta {
+  font-size: 0.8rem;
+  color: var(--tertiary);
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+.seriesList {
+  display: flex;
+  flex-direction: column;
+}
+.seriesList-item {
+  display: grid;
+  grid-template-columns: 3rem 1px 1fr;
+  gap: 0 1.25rem;
+  align-items: stretch;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.12s;
+}
+.seriesList-item:hover {
+  background: var(--entry);
+  margin: 0 -1rem;
+  padding: 1.25rem 1rem;
+  border-radius: 6px;
+}
+.seriesList-item:last-child {
+  border-bottom: none;
+}
+.seriesList-num {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tertiary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  padding-top: 0.15rem;
+  text-align: right;
+}
+.seriesList-sep {
+  background: var(--border);
+  width: 1px;
+  display: block;
+}
+.seriesList-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-left: 0.25rem;
+}
+.seriesList-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--primary);
+  line-height: 1.4;
+  transition: color 0.12s;
+}
+.seriesList-item:hover .seriesList-title {
+  color: var(--accent);
+}
+.seriesList-meta {
+  font-size: 0.78rem;
+  color: var(--tertiary);
+  line-height: 1;
+}
+</style>
 
 {{- end }}{{- /* end main */ -}}
