@@ -1,116 +1,33 @@
-{{- /* Series index — lists all series, PaperMod theme variables */ -}}
+{{- /* Series taxonomy index — uses list.html structure for full visual consistency */ -}}
 {{- define "main" }}
 
-<header class="page-header series-index-header">
-  <h1 class="series-index-title">{{ .Title }}</h1>
-  <p class="series-index-sub">按主题整理的系列文章</p>
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
 </header>
 
-<div class="series-index-list">
+<div class="post-entries">
   {{- range site.Taxonomies.series }}
-    <a href="{{ .Page.Permalink }}" class="series-index-item">
-      <div class="series-index-count">
-        <span class="series-index-n">{{ len .Pages }}</span>
-        <span class="series-index-n-label">篇</span>
-      </div>
-      <div class="series-index-body">
-        <h2 class="series-index-name">{{ .Page.Title }}</h2>
+    <article class="post-entry">
+      <a class="entry-link-area" href="{{ .Page.Permalink }}" aria-label="post link to {{ .Page.Title | plainify }}">
+        <header class="entry-header">
+          <h2 class="entry-hint-parent">
+            {{ .Page.Title }}
+          </h2>
+        </header>
         {{- with .Page.Description }}
-        <p class="series-index-desc">{{ . }}</p>
+          <div class="entry-content">
+            <p>{{ . }}</p>
+          </div>
         {{- end }}
-      </div>
-      <span class="series-index-arrow">→</span>
-    </a>
+      </a>
+      <footer class="entry-footer">
+        <span class="meta-item meta-reading-time">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          共 {{ len .Pages }} 篇
+        </span>
+      </footer>
+    </article>
   {{- end }}
 </div>
-
-<style>
-.series-index-header {
-  padding: 2.5rem 0 2rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-.series-index-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.5rem;
-  color: var(--primary);
-}
-.series-index-sub {
-  color: var(--secondary);
-  font-size: 1rem;
-  margin: 0;
-}
-.series-index-list {
-  display: flex;
-  flex-direction: column;
-}
-.series-index-item {
-  display: grid;
-  grid-template-columns: 5rem 1fr 2rem;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.75rem 0;
-  border-bottom: 1px solid var(--border);
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.15s;
-}
-.series-index-item:last-child {
-  border-bottom: none;
-}
-.series-index-item:hover {
-  background: var(--entry);
-  margin: 0 -1rem;
-  padding: 1.75rem 1rem;
-  border-radius: 8px;
-}
-.series-index-count {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-}
-.series-index-n {
-  font-size: 2.25rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  color: var(--primary);
-  line-height: 1;
-}
-.series-index-n-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--secondary);
-  margin-top: 0.2rem;
-}
-.series-index-body {
-  min-width: 0;
-}
-.series-index-name {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin: 0 0 0.3rem;
-  color: var(--primary);
-}
-.series-index-desc {
-  font-size: 0.9rem;
-  color: var(--secondary);
-  margin: 0;
-  line-height: 1.55;
-}
-.series-index-arrow {
-  font-size: 1.25rem;
-  color: var(--border);
-  transition: transform 0.15s, color 0.15s;
-  align-self: center;
-}
-.series-index-item:hover .series-index-arrow {
-  transform: translateX(5px);
-  color: var(--primary);
-}
-</style>
 
 {{- end }}{{- /* end main */ -}}
