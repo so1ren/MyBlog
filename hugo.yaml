@@ -21,6 +21,7 @@ languages:
      taxonomies:
       category: categories
       tag: tags
+      series: series
 outputs:
   home:
     - HTML

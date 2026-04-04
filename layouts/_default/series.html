@@ -1,0 +1,45 @@
+{{- /* Hugo series page template for /series/kant-critique/ */ -}}
+{{- define "main" }}
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- with .Description }}
+  <div class="post-description">
+    {{ . }}
+  </div>
+  {{- end }}
+</header>
+
+<hr class="section-divider" />
+
+<div class="series-entry-list">
+  {{- range sort .Pages "File.BaseFileName" }}
+    {{- $filename := .File.BaseFileName }}
+    {{- $seq := "" }}
+    {{- $match := findRE `_(\d{2})_` $filename }}
+    {{- if $match }}
+      {{- $seq = trim (index $match 0) "_" }}
+    {{- end }}
+    <div class="series-entry">
+      <div class="series-entry-header">
+        {{- with $seq }}
+        <span class="series-seq">{{ . }}.</span>
+        {{- end }}
+        <a href="{{ .Permalink }}" class="series-title">{{ .Title }}</a>
+      </div>
+      <div class="series-entry-meta">
+        <span class="meta-date">{{ .Date.Format "2006-01-02" }}</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-reading">阅读约 {{ .ReadingTime }} 分钟</span>
+        <span class="meta-sep">·</span>
+        {{- with .Params.categories }}
+          <span class="meta-category">{{ index . 0 }}</span>
+        {{- end }}
+      </div>
+    </div>
+  {{- end }}
+</div>
+
+<hr class="section-divider" />
+
+{{- end }}{{- /* end main */ -}}

@@ -1,0 +1,6 @@
+---
+title: "纯粹理性批判"
+description: "康德《纯粹理性批判》精讲系列，共 15 讲"
+date: 2026-04-03
+series: ["kant-critique"]
+---
