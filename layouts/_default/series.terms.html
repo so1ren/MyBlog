@@ -1,33 +1,32 @@
-{{- /* Series index — clean, minimal list of all series */ -}}
+{{- /* Series index — lists all series, PaperMod theme variables */ -}}
 {{- define "main" }}
 
 <header class="page-header series-index-header">
   <h1 class="series-index-title">{{ .Title }}</h1>
-  <p class="series-index-subtitle">按主题整理的系列文章</p>
+  <p class="series-index-sub">按主题整理的系列文章</p>
 </header>
 
-<div class="seriesTOC">
+<div class="series-index-list">
   {{- range site.Taxonomies.series }}
-    <a href="{{ .Page.Permalink }}" class="seriesTOC-item">
-      <div class="seriesTOC-num">
-        {{- $count := len .Pages -}}
-        <span class="seriesTOC-count">{{ $count }}</span>
-        <span class="seriesTOC-count-label">篇</span>
+    <a href="{{ .Page.Permalink }}" class="series-index-item">
+      <div class="series-index-count">
+        <span class="series-index-n">{{ len .Pages }}</span>
+        <span class="series-index-n-label">篇</span>
       </div>
-      <div class="seriesTOC-body">
-        <h2 class="seriesTOC-name">{{ .Page.Title }}</h2>
+      <div class="series-index-body">
+        <h2 class="series-index-name">{{ .Page.Title }}</h2>
         {{- with .Page.Description }}
-        <p class="seriesTOC-desc">{{ . }}</p>
+        <p class="series-index-desc">{{ . }}</p>
         {{- end }}
       </div>
-      <div class="seriesTOC-arrow">→</div>
+      <span class="series-index-arrow">→</span>
     </a>
   {{- end }}
 </div>
 
 <style>
 .series-index-header {
-  padding: 3rem 0 2rem;
+  padding: 2.5rem 0 2rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 2rem;
 }
@@ -36,77 +35,80 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
+  color: var(--primary);
 }
-.series-index-subtitle {
+.series-index-sub {
   color: var(--secondary);
-  font-size: 0.95rem;
+  font-size: 1rem;
   margin: 0;
 }
-.seriesTOC {
+.series-index-list {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
-.seriesTOC-item {
+.series-index-item {
   display: grid;
-  grid-template-columns: 4rem 1fr 2rem;
+  grid-template-columns: 5rem 1fr 2rem;
   align-items: center;
   gap: 1.5rem;
-  padding: 1.5rem 0;
+  padding: 1.75rem 0;
   border-bottom: 1px solid var(--border);
   text-decoration: none;
   color: inherit;
   transition: background 0.15s;
 }
-.seriesTOC-item:hover {
-  background: var(--entry);
-  margin: 0 -1rem;
-  padding: 1.5rem 1rem;
-  border-radius: 8px;
-}
-.seriesTOC-item:last-child {
+.series-index-item:last-child {
   border-bottom: none;
 }
-.seriesTOC-num {
+.series-index-item:hover {
+  background: var(--entry);
+  margin: 0 -1rem;
+  padding: 1.75rem 1rem;
+  border-radius: 8px;
+}
+.series-index-count {
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 1;
 }
-.seriesTOC-count {
-  font-size: 2rem;
+.series-index-n {
+  font-size: 2.25rem;
   font-weight: 700;
   letter-spacing: -0.04em;
   color: var(--primary);
+  line-height: 1;
 }
-.seriesTOC-count-label {
+.series-index-n-label {
   font-size: 0.7rem;
-  color: var(--secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  color: var(--secondary);
+  margin-top: 0.2rem;
 }
-.seriesTOC-body {
+.series-index-body {
   min-width: 0;
 }
-.seriesTOC-name {
-  font-size: 1.1rem;
+.series-index-name {
+  font-size: 1.15rem;
   font-weight: 600;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.3rem;
   color: var(--primary);
 }
-.seriesTOC-desc {
-  font-size: 0.875rem;
+.series-index-desc {
+  font-size: 0.9rem;
   color: var(--secondary);
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.55;
 }
-.seriesTOC-arrow {
-  color: var(--tertiary);
+.series-index-arrow {
   font-size: 1.25rem;
+  color: var(--border);
   transition: transform 0.15s, color 0.15s;
+  align-self: center;
 }
-.seriesTOC-item:hover .seriesTOC-arrow {
-  transform: translateX(4px);
+.series-index-item:hover .series-index-arrow {
+  transform: translateX(5px);
   color: var(--primary);
 }
 </style>
