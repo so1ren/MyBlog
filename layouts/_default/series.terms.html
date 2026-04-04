@@ -1,4 +1,4 @@
-{{- /* Series taxonomy index — editorial list with refined hover/active states */ -}}
+{{- /* Series taxonomy index — editorial list aligned with PaperMod TOC styling */ -}}
 {{- define "main" }}
 
 <header class="page-header series-index-header">
@@ -51,16 +51,14 @@
   grid-template-columns: 5rem 1fr 2rem;
   align-items: center;
   gap: 1.5rem;
-  padding: 1.75rem 0.75rem;
+  padding: 1.75rem 0.5rem;
   border-bottom: 1px solid var(--border);
   text-decoration: none;
   color: inherit;
   position: relative;
-  transition:
-    background 150ms cubic-bezier(0.25, 1, 0.5, 1),
-    padding-left 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: padding-left 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
-/* left accent bar */
+/* left accent bar — matches PaperMod blockquote/TOC 3px solid var(--primary) */
 .series-index-item::before {
   content: "";
   position: absolute;
@@ -72,13 +70,13 @@
   border-radius: 0 2px 2px 0;
   opacity: 0;
   transform: scaleY(0.6);
+  transform-origin: center;
   transition:
     opacity 150ms cubic-bezier(0.25, 1, 0.5, 1),
     transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 .series-index-item:hover {
-  background: var(--entry);
-  padding-left: 1.25rem;
+  padding-left: 1.5rem;
 }
 .series-index-item:hover::before {
   opacity: 1;
@@ -115,10 +113,10 @@
   font-weight: 600;
   margin: 0 0 0.3rem;
   color: var(--primary);
-  transition: opacity 150ms;
+  transition: opacity 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 .series-index-item:hover .series-index-name {
-  opacity: 0.8;
+  opacity: 0.75;
 }
 .series-index-desc {
   font-size: 0.9rem;
@@ -137,6 +135,19 @@
 .series-index-item:hover .series-index-arrow {
   transform: translateX(6px);
   color: var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .series-index-item,
+  .series-index-item::before,
+  .series-index-name,
+  .series-index-arrow {
+    transition: none;
+  }
+  .series-index-item::before {
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>
 
