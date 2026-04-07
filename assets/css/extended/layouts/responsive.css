@@ -1,72 +1,231 @@
-/* 响应式调整 - 通用 */
+/* ============================================================
+   responsive.css v2 — 移动端全面适配
+   ============================================================ */
+
+/* ---- 通用移动端基础 ---- */
 @media (max-width: 768px) {
     body {
         font-size: 16px;
+        overflow-x: hidden;
     }
-    
-    .post-title {
-        font-size: 1.6rem !important;
-    }
-    
-    .post-content {
-        padding: 0 1rem;
-    }
-    
-    .post-content h1 {
-        font-size: 1.6rem;
-    }
-    
-    .post-content h2 {
-        font-size: 1.4rem;
-    }
-    
-    .post-content h3 {
-        font-size: 1.2rem;
+
+    /* 保持 fluid type scale 生效 */
+    h1, h2, h3 {
+        letter-spacing: -0.01em;
     }
 }
 
-/* 引用块响应式优化 */
+/* ---- 文章内容响应式 ---- */
+@media (max-width: 768px) {
+    .post-content {
+        padding: 0 var(--space-sm);
+    }
+
+    .post-content h1 { font-size: var(--font-xl); }
+    .post-content h2 { font-size: var(--font-lg); }
+    .post-content h3 { font-size: var(--font-md); }
+}
+
+/* ---- Featured Card 移动端：单列 ---- */
+@media (max-width: 768px) {
+    .post-entries > .post-entry:first-child {
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--space-md);
+    }
+
+    .post-entries > .post-entry:first-child .entry-header h2 {
+        font-size: var(--font-lg);
+    }
+
+    .post-entries > .post-entry:first-child .entry-content {
+        font-size: var(--font-sm);
+    }
+}
+
+/* ---- 普通文章卡片移动端 ---- */
+@media (max-width: 768px) {
+    .post-entry {
+        padding: var(--space-sm);
+        margin-bottom: var(--space-sm);
+    }
+
+    .entry-header h2 {
+        font-size: var(--font-md);
+    }
+
+    .entry-content {
+        font-size: var(--font-sm);
+    }
+
+    /* 移动端隐藏部分标签（只保留2个） */
+    .post-entry .post-tags a:nth-child(n+3) {
+        display: none;
+    }
+
+    /* 缩小 entry-tags */
+    .entry-tags .tag-link:nth-child(n+3) {
+        display: none;
+    }
+}
+
+/* ---- 导航栏移动端 ---- */
+@media (max-width: 768px) {
+    .nav ul {
+        font-size: var(--font-xs);
+        gap: 0.25rem;
+        padding: 0;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .nav ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav ul li a {
+        padding: 0.25rem 0.4rem;
+        white-space: nowrap;
+    }
+
+    /* Logo 缩小 */
+    .logo a {
+        font-size: var(--font-sm);
+    }
+}
+
+/* ---- 归档页移动端 ---- */
+@media (max-width: 768px) {
+    .archive-series-item {
+        grid-template-columns: 4rem 1fr 1.5rem;
+        gap: 1rem;
+        padding: 1rem 0.25rem;
+    }
+
+    .archive-series-n {
+        font-size: 1.75rem;
+    }
+
+    .archive-series-name {
+        font-size: var(--font-sm);
+    }
+
+    .archive-series-desc {
+        font-size: var(--font-xs);
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .archive-year-header {
+        font-size: var(--font-lg) !important;
+    }
+
+    .archive-month-header {
+        font-size: var(--font-sm);
+    }
+
+    .archive-entry {
+        padding: 0.4rem 0 0.4rem 0.75rem;
+    }
+
+    .archive-entry-title {
+        font-size: var(--font-sm);
+    }
+}
+
+/* ---- 首页 Profile 移动端 ---- */
+@media (max-width: 640px) {
+    .profile .profile_inner img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .profile .profile_inner h1 {
+        font-size: var(--font-lg);
+    }
+
+    .profile .profile_inner .subtitle {
+        font-size: var(--font-sm);
+    }
+
+    .profile .profile_inner .buttons {
+        gap: var(--space-xs);
+    }
+
+    .profile .profile_inner .buttons a {
+        font-size: var(--font-xs);
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+/* ---- 分页导航移动端 ---- */
+@media (max-width: 640px) {
+    .pagination {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+
+    .pagination .prev,
+    .pagination .next {
+        width: 100%;
+        text-align: center;
+        padding: var(--space-xs);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+    }
+}
+
+/* ---- 引用块响应式 ---- */
 @media (max-width: 768px) {
     .post-content blockquote {
         margin: 1.5rem 0;
-        padding: 1rem 1rem 1rem 2.5rem;
+        padding: 0.75rem 0.75rem 0.75rem 1.75rem;
         border-width: 3px;
+        font-size: var(--font-sm);
     }
-    
+
     .post-content blockquote::before {
-        left: 0.6rem;
-        top: 0.6rem;
-        font-size: 2.5rem;
+        left: 0.4rem;
+        top: 0.4rem;
+        font-size: 2rem;
     }
 }
 
-/* 版权声明响应式设计 */
+/* ---- 版权声明响应式 ---- */
 @media (max-width: 768px) {
     .post-copyright {
-        margin: 2rem 0;
-        border-radius: 8px;
-        font-size: 12px;
+        margin: 1.5rem 0;
+        border-radius: var(--radius-sm);
+        font-size: var(--font-xs);
     }
-    
+
     .post-copyright-header {
-        padding: 10px 16px;
-        font-size: 13px;
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-xs);
     }
-    
+
     .post-copyright-content {
-        padding: 14px 16px;
+        padding: var(--space-sm);
     }
-    
-    .copyright-item {
-        margin-bottom: 8px;
-    }
-    
-    .item-label {
-        padding-right: 8px;
-        font-size: 11px;
-    }
-    
+
     .post-copyright-footer {
-        padding: 10px 16px;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+/* ---- 代码块响应式 ---- */
+@media (max-width: 640px) {
+    pre {
+        border-radius: var(--radius-sm);
+        font-size: var(--font-xs);
+        overflow-x: auto;
+    }
+
+    code {
+        font-size: var(--font-xs);
     }
 }
