@@ -3,14 +3,8 @@
   此文件用于添加特定样式覆盖或临时修复
 */
 
-:root {
-    --bold-color-1: var(--primary-color);
-    --bold-color-2: var(--primary-hover);
-    --bold-color-3: oklch(55% 0.1 270);
-    --bold-color-4: oklch(55% 0.1 160);
-}
-
+/* 加粗语义色：使用 accent-bold（红棕色）覆盖旧的主题蓝 */
 .post-content strong {
-    color: var(--bold-color-1);
-    font-weight: 600;
+    color: var(--accent-bold);
+    font-weight: var(--fw-bold);
 }

@@ -1,19 +1,19 @@
-/* 文章信息字体大小 */
+/* 文章元数据（日期、作者、阅读时间等） */
 .post-meta {
-    font-size: var(--font-lg) !important;
-    margin-top: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-    color: var(--text-color);
-    font-weight: 500;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: var(--spacing-md);
+    font-size: var(--font-sm) !important;
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-md);
+    color: var(--text-secondary);
+    font-weight: var(--fw-normal);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: var(--space-sm);
 }
 
-/* 响应式调整 - 移动端保持适当大小 */
+/* 响应式调整 */
 @media (max-width: 768px) {
     .post-meta {
-        font-size: 1.05em !important;
-        margin-top: 0.6rem;
-        margin-bottom: var(--spacing-md);
+        font-size: var(--font-xs) !important;
+        margin-top: 0.4rem;
+        margin-bottom: var(--space-sm);
     }
 }
