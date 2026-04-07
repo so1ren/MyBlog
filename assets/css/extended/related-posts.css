@@ -1,64 +1,96 @@
-/* 相关文章推荐样式 */
+/* ============================================================
+   related-posts.css v2 — 使用 CSS 变量，支持暗色模式
+   ============================================================ */
+
 .related-posts {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
 }
 
 .related-posts-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--primary);
+    font-size: var(--font-md);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--text-color);
+    letter-spacing: -0.01em;
 }
 
 .related-posts-list {
-  display: grid;
-  gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
 }
 
 .related-post-item {
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  transition: all 0.2s ease;
+    padding: var(--space-md);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    transition:
+        border-color var(--t-smooth),
+        box-shadow var(--t-smooth),
+        transform var(--t-smooth);
 }
 
 .related-post-item:hover {
-  border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
 }
 
 .related-post-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .related-post-title {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--primary);
+    font-size: var(--font-base);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--text-color);
+    transition: color var(--t-fast);
+}
+
+.related-post-item:hover .related-post-title {
+    color: var(--primary-color);
 }
 
 .related-post-desc {
-  font-size: 0.9rem;
-  color: var(--secondary);
-  margin-bottom: 0.75rem;
-  line-height: 1.6;
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .related-post-meta {
-  font-size: 0.85rem;
-  color: var(--tertiary);
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
 }
 
-.related-post-meta .reading-time::before {
-  content: "·";
-  margin-right: 1rem;
+.related-post-meta .separator::before {
+    content: "·";
+    margin: 0 0.3rem;
+}
+
+/* 暗色模式 */
+html.dark .related-post-item {
+    background: var(--surface);
+    border-color: var(--border-subtle);
+}
+
+html.dark .related-post-title {
+    color: var(--text-color);
+}
+
+html.dark .related-post-meta {
+    color: var(--text-tertiary);
 }

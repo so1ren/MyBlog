@@ -1,47 +1,51 @@
-/* =====  单篇文章「标题-元数据之间」标签美化  ===== */
-/* 方案 E: 柔和粉色系 */
-.post-tags-between{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.6rem;
-  margin:.8rem 0 1.2rem;
-  font-size:.85em;
+/* ============================================================
+   tags.css v2 — 与主色调统一，使用 CSS 变量
+   ============================================================ */
+
+.post-tags-between {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin: var(--space-sm) 0 var(--space-md);
+    font-size: var(--font-xs);
 }
 
-.post-tags-between .tag-link{
-  display:inline-flex;
-  align-items:center;
-  padding:.3rem .8rem;
-  background:#fff0f6;
-  color:#e879a0;
-  font-weight:500;
-  text-decoration:none;
-  border-radius:20px;
-  border:1px solid rgba(232, 121, 160, 0.2);
-  transition:border-color .15s ease, color .15s ease, background .15s ease;
+.post-tags-between .tag-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: var(--primary-subtle);
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: var(--font-xs);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    transition:
+        background var(--t-fast),
+        color var(--t-fast),
+        border-color var(--t-fast),
+        transform var(--t-fast);
 }
 
-.post-tags-between .tag-link svg{
-  width:14px;
-  height:14px;
-  margin-right:.35rem;
+.post-tags-between .tag-link svg {
+    width: 12px;
+    height: 12px;
+    margin-right: 0.25rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
 }
 
-.post-tags-between .tag-link:hover{
-  border-color:rgba(232, 121, 160, 0.6);
-  border-style:solid;
-  color:#c2356b;
-  transform:scale(1.03);
+.post-tags-between .tag-link:hover {
+    background: var(--primary-color);
+    color: var(--bg);
+    border-color: var(--primary-color);
+    transform: scale(1.02);
 }
 
 /* 暗色模式 */
-.dark .post-tags-between .tag-link{
-  background:rgba(232, 121, 160, 0.12);
-  color:#f0a0bb;
-  border-color:rgba(232, 121, 160, 0.15);
-}
-
-.dark .post-tags-between .tag-link:hover{
-  border-color:rgba(232, 121, 160, 0.4);
-  color:#e879a0;
+html.dark .post-tags-between .tag-link {
+    background: var(--primary-subtle);
+    color: var(--primary-color);
 }

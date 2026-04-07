@@ -1,8 +1,5 @@
 /* ============================================================
-   基础变量定义 — v2：极简苹果风
-   - Fluid typography (clamp)
-   - Tinted neutrals（中性色偏蓝暖调）
-   - ease-out-quart 动画
+   基础变量定义 — v3：对比度优化 + 暗色模式完善
    ============================================================ */
 :root {
     /* ---- 颜色：柔和蓝主调 ---- */
@@ -11,22 +8,22 @@
     --primary-subtle: oklch(94% 0.03 245);    /* 淡蓝背景 */
 
     /* 亮色模式中性色（偏蓝灰） */
-    --bg: oklch(99% 0.005 250);              /* 页面背景 */
-    --surface: oklch(97% 0.008 250);         /* 卡片/面板背景 */
-    --text-color: oklch(42% 0.02 250);       /* 正文文字 */
-    --text-secondary: oklch(58% 0.015 250);  /* 次要文字 */
-    --text-tertiary: oklch(72% 0.01 250);     /* 辅助文字 */
-    --border: oklch(88% 0.01 250);           /* 边框 */
-    --border-subtle: oklch(93% 0.008 250);   /* 细分隔线 */
+    --bg: oklch(99% 0.005 250);               /* 页面背景 */
+    --surface: oklch(97% 0.008 250);          /* 卡片/面板背景 */
+    --text-color: oklch(30% 0.02 250);        /* 正文：加深对比度 */
+    --text-secondary: oklch(48% 0.015 250);   /* 次要文字：加深 */
+    --text-tertiary: oklch(55% 0.01 250);     /* 辅助文字：够用 */
+    --border: oklch(85% 0.012 250);           /* 边框：稍加深 */
+    --border-subtle: oklch(91% 0.008 250);    /* 细分隔线 */
 
     /* ---- Fluid Typography ---- */
     --font-xs:   clamp(0.7rem,   0.65rem + 0.25vw, 0.75rem);
     --font-sm:   clamp(0.8rem,   0.75rem + 0.25vw, 0.875rem);
-    --font-base: clamp(0.95rem,  0.9rem + 0.25vw,  1.0625rem); /* 15-17px */
-    --font-md:   clamp(1.0625rem,1rem + 0.3vw,   1.25rem);     /* 17-20px */
-    --font-lg:   clamp(1.25rem,  1.1rem + 0.75vw, 1.625rem);   /* 20-26px */
-    --font-xl:   clamp(1.625rem, 1.4rem + 1.1vw,  2.25rem);    /* 26-36px */
-    --font-2xl:  clamp(2rem,     1.75rem + 1.25vw, 3rem);     /* 32-48px */
+    --font-base: clamp(0.95rem,  0.9rem + 0.25vw,  1.0625rem);
+    --font-md:   clamp(1.0625rem,1rem + 0.3vw,   1.25rem);
+    --font-lg:   clamp(1.25rem,  1.1rem + 0.75vw, 1.625rem);
+    --font-xl:   clamp(1.625rem, 1.4rem + 1.1vw,  2.25rem);
+    --font-2xl:  clamp(2rem,     1.75rem + 1.25vw, 3rem);
 
     /* ---- 间距（动态） ---- */
     --space-xs:  clamp(0.25rem,  0.2rem + 0.25vw,  0.5rem);
@@ -41,24 +38,30 @@
     --radius-lg:  16px;
 
     /* ---- 阴影（柔和多层） ---- */
-    --shadow-sm:  0 1px 3px oklch(0% 0 0 / 0.04), 0 1px 2px oklch(0% 0 0 / 0.03);
-    --shadow-md:  0 4px 12px oklch(0% 0 0 / 0.06), 0 2px 6px oklch(0% 0 0 / 0.04);
-    --shadow-lg:  0 12px 32px oklch(0% 0 0 / 0.08), 0 4px 12px oklch(0% 0 0 / 0.05);
+    --shadow-sm:  0 1px 3px oklch(0% 0 0 / 0.05), 0 1px 2px oklch(0% 0 0 / 0.04);
+    --shadow-md:  0 4px 12px oklch(0% 0 0 / 0.07), 0 2px 6px oklch(0% 0 0 / 0.05);
+    --shadow-lg:  0 12px 32px oklch(0% 0 0 / 0.09), 0 4px 12px oklch(0% 0 0 / 0.06);
 
     /* ---- 动画（ease-out-quart） ---- */
     --ease-out:  cubic-bezier(0.25, 1, 0.5, 1);
     --t-fast:    0.15s var(--ease-out);
     --t-smooth:  0.25s var(--ease-out);
     --t-slow:    0.4s  var(--ease-out);
+
+    /* ---- 兼容 PaperMod 变量别名 ---- */
+    --primary:   var(--primary-color);
+    --secondary: var(--text-secondary);
+    --tertiary:  var(--text-tertiary);
 }
 
 /* 暗色模式 */
+html.dark,
 .dark {
     --bg:             oklch(18% 0.02 250);
     --surface:        oklch(22% 0.02 250);
     --text-color:     oklch(88% 0.01 250);
-    --text-secondary: oklch(68% 0.015 250);
-    --text-tertiary:  oklch(52% 0.01 250);
+    --text-secondary: oklch(70% 0.012 250);
+    --text-tertiary:  oklch(60% 0.01 250);
     --border:         oklch(30% 0.015 250);
     --border-subtle:  oklch(38% 0.01 250);
     --primary-subtle: oklch(28% 0.08 245);
@@ -77,7 +80,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---- 全局背景一致性：让所有内容区域继承 body 背景 ---- */
+/* ---- 全局背景一致性 ---- */
 .main,
 .list,
 .single,
@@ -85,6 +88,17 @@ body {
 .post-content,
 article .entry-container {
     background: transparent;
+}
+
+/* ---- 确保暗色模式背景正确 ---- */
+html.dark body,
+html.dark .main,
+html.dark .list,
+html.dark .single,
+html.dark .post-content,
+html.dark article {
+    background: var(--bg);
+    color: var(--text-color);
 }
 
 /* 代码块保持等宽字体 */

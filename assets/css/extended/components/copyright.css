@@ -1,207 +1,116 @@
-/* 版权声明卡片样式 */
+/* ============================================================
+   copyright.css v2 — 使用 CSS 变量，支持暗色模式
+   ============================================================ */
+
 .post-copyright {
-    margin: 2.5rem 0;
-    padding: 0;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    border: 1px solid #eaecef;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary-color);
+    transition:
+        border-color var(--t-smooth),
+        box-shadow var(--t-smooth);
 }
 
 .post-copyright:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--primary-hover);
+    border-left-color: var(--primary-hover);
 }
 
 .post-copyright-header {
-    padding: 12px 20px;
-    background: var(--accent-light);
-    color: var(--primary-dark);
-    font-weight: 600;
-    font-size: 14px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.copyright-icon {
-    margin-right: 8px;
-    font-size: 14px;
-    font-weight: bold;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--primary-color);
+    font-size: var(--font-sm);
+    font-weight: 600;
 }
 
 .post-copyright-content {
-    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
 }
 
 .copyright-item {
     display: flex;
-    margin-bottom: 10px;
     align-items: flex-start;
-}
-
-.copyright-item:last-child {
-    margin-bottom: 0;
+    font-size: var(--font-sm);
+    gap: var(--space-sm);
 }
 
 .item-label {
-    flex: 0 0 75px;
-    color: var(--text-color);
+    flex: 0 0 auto;
+    min-width: 4rem;
+    color: var(--text-secondary);
     font-weight: 500;
-    text-align: right;
-    padding-right: 12px;
-    white-space: nowrap;
 }
 
 .item-content {
     flex: 1;
-    color: #2d3748;
+    color: var(--text-color);
     word-break: break-word;
 }
 
 .post-copyright-content a {
     color: var(--primary-color);
-    font-weight: 500;
     text-decoration: none;
-    padding: 0.1em 0.4em;
-    margin: 0 -0.4em;
-    border-radius: 5px;
-    transition: background 0.2s ease, color 0.2s ease;
-    display: inline;
+    transition: color var(--t-fast);
 }
 
 .post-copyright-content a:hover {
-    background: rgba(49, 130, 206, 0.1);
-    color: var(--primary-dark);
+    color: var(--primary-hover);
 }
 
 .post-copyright-footer {
-    padding: 12px 20px;
-    background-color: #f7fafc;
-    border-top: 1px solid var(--border-light);
+    padding-top: var(--space-sm);
+    margin-top: var(--space-sm);
+    border-top: 1px solid var(--border-subtle);
     display: flex;
     justify-content: center;
-    text-align: center;
 }
 
-.post-copyright-footer a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #718096;
-    font-size: 12px;
-    padding: 0.2em 0.5em;
-    margin: 0 -0.5em;
-    border-radius: 5px;
-    transition: background 0.2s ease, color 0.2s ease;
+/* 暗色模式 */
+html.dark .post-copyright {
+    background: var(--surface);
+    border-color: var(--border);
 }
 
-.post-copyright-footer a:hover {
-    background: rgba(49, 130, 206, 0.1);
+html.dark .post-copyright-header {
     color: var(--primary-color);
 }
 
-.post-copyright-footer img {
-    margin-right: 8px;
-    height: 18px;
-    width: auto;
+html.dark .item-label {
+    color: var(--text-secondary);
 }
 
-/* 暗色模式适配 - 从 blank.css 提取 */
-.dark .post-copyright {
-    background: #2d3748;
-    border-color: #4a5568;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+html.dark .item-content {
+    color: var(--text-color);
 }
 
-.dark .post-copyright-header {
-    background: #4a5568;
-    color: #e2e8f0;
-    border-bottom-color: #4a5568;
+html.dark .post-copyright-content a {
+    color: var(--primary-color);
 }
 
-.dark .post-copyright-content {
-    background: #2d3748;
-}
-
-.dark .item-label {
-    color: #cbd5e0;
-}
-
-.dark .item-content {
-    color: #e2e8f0;
-}
-
-.dark .post-copyright-content a {
-    color: #63b3ed;
-}
-
-.dark .post-copyright-content a:hover {
-    background: rgba(99, 179, 237, 0.12);
-    color: #90cdf4;
-}
-
-.dark .post-copyright-footer {
-    background-color: #2d3748;
-    border-top-color: #4a5568;
-}
-
-.dark .post-copyright-footer a {
-    color: #a0aec0;
-}
-
-.dark .post-copyright-footer a:hover {
-    background: rgba(99, 179, 237, 0.12);
-    color: #63b3ed;
-}
-
-/* 响应式设计 */
+/* 响应式 */
 @media (max-width: 768px) {
     .post-copyright {
-        margin: 2rem 0;
-        border-radius: 8px;
-        font-size: 12px;
+        margin: var(--space-md) 0;
+        padding: var(--space-sm);
     }
-    
-    .post-copyright-header {
-        padding: 10px 16px;
-        font-size: 13px;
-    }
-    
-    .post-copyright-content {
-        padding: 14px 16px;
-    }
-    
+
     .copyright-item {
-        margin-bottom: 8px;
-        align-items: center;
+        flex-direction: column;
+        gap: 0.15rem;
     }
-    
+
     .item-label {
-        flex: 0 0 auto;
-        text-align: left;
-        padding-right: 8px;
-        font-size: 11px;
-        width: auto;
-        white-space: nowrap;
-    }
-    
-    .item-content {
-        flex: 1;
-        min-width: 0;
-        overflow-wrap: break-word;
-    }
-    
-    .post-copyright-footer {
-        padding: 10px 16px;
-    }
-    
-    .post-copyright-footer img {
-        margin-right: 6px;
-        margin-bottom: 0;
+        min-width: unset;
     }
 }

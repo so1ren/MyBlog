@@ -1,5 +1,4 @@
-{{- /* Giscus 评论系统 */ -}}
-{{- /* 使用说明：访问 https://giscus.app/zh-CN 获取 repoID 和 categoryID */ -}}
+{{- /* Giscus 评论系统 — 支持主题自动切换 */ -}}
 {{- $giscus := site.Params.giscus | default dict -}}
 {{- if $.Params.comments | default true }}
 <div id="giscus-comments" class="giscus-wrapper">
@@ -13,10 +12,49 @@
           data-reactions-enabled="{{ $giscus.reactionsEnabled | default "1" }}"
           data-emit-metadata="{{ $giscus.emitMetadata | default "0" }}"
           data-input-position="{{ $giscus.inputPosition | default "bottom" }}"
-          data-theme="{{ $giscus.theme | default "preferred_color_scheme" }}"
+          data-theme="preferred_color_scheme"
           data-lang="{{ $giscus.lang | default "zh-CN" }}"
           crossorigin="anonymous"
           async>
   </script>
 </div>
+
+<script>
+// Giscus 主题自动同步
+(function() {
+  function sendGiscusTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const theme = isDark ? 'dark_dimmed' : 'light';
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: theme } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  // 页面加载完成后同步一次
+  window.addEventListener('load', function() {
+    setTimeout(sendGiscusTheme, 500);
+  });
+
+  // 监听主题切换
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      setTimeout(sendGiscusTheme, 150);
+    });
+  }
+
+  // 监听 PaperMod 主题变化（observer）
+  var observer = new MutationObserver(function() {
+    setTimeout(sendGiscusTheme, 150);
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+})();
+</script>
 {{- end }}

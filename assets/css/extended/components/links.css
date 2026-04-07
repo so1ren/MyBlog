@@ -1,4 +1,7 @@
-/* 链接样式 */
+/* ============================================================
+   links.css v2 — 使用 CSS 变量，支持暗色模式
+   ============================================================ */
+
 .post-content a {
     color: var(--primary-color);
     text-decoration: none !important;
@@ -7,27 +10,28 @@
     box-shadow: none !important;
     position: relative;
     font-weight: 500;
-    /* Option 5: 背景色淡入 */
     padding: 0.1em 0.4em;
     margin: 0 -0.4em;
-    border-radius: 5px;
-    transition: background 0.2s ease, color 0.2s ease;
+    border-radius: var(--radius-sm);
+    transition:
+        background var(--t-fast),
+        color var(--t-fast);
     outline: none;
 }
 
 .post-content a:hover {
-    background: rgba(49, 130, 206, 0.1);
-    color: var(--primary-dark);
+    background: var(--primary-subtle);
+    color: var(--primary-hover);
 }
 
-/* 暗色模式适配 */
-.dark .post-content a {
-    color: #63b3ed;
+/* 暗色模式 */
+html.dark .post-content a {
+    color: var(--primary-color);
 }
 
-.dark .post-content a:hover {
-    background: rgba(99, 179, 237, 0.12);
-    color: #90cdf4;
+html.dark .post-content a:hover {
+    background: var(--primary-subtle);
+    color: var(--primary-color);
 }
 
 /* 标题链接特殊处理 */
@@ -37,11 +41,12 @@
     padding: 0;
     margin: 0;
     border-radius: 0;
+    background: none !important;
 }
 
 .post-content h1 a:hover,
 .post-content h2 a:hover,
 .post-content h3 a:hover {
-    background: none;
+    background: none !important;
     color: inherit;
 }
