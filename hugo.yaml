@@ -80,7 +80,7 @@ params:
   images:
     - "/cow.jpg"
 
-      disableHLJS: false
+  disableHLJS: false
 
   profileMode:
     enabled: true
@@ -142,10 +142,6 @@ menu:
       name: 标签
       url: /tags/
       weight: 20
-    - identifier: series
-      name: 系列
-      url: /series/
-      weight: 25
     - identifier: archives
       name: 归档
       url: /archives/

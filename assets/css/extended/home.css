@@ -1,41 +1,96 @@
-/* 首页视觉升级样式 */
+/* ============================================================
+   home.css v2 — 极简苹果风首页
+   - 头像悬停柔和放大
+   - 标题渐变色
+   - 按钮更柔和
+   ============================================================ */
 
-/* 头像悬停效果 */
+/* 头像悬停效果 — 柔和 */
 .profile .profile_inner img {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform var(--t-smooth),
+        box-shadow var(--t-smooth);
+    border-radius: var(--radius-lg);
 }
 
 .profile .profile_inner img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: scale(1.04);
+    box-shadow: var(--shadow-lg);
 }
 
 /* 社交图标动画 */
 .social-icons a {
-  transition: all 0.2s ease;
+    transition:
+        transform var(--t-smooth),
+        color var(--t-fast),
+        opacity var(--t-fast);
 }
 
 .social-icons a:hover {
-  transform: translateY(-3px);
-  color: var(--primary) !important;
+    transform: translateY(-3px);
+    color: var(--primary-color) !important;
 }
 
 /* 副标题渐变效果 */
 .profile .profile_inner h1 {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    background: linear-gradient(
+        135deg,
+        var(--primary-color) 0%,
+        oklch(60% 0.12 260) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: var(--font-xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+/* 副标题 */
+.profile .profile_inner .subtitle {
+    font-size: var(--font-md);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: var(--space-xs);
 }
 
 /* 主页按钮样式 */
+.profile .profile_inner .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
 .profile .profile_inner .buttons a {
-  transition: all 0.2s ease;
-  border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--text-color);
+    background: var(--surface);
+    transition:
+        background var(--t-smooth),
+        color var(--t-smooth),
+        border-color var(--t-smooth),
+        box-shadow var(--t-smooth),
+        transform var(--t-smooth);
 }
 
 .profile .profile_inner .buttons a:hover {
-  background: var(--primary);
-  color: var(--theme) !important;
-  transform: translateY(-2px);
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--bg) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Profile section 整体 padding */
+.profile {
+    padding: var(--space-xl) 0 var(--space-lg);
 }

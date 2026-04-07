@@ -1,58 +1,246 @@
-/* 文章列表优化样式 */
+/* ============================================================
+   post-list.css v2 — 极简苹果风
+   - 首篇文章 Featured Card（占满整行）
+   - 左对齐为主
+   - 动态间距节奏
+   - 柔和圆角 + 微妙阴影
+   ============================================================ */
 
-/* 卡片间距和悬停 */
+/* ---- 文章卡片网格 ---- */
+.post-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* ---- 普通文章卡片 ---- */
 .post-entry {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border-radius: 10px;
-  transition: all 0.25s ease;
-  border: 1px solid transparent;
+    position: relative;
+    margin-bottom: var(--space-md);
+    padding: var(--space-md) var(--space-sm);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition:
+        box-shadow var(--t-smooth),
+        border-color var(--t-smooth),
+        transform var(--t-smooth),
+        background var(--t-smooth);
+    background: var(--surface);
+    /* 左对齐 */
+    text-align: left;
 }
 
 .post-entry:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  border-color: var(--border);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-subtle);
+    transform: translateY(-2px);
 }
 
-/* 标签样式：最多显示2个 */
-.post-entry .post-tags a:nth-child(n+3) {
-  display: none;
+/* ---- 首篇 Featured Card（直接定位第一张卡片，绕过 PaperMod 条件限制） ---- */
+.post-entries > .post-entry:first-child {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--primary-subtle);
+    border-color: oklch(88% 0.05 245);
 }
 
-/* 标签 pill 样式 */
-.post-entry .post-tags a {
-  display: inline-block;
-  font-size: 0.78rem;
-  padding: 0.2rem 0.65rem;
-  border-radius: 4px;
-  background: var(--code-bg);
-  color: var(--primary);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  margin-right: 0.25rem;
+.post-entries > .post-entry:first-child .entry-header h2 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin: 0;
 }
 
-.post-entry .post-tags a:hover {
-  background: var(--primary);
-  color: var(--theme);
+.post-entries > .post-entry:first-child .entry-content {
+    font-size: var(--font-md);
+    color: var(--text-secondary);
+    line-height: 1.7;
 }
 
-/* 摘要文字优化 */
-.post-entry .entry-content p {
-  line-height: 1.7;
-  color: var(--secondary);
-  margin-top: 0.5rem;
+.post-entries > .post-entry:first-child .entry-content p {
+    margin: 0;
 }
 
-/* 文章标题悬停颜色 */
-.post-entry .post-title a:hover {
-  color: var(--primary);
+.post-entries > .post-entry:first-child .entry-footer {
+    margin-top: var(--space-sm);
 }
 
-/* 元信息优化 */
-.post-entry .post-meta {
-  font-size: 0.85rem;
-  color: var(--tertiary);
-  margin-top: 0.5rem;
+/* ---- 文章链接热区 ---- */
+.entry-link-area {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* ---- 标题 ---- */
+.entry-header h2 {
+    font-size: var(--font-lg);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    margin: 0 0 var(--space-xs);
+    color: var(--text-color);
+}
+
+.entry-header h2 a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--t-fast);
+}
+
+.entry-header h2 a:hover {
+    color: var(--primary-color);
+}
+
+/* ---- 摘要文字 ---- */
+.entry-content {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.entry-content p {
+    margin: 0;
+    /* 限制行数 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ---- 标签 pill ---- */
+.entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+}
+
+.entry-tags .tag-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: var(--primary-subtle);
+    color: var(--primary-color);
+    text-decoration: none;
+    transition:
+        background var(--t-fast),
+        color var(--t-fast);
+    letter-spacing: 0.01em;
+}
+
+.entry-tags .tag-link:hover {
+    background: var(--primary-color);
+    color: var(--bg);
+}
+
+/* 标签最多显示3个，其余隐藏 */
+.post-entry .post-tags a:nth-child(n+4) {
+    display: none;
+}
+
+/* ---- 元信息栏 ---- */
+.entry-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+}
+
+.meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.meta-item svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+/* ---- 归档页系列卡片（重写） ---- */
+.archive-series-item {
+    border-radius: var(--radius-md);
+}
+
+/* ---- 分页导航 ---- */
+.page-footer {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.pagination .prev,
+.pagination .next {
+    font-size: var(--font-sm);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition:
+        background var(--t-fast),
+        color var(--t-fast);
+}
+
+.pagination .prev:hover,
+.pagination .next:hover {
+    background: var(--primary-subtle);
+    color: var(--primary-hover);
+}
+
+/* ---- 移动端适配 ---- */
+@media (max-width: 640px) {
+    .post-entry.first-entry,
+    .post-entry:is(.first-entry) {
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+    }
+
+    .post-entry {
+        padding: var(--space-sm);
+    }
+
+    /* 移动端隐藏部分标签 */
+    .entry-tags .tag-link:nth-child(n+3) {
+        display: none;
+    }
+}
+
+/* ---- 暗色模式适配 ---- */
+@media (prefers-color-scheme: dark) {
+    /* handled via .dark class on <html> */
+}
+
+/* ---- 减少动画 ---- */
+@media (prefers-reduced-motion: reduce) {
+    .post-entry,
+    .post-entry *,
+    .entry-tags .tag-link,
+    .pagination .prev,
+    .pagination .next {
+        transition: none;
+        animation: none !important;
+    }
+
+    .post-entry {
+        opacity: 1;
+    }
 }
