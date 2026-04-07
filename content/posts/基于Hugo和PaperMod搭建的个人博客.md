@@ -4,6 +4,7 @@ draft = false
 title = '基于Hugo和PaperMod搭建的个人博客'
 tags =  ["Hugo", "PaperMod"]
 categories = ["网站和博客技术"]
+description = "小白写给小白的 Hugo + PaperMod 博客搭建教程，从安装到部署全程图文讲解。"
 +++
 
 小白写给小白。

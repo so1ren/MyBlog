@@ -76,6 +76,10 @@ params:
       apple_touch_icon: "cow.jpg"
       safari_pinned_tab: "cow.jpg"
 
+  # 默认 Open Graph 图片
+  images:
+    - "/cow.jpg"
+
       disableHLJS: false
 
   profileMode:
