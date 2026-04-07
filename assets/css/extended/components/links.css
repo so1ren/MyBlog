@@ -3,13 +3,13 @@
    ============================================================ */
 
 .post-content a {
-    color: var(--primary-color);
+    color: var(--accent-link);
     text-decoration: none !important;
     border-bottom: none !important;
     background-image: none !important;
     box-shadow: none !important;
     position: relative;
-    font-weight: 500;
+    font-weight: var(--fw-medium);
     padding: 0.1em 0.4em;
     margin: 0 -0.4em;
     border-radius: var(--radius-sm);
@@ -20,18 +20,18 @@
 }
 
 .post-content a:hover {
-    background: var(--primary-subtle);
-    color: var(--primary-hover);
+    background: oklch(94% 0.04 240);
+    color: oklch(38% 0.18 240);
 }
 
 /* 暗色模式 */
 html.dark .post-content a {
-    color: var(--primary-color);
+    color: var(--accent-link);
 }
 
 html.dark .post-content a:hover {
-    background: var(--primary-subtle);
-    color: var(--primary-color);
+    background: oklch(28% 0.06 240);
+    color: oklch(75% 0.15 240);
 }
 
 /* 标题链接特殊处理 */

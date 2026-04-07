@@ -7,29 +7,27 @@
     padding: var(--space-md);
     border-radius: var(--radius-md);
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--primary-color);
-    transition:
-        border-color var(--t-smooth),
-        box-shadow var(--t-smooth);
+    border: 1px solid var(--border-subtle);
+    border-top: 2px solid var(--border);
+    transition: border-color var(--t-smooth), box-shadow var(--t-smooth);
 }
 
 .post-copyright:hover {
     box-shadow: var(--shadow-sm);
-    border-color: var(--primary-hover);
-    border-left-color: var(--primary-hover);
 }
 
 .post-copyright-header {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    padding-bottom: var(--space-sm);
+    padding-bottom: var(--space-xs);
     margin-bottom: var(--space-sm);
     border-bottom: 1px solid var(--border-subtle);
-    color: var(--primary-color);
-    font-size: var(--font-sm);
+    color: var(--text-tertiary);
+    font-size: var(--font-xs);
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .post-copyright-content {
@@ -59,13 +57,13 @@
 }
 
 .post-copyright-content a {
-    color: var(--primary-color);
+    color: var(--accent-link);
     text-decoration: none;
     transition: color var(--t-fast);
 }
 
 .post-copyright-content a:hover {
-    color: var(--primary-hover);
+    color: oklch(38% 0.18 240);
 }
 
 .post-copyright-footer {
@@ -83,7 +81,7 @@ html.dark .post-copyright {
 }
 
 html.dark .post-copyright-header {
-    color: var(--primary-color);
+    color: var(--text-tertiary);
 }
 
 html.dark .item-label {
@@ -95,7 +93,7 @@ html.dark .item-content {
 }
 
 html.dark .post-copyright-content a {
-    color: var(--primary-color);
+    color: var(--accent-link);
 }
 
 /* 响应式 */

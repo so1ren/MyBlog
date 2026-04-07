@@ -1,6 +1,11 @@
-/* 文章标题 */
+/* 文章大标题 */
 .post-title {
-    font-size: var(--font-xl) !important;
+    font-size: var(--font-2xl) !important;
+    font-weight: var(--fw-black);
+    line-height: 1.2;
+    color: var(--text-color);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-sm);
 }
 
 /* 文章内图片响应式 */
@@ -10,36 +15,72 @@
     display: block;
 }
 
-/* 文章内容标题字体大小调整 */
+/* 文章内容标题字重字号 */
 .post-content h1 {
-    font-size: 1.9rem;
-    margin-top: 1.8rem;
-    margin-bottom: var(--spacing-md);
+    font-size: var(--font-xl);
+    font-weight: var(--fw-black);
+    line-height: 1.3;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.01em;
+    color: var(--text-color);
 }
 
 .post-content h2 {
-    font-size: 1.7rem;
-    margin-top: 1.6rem;
-    margin-bottom: 0.9rem;
+    font-size: var(--font-lg);
+    font-weight: var(--fw-bold);
+    line-height: 1.35;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    color: var(--text-color);
 }
 
 .post-content h3 {
-    font-size: 1.5rem;
-    margin-top: 1.4rem;
-    margin-bottom: 0.8rem;
+    font-size: var(--font-md);
+    font-weight: var(--fw-bold);
+    line-height: 1.4;
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
+    color: var(--text-color);
 }
 
 .post-content h4 {
-    font-size: 1.3rem;
-    margin-top: 1.2rem;
-    margin-bottom: 0.7rem;
+    font-size: var(--font-base);
+    font-weight: var(--fw-semibold);
+    line-height: 1.5;
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
+    color: var(--text-color);
 }
 
-.post-content h5, 
+.post-content h5,
 .post-content h6 {
-    font-size: 1.2rem;
-    margin-top: 1.1rem;
-    margin-bottom: 0.6rem;
+    font-size: var(--font-sm);
+    font-weight: var(--fw-semibold);
+    line-height: 1.5;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-xs);
+    color: var(--text-secondary);
+}
+
+/* 正文加粗 */
+.post-content strong {
+    color: var(--accent-bold);
+    font-weight: var(--fw-bold);
+}
+
+/* 行内代码 */
+.post-content code:not(pre code) {
+    color: var(--accent-code);
+    background: oklch(97% 0.015 168);
+    padding: 0.15em 0.45em;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+    font-weight: var(--fw-normal);
+}
+
+html.dark .post-content code:not(pre code) {
+    background: oklch(22% 0.03 168);
 }
 
 /* 目录固定右侧，内容留出空间 */

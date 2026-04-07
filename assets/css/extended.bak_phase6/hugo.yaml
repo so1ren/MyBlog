@@ -1,0 +1,188 @@
+baseURL: "https://caiyu.life/"
+title: "Solren的网络自留地"
+theme: PaperMod
+languageCode: zh-cn
+
+hasCJKLanguage: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+defaultContentLanguage: zh
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+languages:
+  zh:
+     languageName: "中文"
+     taxonomies:
+      category: categories
+      tag: tags
+      series: series
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # 用于搜索引擎索引
+
+# 相关文章配置
+related:
+  includeNewer: true
+  threshold: 80
+  toLower: false
+  indices:
+    - name: tags
+      weight: 100
+    - name: categories
+      weight: 80
+    - name: series
+      weight: 60
+
+# Sitemap 配置
+sitemap:
+  changefreq: weekly
+  priority: 0.8
+
+params:
+
+  author: "So1ren"
+
+  # 主题模式: auto, light, dark
+  defaultTheme: auto
+  
+  # 显示修改日期
+  ShowPostNavLinks: true
+  
+  # 启用代码高亮
+  enableHighlight: true
+  
+  mainSections:
+    - posts
+  
+  dateFormat: "2006年01月02日"
+    
+  ShowToc: true
+  TocOpen: true
+  ShowLastMod: true
+  ShowReadingTime: true
+
+  assets:
+      favicon: "cow.jpg"
+      favicon16x16: "cow.jpg"
+      favicon32x32: "cow.jpg"
+      apple_touch_icon: "cow.jpg"
+      safari_pinned_tab: "cow.jpg"
+
+  # 默认 Open Graph 图片
+  images:
+    - "/cow.jpg"
+
+  disableHLJS: false
+
+  profileMode:
+    enabled: true
+    title: "<Title>" # optional default will be site title
+    subtitle: "我思故我在。"
+    imageUrl: "cow.jpg" # optional
+    imageTitle: "I'm solren" # optional
+    imageWidth: 200 # custom size
+    imageHeight: 200 # custom size
+    
+    buttons:
+      - name: 文章
+        url: "/posts/"
+      - name: 关于
+        url: "/about/"
+
+  socialIcons:
+      - name: github
+        url: "https://github.com/so1ren"
+      - name: QQ
+        url: "qq.jpg"
+      - name: email
+        url: "mailto:caiyu2001@126.com"
+  
+  # Giscus 评论系统配置
+  # 访问 https://giscus.app/zh-CN 获取 repoID 和 categoryID
+  comments: true
+  giscus:
+    repo: "so1ren/MyBlog"
+    repoID: "R_kgDOPlpGOQ"
+    category: "Announcements"
+    categoryID: "DIC_kwDOPlpGOc4C6Rkc"
+    mapping: "pathname"
+    reactionsEnabled: "1"
+    emitMetadata: "0"
+    inputPosition: "bottom"
+    theme: "preferred_color_scheme"
+    lang: "zh-CN"
+
+  # 搜索
+  fuseOpts:
+    isCaseSensitive: false # 是否大小写敏感
+    shouldSort: true # 是否排序
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0     
+    keys: ["title", "permalink", "summary", "content"]
+    includeMatches: true
+
+          
+menu:
+  main:
+    - identifier: categories
+      name: 分类
+      url: /categories/
+      weight: 10
+    - identifier: tags
+      name: 标签
+      url: /tags/
+      weight: 20
+    - identifier: archives
+      name: 归档
+      url: /archives/
+      weight: 30
+    - identifier: search
+      name: 搜索
+      url: /search/
+      weight: 40
+    - identifier: about
+      name: 关于
+      url: /about/
+      weight: 50
+
+
+markup:
+  math:
+    enable: true
+  highlight:
+    noClasses: false
+    lineNos: true  # 启用行号
+    lineNumbersInTable: false
+    codeFolding: true
+    codeFoldingInit: "fold"
+    style: "github"  # 改为简约的github风格
+    tabWidth: 4 
+    guessSyntax: true
+    # 明确支持的语言
+    hl_Languages: [
+      "yaml", "yml",
+      "bash", "sh", "zsh",
+      "html", "xml",
+      "javascript", "js=javascript",
+      "typescript", "ts=typescript",
+      "css", "scss",
+      "python", "py=python",
+      "go", "golang",
+      "java",
+      "c", "cpp",
+      "rust", "rs=rust",
+      "sql",
+      "dockerfile", "docker",
+      "makefile", "mk=makefile",
+      "ini", "toml"
+    ]
