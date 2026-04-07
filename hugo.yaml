@@ -106,9 +106,9 @@ params:
   comments: true
   giscus:
     repo: "so1ren/MyBlog"
-    repoID: "YOUR_REPO_ID"
+    repoID: "R_kgDOPlpGOQ"
     category: "Announcements"
-    categoryID: "YOUR_CATEGORY_ID"
+    categoryID: "DIC_kwDOPlpGOc4C6Rkc"
     mapping: "pathname"
     reactionsEnabled: "1"
     emitMetadata: "0"
