@@ -1,0 +1,19 @@
+/* 阅读进度条样式 */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--tertiary));
+  z-index: 9999;
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .reading-progress-bar {
+    background: linear-gradient(90deg, #6c63ff, #a29bfe);
+  }
+}

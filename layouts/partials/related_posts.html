@@ -1,0 +1,23 @@
+{{- /* 相关文章推荐 */ -}}
+{{- $related := .Site.RegularPages.Related . | first 3 }}
+{{- if $related }}
+<div class="related-posts">
+  <h3 class="related-posts-title">📖 相关文章</h3>
+  <div class="related-posts-list">
+    {{- range $related }}
+    <article class="related-post-item">
+      <a href="{{ .Permalink }}" class="related-post-link">
+        <h4 class="related-post-title">{{ .Title }}</h4>
+        {{- if .Description }}
+        <p class="related-post-desc">{{ .Description }}</p>
+        {{- end }}
+        <div class="related-post-meta">
+          <time>{{ .Date.Format "2006年01月02日" }}</time>
+          <span class="reading-time">{{ .ReadingTime }} 分钟阅读</span>
+        </div>
+      </a>
+    </article>
+    {{- end }}
+  </div>
+</div>
+{{- end }}

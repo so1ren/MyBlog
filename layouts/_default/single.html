@@ -1,6 +1,10 @@
 {{- define "main" }}
 
 <article class="post-single">
+  {{- /* 阅读进度条（仅文章页） */ -}}
+  {{- if eq .Type "posts" }}
+  <div class="reading-progress-bar"></div>
+  {{- end }}
   <header class="post-header">
     {{ partial "breadcrumbs.html" . }}
 
@@ -114,6 +118,11 @@
     {{- end }}
   </footer>
 
+  {{- /* 相关文章推荐（仅文章页） */ -}}
+  {{- if eq .Type "posts" }}
+    {{- partial "related_posts.html" . -}}
+  {{- end }}
+
   {{- if (.Param "comments") }}
   {{- partial "comments.html" . }}
   {{- end }}
@@ -149,4 +158,8 @@ document.addEventListener('DOMContentLoaded', function () {
     onScroll();
 });
 </script>
+
+<!-- 阅读进度条脚本 -->
+<script src="{{ "js/reading-progress.js" | absURL }}"></script>
+
 {{- end }}{{/* end main */}}

@@ -1,0 +1,18 @@
+/* Giscus 评论系统样式 */
+.giscus-wrapper {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.giscus-wrapper .giscus {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .giscus-wrapper .giscus-frame {
+    filter: brightness(0.95);
+  }
+}

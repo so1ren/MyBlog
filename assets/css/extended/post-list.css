@@ -1,0 +1,58 @@
+/* 文章列表优化样式 */
+
+/* 卡片间距和悬停 */
+.post-entry {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.post-entry:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--border);
+}
+
+/* 标签样式：最多显示2个 */
+.post-entry .post-tags a:nth-child(n+3) {
+  display: none;
+}
+
+/* 标签 pill 样式 */
+.post-entry .post-tags a {
+  display: inline-block;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 4px;
+  background: var(--code-bg);
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-right: 0.25rem;
+}
+
+.post-entry .post-tags a:hover {
+  background: var(--primary);
+  color: var(--theme);
+}
+
+/* 摘要文字优化 */
+.post-entry .entry-content p {
+  line-height: 1.7;
+  color: var(--secondary);
+  margin-top: 0.5rem;
+}
+
+/* 文章标题悬停颜色 */
+.post-entry .post-title a:hover {
+  color: var(--primary);
+}
+
+/* 元信息优化 */
+.post-entry .post-meta {
+  font-size: 0.85rem;
+  color: var(--tertiary);
+  margin-top: 0.5rem;
+}

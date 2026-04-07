@@ -14,6 +14,11 @@
     "css/extended/layouts/responsive.css"
     "css/extended/custom.css"
     "css/extended/list.css"
+    "css/extended/home.css"
+    "css/extended/post-list.css"
+    "css/extended/giscus.css"
+    "css/extended/related-posts.css"
+    "css/extended/reading-progress.css"
 -}}
 
 {{- range $cssFiles -}}
@@ -51,3 +56,8 @@ document.addEventListener("DOMContentLoaded", function() {
 .katex { font-family: Arial, sans-serif !important; }
 .katex .mord { font-family: Arial, sans-serif !important; }
 </style>
+
+{{- /* JSON-LD 结构化数据（仅文章页） */ -}}
+{{- if eq .Type "posts" }}
+{{- partial "structured_data.html" . -}}
+{{- end }}

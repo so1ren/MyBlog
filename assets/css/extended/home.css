@@ -1,0 +1,41 @@
+/* 首页视觉升级样式 */
+
+/* 头像悬停效果 */
+.profile .profile_inner img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile .profile_inner img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 社交图标动画 */
+.social-icons a {
+  transition: all 0.2s ease;
+}
+
+.social-icons a:hover {
+  transform: translateY(-3px);
+  color: var(--primary) !important;
+}
+
+/* 副标题渐变效果 */
+.profile .profile_inner h1 {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 主页按钮样式 */
+.profile .profile_inner .buttons a {
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.profile .profile_inner .buttons a:hover {
+  background: var(--primary);
+  color: var(--theme) !important;
+  transform: translateY(-2px);
+}

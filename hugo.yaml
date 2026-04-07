@@ -28,6 +28,24 @@ outputs:
     - RSS
     - JSON # 用于搜索引擎索引
 
+# 相关文章配置
+related:
+  includeNewer: true
+  threshold: 80
+  toLower: false
+  indices:
+    - name: tags
+      weight: 100
+    - name: categories
+      weight: 80
+    - name: series
+      weight: 60
+
+# Sitemap 配置
+sitemap:
+  changefreq: weekly
+  priority: 0.8
+
 params:
 
   author: "So1ren"
@@ -36,13 +54,13 @@ params:
   defaultTheme: auto
   
   # 显示修改日期
-  showPostNavLinks: true
+  ShowPostNavLinks: true
   
   # 启用代码高亮
   enableHighlight: true
   
-  mainSection:
-    - post
+  mainSections:
+    - posts
   
   dateFormat: "2006年01月02日"
     
@@ -66,8 +84,8 @@ params:
     subtitle: "我思故我在。"
     imageUrl: "cow.jpg" # optional
     imageTitle: "I'm solren" # optional
-    imageWidth: 150 # custom size
-    imageHeight: 150 # custom size
+    imageWidth: 200 # custom size
+    imageHeight: 200 # custom size
     
     buttons:
       - name: 文章
@@ -83,6 +101,21 @@ params:
       - name: email
         url: "mailto:caiyu2001@126.com"
   
+  # Giscus 评论系统配置
+  # 访问 https://giscus.app/zh-CN 获取 repoID 和 categoryID
+  comments: true
+  giscus:
+    repo: "so1ren/MyBlog"
+    repoID: "YOUR_REPO_ID"
+    category: "Announcements"
+    categoryID: "YOUR_CATEGORY_ID"
+    mapping: "pathname"
+    reactionsEnabled: "1"
+    emitMetadata: "0"
+    inputPosition: "bottom"
+    theme: "preferred_color_scheme"
+    lang: "zh-CN"
+
   # 搜索
   fuseOpts:
     isCaseSensitive: false # 是否大小写敏感
