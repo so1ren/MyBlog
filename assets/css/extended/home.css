@@ -1,11 +1,10 @@
 /* ============================================================
-   home.css v2 — 极简苹果风首页
-   - 头像悬停柔和放大
-   - 标题渐变色
-   - 按钮更柔和
+   home.css v3 — 简洁统一风格
+   - 标题纯色（非渐变）
+   - 按钮蓝色边框风格
    ============================================================ */
 
-/* 头像悬停效果 — 柔和 */
+/* 头像悬停效果 */
 .profile .profile_inner img {
     transition:
         transform var(--t-smooth),
@@ -14,8 +13,8 @@
 }
 
 .profile .profile_inner img:hover {
-    transform: scale(1.04);
-    box-shadow: var(--shadow-lg);
+    transform: scale(1.03);
+    box-shadow: var(--shadow-md);
 }
 
 /* 社交图标动画 */
@@ -31,19 +30,14 @@
     color: var(--primary-color) !important;
 }
 
-/* 副标题渐变效果 */
+/* 首页标题：纯色，非渐变 */
 .profile .profile_inner h1 {
-    background: linear-gradient(
-        135deg,
-        var(--primary-color) 0%,
-        oklch(60% 0.12 260) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-color);
     font-size: var(--font-xl);
     font-weight: 700;
     letter-spacing: -0.03em;
+    -webkit-text-fill-color: unset;
+    background: unset;
 }
 
 /* 副标题 */
@@ -54,7 +48,7 @@
     margin-top: var(--space-xs);
 }
 
-/* 主页按钮样式 */
+/* 主页按钮：蓝色边框 + 透明背景 */
 .profile .profile_inner .buttons {
     display: flex;
     flex-wrap: wrap;
@@ -71,23 +65,21 @@
     padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-md);
     text-decoration: none;
-    border: 1px solid var(--border);
-    color: var(--text-color);
-    background: var(--surface);
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
     transition:
         background var(--t-smooth),
         color var(--t-smooth),
         border-color var(--t-smooth),
-        box-shadow var(--t-smooth),
         transform var(--t-smooth);
+    letter-spacing: 0.01em;
 }
 
 .profile .profile_inner .buttons a:hover {
     background: var(--primary-color);
-    border-color: var(--primary-color);
     color: var(--bg) !important;
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
 }
 
 /* Profile section 整体 padding */

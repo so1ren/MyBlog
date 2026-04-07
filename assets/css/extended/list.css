@@ -1,159 +1,120 @@
-/*  ====================  Hugo + PaperMod 列表页重构版  ====================
- *  统一标签配色 + 卡片边框动画 + 简洁元数据栏
- *  ====================================================================== */
+/* ============================================================
+   list.css v2 — 与新主题统一
+   - 使用 CSS 变量（不再硬编码颜色）
+   - 与 post-list.css 保持一致
+   ============================================================ */
 
-/*  ------------  设计变量（浅色 & 暗色） ------------  */
-:root {
-    --c-bg: #ffffff;
-    --c-border: #eaecef;
-    --c-border-hover: #3182ce;
-    --c-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    --c-shadow-hover: 0 6px 20px rgba(49, 130, 206, 0.15);
-    --c-meta: #a0aec0;
-    --c-meta-hover: #3182ce;
-}
-
-.dark {
-    --c-bg: #2a3040;
-    --c-border: #3a4558;
-    --c-border-hover: #60a5fa;
-    --c-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    --c-shadow-hover: 0 6px 20px rgba(96, 165, 250, 0.2);
-    --c-meta: #718096;
-    --c-meta-hover: #60a5fa;
-}
-
-/*  ------------  通用动画（复用）  ------------  */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/*  ------------  页面头部  ------------  */
+/*  ------------  页面头部隐藏（使用自定义样式）  ------------  */
 .page-header { display: none !important; }
 
-/*  ------------  网格容器  ------------  */
+/*  ------------  网格容器（与 post-list.css 保持一致）  ------------  */
 .post-entries {
-    display: grid;
-    gap: 1.5rem;
-    margin: 1.5rem 0 2.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
-/*  ------------  文章卡片（方案 B: 纯蓝边框） ------------  */
+/*  ------------  文章卡片（统一边框样式）  ------------  */
 .post-entry {
-    background: var(--c-bg);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 2px solid var(--c-border);
-    box-shadow: var(--c-shadow);
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    border: 1px solid var(--border);
     position: relative;
-    animation: fadeInUp 0.5s ease forwards;
-    opacity: 0;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    transition:
+        border-color var(--t-smooth),
+        box-shadow var(--t-smooth),
+        transform var(--t-smooth);
 }
 
 .post-entry:hover {
-    border-color: var(--c-border-hover);
-    box-shadow: var(--c-shadow-hover);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
 }
 
-/*  ------------  封面  ------------  */
-.entry-cover {
-    margin-bottom: 1.2rem;
-    border-radius: 10px;
-    overflow: hidden;
-}
-.entry-cover img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.4s ease;
-}
-.post-entry:hover .entry-cover img {
-    transform: scale(1.02);
-}
-
-/*  ------------  标签（方案 E: 柔和粉 + 轻微放大） ------------  */
+/*  ------------  标签（柔和粉改为主题蓝）  ------------  */
 .entry-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.8rem;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
 }
+
 .tag-link {
     display: inline-flex;
     align-items: center;
-    padding: 0.25rem 0.75rem;
-    background: #fff0f6;
-    color: #e879a0;
-    font-size: 0.9375rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--primary-subtle);
+    color: var(--primary-color);
+    font-size: var(--font-xs);
     font-weight: 500;
     text-decoration: none;
-    border-radius: 20px;
-    border: 1px solid rgba(232, 121, 160, 0.2);
-    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    transition:
+        background var(--t-fast),
+        color var(--t-fast),
+        border-color var(--t-fast);
+    letter-spacing: 0.01em;
 }
-.tag-link svg { width: 11px; height: 11px; margin-right: 0.3rem; }
+
+.tag-link svg {
+    width: 11px;
+    height: 11px;
+    margin-right: 0.25rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
 .tag-link:hover {
-    border-color: rgba(232, 121, 160, 0.6);
-    border-style: solid;
-    color: #c2356b;
-    transform: scale(1.03);
-}
-.dark .tag-link {
-    background: rgba(232, 121, 160, 0.12);
-    color: #f0a0bb;
-    border-color: rgba(232, 121, 160, 0.15);
-}
-.dark .tag-link:hover {
-    border-color: rgba(232, 121, 160, 0.4);
-    color: #e879a0;
+    background: var(--primary-color);
+    color: var(--bg);
 }
 
 /*  ------------  标题 & 摘要  ------------  */
 .entry-header h2 {
-    font-size: 1.6rem;
+    font-size: var(--font-md);
     font-weight: 600;
-    color: #1a202c;
-    margin: 0 0 0.6rem 0;
-    line-height: 1.3;
+    color: var(--text-color);
+    margin: 0 0 var(--space-xs);
+    line-height: 1.35;
     letter-spacing: -0.01em;
 }
-.dark .entry-header h2 { color: #e2e8f0; }
 
 .entry-content p {
-    color: #718096;
-    font-size: 1.0625rem;
-    line-height: 1.6;
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    line-height: 1.7;
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-.dark .entry-content p { color: #a0aec0; }
 
-/*  ------------  元数据栏（简洁图标 + 灰字） ------------  */
+/*  ------------  元数据栏  ------------  */
 .entry-footer {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    font-size: 0.9375rem;
-    color: var(--c-meta);
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--c-border);
-    margin-top: 0.75rem;
+    gap: var(--space-sm);
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    padding-top: var(--space-xs);
+    border-top: 1px solid var(--border-subtle);
+    margin-top: var(--space-xs);
 }
 
 .meta-item {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    color: var(--c-meta);
-    transition: color 0.15s ease;
+    gap: 0.25rem;
+    color: var(--text-tertiary);
+    transition: color var(--t-fast);
 }
-.meta-item:hover { color: var(--c-meta-hover); }
+
+.meta-item:hover { color: var(--primary-color); }
 
 .meta-item svg {
     width: 13px;
@@ -161,77 +122,70 @@
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
+    flex-shrink: 0;
 }
 
-/* 分类链接默认颜色 */
 a.meta-category {
-    color: var(--c-meta);
+    color: var(--text-tertiary);
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color var(--t-fast);
 }
-a.meta-category:hover { color: var(--c-meta-hover); }
 
-.meta-sep { color: #d1d5db; }
-
-/*  ------------  第一篇文章特效  ------------  */
-.first-entry {
-    border-color: rgba(49, 130, 206, 0.3);
-}
-.first-entry::before {
-    content: '最新';
-    position: absolute;
-    top: -8px;
-    right: 15px;
-    background: #3182ce;
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 20px;
-    z-index: 2;
-}
+a.meta-category:hover { color: var(--primary-color); }
 
 /*  ------------  分页  ------------  */
 .page-footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eaecef;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-subtle);
 }
-.pagination { display: flex; justify-content: space-between; }
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+}
+
 .pagination a {
     display: inline-flex;
     align-items: center;
-    padding: 0.7rem 1.4rem;
-    border-radius: 10px;
-    background: #f8fafc;
-    color: #4a5568;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    color: var(--primary-color);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    border: 1px solid #eaecef;
-    transition: all 0.2s ease;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    border: 1px solid var(--border);
+    transition:
+        background var(--t-smooth),
+        color var(--t-smooth),
+        border-color var(--t-smooth);
 }
+
 .pagination a:hover {
-    background: #3182ce;
-    color: #fff;
-    border-color: #3182ce;
-}
-.dark .pagination a {
-    background: #2a3040;
-    color: #cbd5e0;
-    border-color: #3a4558;
-}
-.dark .pagination a:hover {
-    background: #60a5fa;
-    color: #fff;
-    border-color: #60a5fa;
+    background: var(--primary-subtle);
+    border-color: var(--primary-color);
+    color: var(--primary-hover);
 }
 
 /*  ------------  响应式  ------------  */
 @media (max-width: 768px) {
-    .post-entry { padding: 1.3rem; }
-    .entry-header h2 { font-size: 1.2rem; }
-    .entry-footer { gap: 0.4rem; }
-    .pagination { flex-direction: column; gap: 0.8rem; }
-    .pagination a { justify-content: center; }
+    .post-entry {
+        padding: var(--space-sm);
+        margin-bottom: var(--space-xs);
+    }
+
+    .entry-header h2 {
+        font-size: var(--font-base);
+    }
+
+    .pagination {
+        flex-direction: column;
+    }
+
+    .pagination a {
+        justify-content: center;
+        text-align: center;
+    }
 }

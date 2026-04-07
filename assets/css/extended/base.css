@@ -77,6 +77,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* ---- 全局背景一致性：让所有内容区域继承 body 背景 ---- */
+.main,
+.list,
+.single,
+.page-content,
+.post-content,
+article .entry-container {
+    background: transparent;
+}
+
 /* 代码块保持等宽字体 */
 code, pre {
     font-family: 'Fira Code', 'Source Code Pro', monospace;

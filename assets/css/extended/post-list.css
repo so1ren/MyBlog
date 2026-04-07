@@ -1,9 +1,7 @@
 /* ============================================================
-   post-list.css v2 — 极简苹果风
-   - 首篇文章 Featured Card（占满整行）
-   - 左对齐为主
-   - 动态间距节奏
-   - 柔和圆角 + 微妙阴影
+   post-list.css v3 — 极简统一风格
+   - 移除首篇 Featured Card（所有卡片统一）
+   - 明确边框，悬停蓝色高亮
    ============================================================ */
 
 /* ---- 文章卡片网格 ---- */
@@ -13,58 +11,25 @@
     gap: 0;
 }
 
-/* ---- 普通文章卡片 ---- */
+/* ---- 文章卡片：明确边框 ---- */
 .post-entry {
     position: relative;
-    margin-bottom: var(--space-md);
-    padding: var(--space-md) var(--space-sm);
+    margin-bottom: var(--space-sm);
+    padding: var(--space-md);
     border-radius: var(--radius-md);
-    border: 1px solid transparent;
+    border: 1px solid var(--border);
     transition:
         box-shadow var(--t-smooth),
         border-color var(--t-smooth),
-        transform var(--t-smooth),
-        background var(--t-smooth);
+        transform var(--t-smooth);
     background: var(--surface);
-    /* 左对齐 */
     text-align: left;
 }
 
 .post-entry:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-subtle);
-    transform: translateY(-2px);
-}
-
-/* ---- 首篇 Featured Card（直接定位第一张卡片，绕过 PaperMod 条件限制） ---- */
-.post-entries > .post-entry:first-child {
-    margin-bottom: var(--space-lg);
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
-    background: var(--primary-subtle);
-    border-color: oklch(88% 0.05 245);
-}
-
-.post-entries > .post-entry:first-child .entry-header h2 {
-    font-size: var(--font-xl);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-    margin: 0;
-}
-
-.post-entries > .post-entry:first-child .entry-content {
-    font-size: var(--font-md);
-    color: var(--text-secondary);
-    line-height: 1.7;
-}
-
-.post-entries > .post-entry:first-child .entry-content p {
-    margin: 0;
-}
-
-.post-entries > .post-entry:first-child .entry-footer {
-    margin-top: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
 }
 
 /* ---- 文章链接热区 ---- */
@@ -76,10 +41,10 @@
 
 /* ---- 标题 ---- */
 .entry-header h2 {
-    font-size: var(--font-lg);
+    font-size: var(--font-md);
     font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
     margin: 0 0 var(--space-xs);
     color: var(--text-color);
 }
@@ -104,7 +69,6 @@
 
 .entry-content p {
     margin: 0;
-    /* 限制行数 */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -141,18 +105,13 @@
     color: var(--bg);
 }
 
-/* 标签最多显示3个，其余隐藏 */
-.post-entry .post-tags a:nth-child(n+4) {
-    display: none;
-}
-
 /* ---- 元信息栏 ---- */
 .entry-footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-sm);
-    margin-top: var(--space-sm);
+    margin-top: var(--space-xs);
     font-size: var(--font-xs);
     color: var(--text-tertiary);
 }
@@ -166,11 +125,6 @@
 .meta-item svg {
     flex-shrink: 0;
     opacity: 0.7;
-}
-
-/* ---- 归档页系列卡片（重写） ---- */
-.archive-series-item {
-    border-radius: var(--radius-md);
 }
 
 /* ---- 分页导航 ---- */
@@ -195,44 +149,49 @@
     color: var(--primary-color);
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
     transition:
         background var(--t-fast),
-        color var(--t-fast);
+        color var(--t-fast),
+        border-color var(--t-fast);
 }
 
 .pagination .prev:hover,
 .pagination .next:hover {
     background: var(--primary-subtle);
+    border-color: var(--primary-color);
     color: var(--primary-hover);
 }
 
-/* ---- 移动端适配 ---- */
+/* ---- 移动端 ---- */
 @media (max-width: 640px) {
-    .post-entry.first-entry,
-    .post-entry:is(.first-entry) {
-        padding: var(--space-md);
-        border-radius: var(--radius-md);
-    }
-
     .post-entry {
         padding: var(--space-sm);
+        margin-bottom: var(--space-xs);
     }
 
-    /* 移动端隐藏部分标签 */
+    .entry-header h2 {
+        font-size: var(--font-base);
+    }
+
     .entry-tags .tag-link:nth-child(n+3) {
         display: none;
     }
-}
 
-/* ---- 暗色模式适配 ---- */
-@media (prefers-color-scheme: dark) {
-    /* handled via .dark class on <html> */
+    .pagination {
+        flex-direction: column;
+    }
+
+    .pagination .prev,
+    .pagination .next {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* ---- 减少动画 ---- */
 @media (prefers-reduced-motion: reduce) {
     .post-entry,
-    .post-entry *,
     .entry-tags .tag-link,
     .pagination .prev,
     .pagination .next {
