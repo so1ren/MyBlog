@@ -5,16 +5,13 @@
 .post-content a {
     color: var(--primary-color);
     text-decoration: none !important;
-    text-decoration-line: none !important;
-    text-decoration-style: none !important;
-    font-weight: 500;
-    transition:
-        background var(--t-fast),
-        color var(--t-fast);
+    box-shadow: none !important;
+    transition: all 0.2s ease;
 }
 
 .post-content a:hover {
     text-decoration: none !important;
+    box-shadow: none !important;
     padding: 0.1em 0.4em;
     margin: 0 -0.4em;
     border-radius: 4px;
@@ -26,12 +23,14 @@
 html.dark .post-content a {
     color: oklch(65% 0.15 240);
     text-decoration: none !important;
+    box-shadow: none !important;
 }
 
 html.dark .post-content a:hover {
     background: oklch(28% 0.03 240);
     color: oklch(75% 0.15 240);
     text-decoration: none !important;
+    box-shadow: none !important;
 }
 
 /* 标题链接特殊处理 */
