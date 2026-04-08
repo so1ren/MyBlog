@@ -1,67 +1,105 @@
 /* ============================================================
-   blockquotes.css v4 — Notion 风格：温暖背景 + whisper 边框
+   blockquotes.css v6 — 精致「」装饰 + 左侧细条
    ============================================================ */
 
 .post-content blockquote {
     position: relative;
     margin: var(--space-lg) 0;
-    padding: var(--space-md);
+    padding: var(--space-sm) var(--space-md) var(--space-sm) calc(var(--space-md) + 0.5rem);
     border-left: 3px solid var(--primary-color);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: oklch(98% 0.008 45);
-    border-top: 1px solid rgba(0,0,0,0.06);
-    border-right: 1px solid rgba(0,0,0,0.06);
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-    transition: border-color var(--t-smooth), box-shadow var(--t-smooth);
+    border-radius: 0;
+    background: transparent;
+    transition: border-left-color var(--t-smooth);
+}
+
+/* 「开引号 — 精致小字 */
+.post-content blockquote::before {
+    content: "「";
+    position: absolute;
+    top: 0;
+    left: calc(var(--space-md) + 0.5rem);
+    font-size: 0.9em;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--primary-color);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* 」闭引号 — 精致小字 */
+.post-content blockquote::after {
+    content: "」";
+    position: absolute;
+    bottom: 0;
+    right: var(--space-md);
+    font-size: 0.9em;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--primary-color);
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 .post-content blockquote:hover {
     border-left-color: var(--primary-hover);
-    box-shadow: var(--shadow-sm);
+}
+
+.post-content blockquote:hover::before,
+.post-content blockquote:hover::after {
+    opacity: 0.5;
 }
 
 .post-content blockquote p {
     margin: 0;
-    color: var(--text-color);
+    color: var(--text-secondary);
     font-size: var(--font-base);
     line-height: 1.75;
     font-style: normal;
+}
+
+.post-content blockquote p:first-child {
+    text-indent: 1.2em;
 }
 
 .post-content blockquote p + p {
     margin-top: var(--space-sm);
 }
 
-/* 嵌套引用块 */
+/* 嵌套引用块（去掉双层「」） */
 .post-content blockquote blockquote {
     margin: var(--space-md) 0;
+    border-left-width: 2px;
     border-left-color: var(--border);
-    background: transparent;
-    border-top-color: var(--border-subtle);
-    border-right-color: var(--border-subtle);
-    border-bottom-color: var(--border-subtle);
+}
+
+.post-content blockquote blockquote::before,
+.post-content blockquote blockquote::after {
+    display: none;
 }
 
 /* 暗色模式 */
-html.dark .post-content blockquote {
-    background: oklch(24% 0.015 45);
-    border-top-color: rgba(255,255,255,0.05);
-    border-right-color: rgba(255,255,255,0.05);
-    border-bottom-color: rgba(255,255,255,0.05);
+html.dark .post-content blockquote::before,
+html.dark .post-content blockquote::after {
+    opacity: 0.25;
 }
 
-html.dark .post-content blockquote:hover {
-    border-left-color: var(--primary-hover);
-}
-
-html.dark .post-content blockquote blockquote {
-    background: transparent;
+html.dark .post-content blockquote:hover::before,
+html.dark .post-content blockquote:hover::after {
+    opacity: 0.45;
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
     .post-content blockquote {
         margin: var(--space-md) 0;
-        padding: var(--space-sm);
+        padding: var(--space-xs) var(--space-sm) var(--space-xs) calc(var(--space-sm) + 0.5rem);
+    }
+
+    .post-content blockquote::before {
+        left: calc(var(--space-sm) + 0.5rem);
+    }
+
+    .post-content blockquote::after {
+        right: var(--space-sm);
     }
 }
