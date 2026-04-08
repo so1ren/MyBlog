@@ -18,7 +18,7 @@
     position: absolute;
     top: 0;
     left: calc(var(--space-md) + 0.5rem);
-    font-size: 0.9em;
+    font-size: 1.2em;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
@@ -32,7 +32,7 @@
     position: absolute;
     bottom: 0;
     right: var(--space-md);
-    font-size: 0.9em;
+    font-size: 1.2em;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);

@@ -3,14 +3,14 @@
   此文件用于添加特定样式覆盖或临时修复
 */
 
-/* 加粗文字：克制的红色 */
+/* 加粗文字：亮粉红色 */
 .post-content strong {
-    color: oklch(48% 0.15 25);
+    color: #ff1492;
     font-weight: 600;
 }
 
 html.dark .post-content strong {
-    color: oklch(68% 0.14 25);
+    color: #ff69b4;
 }
 
 /* ============================================================

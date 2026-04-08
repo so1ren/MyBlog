@@ -1,45 +1,49 @@
 /* ============================================================
-   links.css v3 — Mintlify 风格：下划线 + 悬停变色
+   links.css v4 — 恢复背景样式 + 优化颜色
    ============================================================ */
 
 .post-content a {
     color: var(--primary-color);
-    text-decoration: underline;
-    text-decoration-color: rgba(0,0,0,0.2);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
+    text-decoration: none;
     font-weight: 500;
+    padding: 0.1em 0.4em;
+    margin: 0 -0.4em;
+    border-radius: 4px;
+    background: oklch(95% 0.02 240);
     transition:
-        color var(--t-fast),
-        text-decoration-color var(--t-fast);
+        background var(--t-fast),
+        color var(--t-fast);
 }
 
 .post-content a:hover {
+    background: oklch(92% 0.04 240);
     color: var(--primary-hover);
-    text-decoration-color: var(--primary-hover);
 }
 
 /* 暗色模式 */
 html.dark .post-content a {
     color: oklch(65% 0.15 240);
-    text-decoration-color: rgba(255,255,255,0.3);
+    background: oklch(28% 0.03 240);
 }
 
 html.dark .post-content a:hover {
+    background: oklch(32% 0.05 240);
     color: oklch(75% 0.15 240);
-    text-decoration-color: oklch(75% 0.15 240);
 }
 
 /* 标题链接特殊处理 */
 .post-content h1 a,
 .post-content h2 a,
 .post-content h3 a {
-    text-decoration: none;
-    color: inherit;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    background: none;
 }
 
 .post-content h1 a:hover,
 .post-content h2 a:hover,
 .post-content h3 a:hover {
+    background: none;
     color: var(--primary-color);
 }
