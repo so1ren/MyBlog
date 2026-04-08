@@ -1,33 +1,39 @@
 /* ============================================================
-   links.css v4 — 恢复背景样式 + 优化颜色
+   links.css v5 — 强制去除下划线
    ============================================================ */
 
 .post-content a {
     color: var(--primary-color);
     text-decoration: none !important;
+    text-decoration-line: none !important;
+    text-decoration-style: none !important;
     font-weight: 500;
+    padding: 0.1em 0.4em;
+    margin: 0 -0.4em;
+    border-radius: 4px;
+    background: oklch(95% 0.02 240);
     transition:
         background var(--t-fast),
         color var(--t-fast);
 }
 
 .post-content a:hover {
+    text-decoration: none !important;
+    background: oklch(92% 0.04 240);
     color: var(--primary-hover);
-    padding: 0.1em 0.4em;
-    margin: 0 -0.4em;
-    border-radius: 4px;
-    background: oklch(95% 0.02 240);
 }
 
 /* 暗色模式 */
 html.dark .post-content a {
     color: oklch(65% 0.15 240);
+    background: oklch(28% 0.03 240);
     text-decoration: none !important;
 }
 
 html.dark .post-content a:hover {
     background: oklch(32% 0.05 240);
     color: oklch(75% 0.15 240);
+    text-decoration: none !important;
 }
 
 /* 标题链接特殊处理 */
@@ -37,12 +43,14 @@ html.dark .post-content a:hover {
     padding: 0;
     margin: 0;
     border-radius: 0;
-    background: none;
+    background: none !important;
+    text-decoration: none !important;
 }
 
 .post-content h1 a:hover,
 .post-content h2 a:hover,
 .post-content h3 a:hover {
-    background: none;
+    background: none !important;
     color: var(--primary-color);
+    text-decoration: none !important;
 }
