@@ -57,13 +57,18 @@
 }
 
 .post-copyright-content a {
-    color: var(--accent-link);
-    text-decoration: none;
-    transition: color var(--t-fast);
+    color: var(--primary-color);
+    text-decoration: none !important;
+    box-shadow: none !important;
+    transition: background var(--t-fast), color var(--t-fast);
 }
 
 .post-copyright-content a:hover {
-    color: oklch(38% 0.18 240);
+    color: var(--primary-hover);
+    padding: 0.1em 0.4em;
+    margin: 0 -0.4em;
+    border-radius: 4px;
+    background: oklch(95% 0.02 240);
 }
 
 .post-copyright-footer {
@@ -109,7 +114,14 @@ html.dark .item-content {
 }
 
 html.dark .post-copyright-content a {
-    color: var(--accent-link);
+    color: oklch(65% 0.15 240);
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+
+html.dark .post-copyright-content a:hover {
+    background: oklch(28% 0.03 240);
+    color: oklch(75% 0.15 240);
 }
 
 /* 响应式 */
