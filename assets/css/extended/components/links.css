@@ -8,10 +8,6 @@
     text-decoration-line: none !important;
     text-decoration-style: none !important;
     font-weight: 500;
-    padding: 0.1em 0.4em;
-    margin: 0 -0.4em;
-    border-radius: 4px;
-    background: oklch(95% 0.02 240);
     transition:
         background var(--t-fast),
         color var(--t-fast);
@@ -19,19 +15,21 @@
 
 .post-content a:hover {
     text-decoration: none !important;
-    background: oklch(92% 0.04 240);
+    padding: 0.1em 0.4em;
+    margin: 0 -0.4em;
+    border-radius: 4px;
+    background: oklch(95% 0.02 240);
     color: var(--primary-hover);
 }
 
 /* 暗色模式 */
 html.dark .post-content a {
     color: oklch(65% 0.15 240);
-    background: oklch(28% 0.03 240);
     text-decoration: none !important;
 }
 
 html.dark .post-content a:hover {
-    background: oklch(32% 0.05 240);
+    background: oklch(28% 0.03 240);
     color: oklch(75% 0.15 240);
     text-decoration: none !important;
 }
