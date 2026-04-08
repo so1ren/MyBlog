@@ -3,8 +3,42 @@
   此文件用于添加特定样式覆盖或临时修复
 */
 
-/* 加粗语义色：使用 accent-bold（红棕色）覆盖旧的主题蓝 */
+/* 加粗文字：降低饱和度，接近正文色，克制的强调 */
 .post-content strong {
-    color: var(--accent-bold);
-    font-weight: var(--fw-bold);
+    color: oklch(32% 0.03 250);
+    font-weight: 600;
+}
+
+/* ============================================================
+   回到顶部按钮 — Mintlify 风格
+   ============================================================ */
+
+#top-link,
+.top-link {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 12px !important;
+    background: var(--surface) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    visibility: hidden;
+    opacity: 0;
+}
+
+#top-link svg,
+.top-link svg {
+    color: var(--text-color) !important;
+}
+
+html.dark #top-link,
+html.dark .top-link {
+    background: var(--surface) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+}
+
+html.dark #top-link svg,
+html.dark .top-link svg {
+    color: var(--text-color) !important;
 }

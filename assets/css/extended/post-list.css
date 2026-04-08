@@ -17,22 +17,21 @@
     margin-bottom: var(--space-sm);
     padding: var(--space-md);
     border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.08);
     transition:
         box-shadow var(--t-smooth),
         border-color var(--t-smooth),
-        transform var(--t-smooth),
-        background var(--t-smooth);
-    background: var(--surface);
+        transform var(--t-smooth);
+    background: transparent;
     text-align: left;
 }
 
 .post-entry:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary-color);
+    box-shadow:
+        0 1px 3px rgba(0,0,0,0.04),
+        0 4px 12px rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.12);
     transform: translateY(-1px);
-    background: var(--surface);
 }
 
 /* ---- 文章链接热区 ---- */

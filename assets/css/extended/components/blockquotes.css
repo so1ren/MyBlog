@@ -1,105 +1,57 @@
 /* ============================================================
-   blockquotes.css v3 — 「」装饰引用块，支持暗色模式
+   blockquotes.css v4 — Notion 风格：温暖背景 + whisper 边框
    ============================================================ */
 
 .post-content blockquote {
     position: relative;
     margin: var(--space-lg) 0;
-    padding: var(--space-md) var(--space-md) var(--space-md) calc(var(--space-md) + 0.25rem);
+    padding: var(--space-md);
     border-left: 3px solid var(--primary-color);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-    transition:
-        border-color var(--t-smooth),
-        box-shadow var(--t-smooth);
-}
-
-/* 「 开引号装饰 */
-.post-content blockquote::before {
-    content: "「";
-    position: absolute;
-    top: -0.15em;
-    left: calc(var(--space-md) + 0.25rem);
-    font-size: 1.6em;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--primary-color);
-    opacity: 0.55;
-    pointer-events: none;
-    font-family: 'LXGW', serif;
-}
-
-/* 」 闭引号装饰 */
-.post-content blockquote::after {
-    content: "」";
-    position: absolute;
-    bottom: -0.15em;
-    right: var(--space-md);
-    font-size: 1.6em;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--primary-color);
-    opacity: 0.55;
-    pointer-events: none;
-    font-family: 'LXGW', serif;
+    background: oklch(98% 0.008 45);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    border-right: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    transition: border-color var(--t-smooth), box-shadow var(--t-smooth);
 }
 
 .post-content blockquote:hover {
-    box-shadow: var(--shadow-sm);
     border-left-color: var(--primary-hover);
-}
-
-.post-content blockquote:hover::before,
-.post-content blockquote:hover::after {
-    opacity: 0.85;
+    box-shadow: var(--shadow-sm);
 }
 
 .post-content blockquote p {
     margin: 0;
-    color: var(--text-secondary);
+    color: var(--text-color);
     font-size: var(--font-base);
     line-height: 1.75;
-    font-style: italic;
+    font-style: normal;
 }
 
 .post-content blockquote p + p {
     margin-top: var(--space-sm);
 }
 
-/* 嵌套引用块（去掉双层「」） */
+/* 嵌套引用块 */
 .post-content blockquote blockquote {
     margin: var(--space-md) 0;
     border-left-color: var(--border);
     background: transparent;
-    border-top: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.post-content blockquote blockquote::before,
-.post-content blockquote blockquote::after {
-    display: none;
-}
-
-/* 暗色模式 */
-html.dark .post-content blockquote {
-    background: var(--surface);
     border-top-color: var(--border-subtle);
     border-right-color: var(--border-subtle);
     border-bottom-color: var(--border-subtle);
 }
 
-html.dark .post-content blockquote::before,
-html.dark .post-content blockquote::after {
-    opacity: 0.45;
+/* 暗色模式 */
+html.dark .post-content blockquote {
+    background: oklch(24% 0.015 45);
+    border-top-color: rgba(255,255,255,0.05);
+    border-right-color: rgba(255,255,255,0.05);
+    border-bottom-color: rgba(255,255,255,0.05);
 }
 
-html.dark .post-content blockquote:hover::before,
-html.dark .post-content blockquote:hover::after {
-    opacity: 0.75;
+html.dark .post-content blockquote:hover {
+    border-left-color: var(--primary-hover);
 }
 
 html.dark .post-content blockquote blockquote {
