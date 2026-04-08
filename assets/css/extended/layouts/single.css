@@ -8,6 +8,12 @@
     margin-bottom: var(--space-sm);
 }
 
+/* 文章内容正文宽度 */
+.post-content {
+    max-width: min(680px, 100%);
+    margin: 0 auto;
+}
+
 /* 文章内图片响应式 */
 .post-content img {
     max-width: 100%;
@@ -30,8 +36,8 @@
     font-size: var(--font-lg);
     font-weight: var(--fw-bold);
     line-height: 1.35;
-    margin-top: var(--space-lg);
-    margin-bottom: var(--space-sm);
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
     color: var(--text-color);
 }
 
@@ -39,8 +45,8 @@
     font-size: var(--font-md);
     font-weight: var(--fw-bold);
     line-height: 1.4;
-    margin-top: var(--space-md);
-    margin-bottom: var(--space-xs);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
     color: var(--text-color);
 }
 
