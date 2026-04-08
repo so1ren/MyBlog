@@ -4,7 +4,7 @@
 
 .post-content a {
     color: var(--primary-color);
-    text-decoration: none;
+    text-decoration: none !important;
     font-weight: 500;
     transition:
         background var(--t-fast),
@@ -22,7 +22,7 @@
 /* 暗色模式 */
 html.dark .post-content a {
     color: oklch(65% 0.15 240);
-    background: oklch(28% 0.03 240);
+    text-decoration: none !important;
 }
 
 html.dark .post-content a:hover {
