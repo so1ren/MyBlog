@@ -1,75 +1,81 @@
 /* ============================================================
-   blockquotes.css v6 — 精致「」装饰 + 左侧细条
+   blockquotes.css v7 — 「」对称双引号版
+   「 和 」 作为主识别元素，视觉权重一致
    ============================================================ */
 
 .post-content blockquote {
     position: relative;
     margin: var(--space-lg) 0;
-    padding: var(--space-sm) var(--space-md) var(--space-sm) calc(var(--space-md) + 0.5rem);
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid var(--border-subtle);
     border-left: 3px solid var(--primary-color);
-    border-radius: 0;
-    background: transparent;
-    transition: border-left-color var(--t-smooth);
+    border-radius: var(--radius-md);
+    background: var(--primary-subtle);
+    transition:
+        border-left-color var(--t-smooth),
+        box-shadow var(--t-smooth),
+        background var(--t-smooth);
 }
 
-/* 「开引号 — 精致小字 */
+/* 「 开引号 — 左上角大字，清晰可见 */
 .post-content blockquote::before {
     content: "「";
     position: absolute;
-    top: 0;
-    left: calc(var(--space-md) + 0.5rem);
-    font-size: 1.2em;
+    top: -0.15em;
+    left: var(--space-sm);
+    font-size: 2.4rem;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
-    opacity: 0.3;
+    opacity: 0.75;
     pointer-events: none;
+    user-select: none;
 }
 
-/* 」闭引号 — 精致小字 */
+/* 」 闭引号 — 右下角大字，视觉权重与 「 对称 */
 .post-content blockquote::after {
     content: "」";
     position: absolute;
-    bottom: 0;
+    bottom: -0.3em;
     right: var(--space-md);
-    font-size: 1.2em;
+    font-size: 2.4rem;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
-    opacity: 0.3;
+    opacity: 0.75;
     pointer-events: none;
+    user-select: none;
 }
 
 .post-content blockquote:hover {
     border-left-color: var(--primary-hover);
+    box-shadow: var(--shadow-sm);
+    background: oklch(92% 0.04 245);
 }
 
 .post-content blockquote:hover::before,
 .post-content blockquote:hover::after {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .post-content blockquote p {
     margin: 0;
-    color: var(--text-secondary);
+    color: var(--text-color);
     font-size: var(--font-base);
     line-height: 1.75;
     font-style: normal;
-}
-
-.post-content blockquote p:first-child {
-    text-indent: 1.2em;
 }
 
 .post-content blockquote p + p {
     margin-top: var(--space-sm);
 }
 
-/* 嵌套引用块（去掉双层「」） */
+/* 嵌套引用块 — 降级处理，避免双层强装饰 */
 .post-content blockquote blockquote {
     margin: var(--space-md) 0;
     border-left-width: 2px;
     border-left-color: var(--border);
+    border-radius: var(--radius-sm);
 }
 
 .post-content blockquote blockquote::before,
@@ -78,28 +84,40 @@
 }
 
 /* 暗色模式 */
+html.dark .post-content blockquote {
+    background: oklch(25% 0.06 245);
+    border-color: var(--border);
+}
+
 html.dark .post-content blockquote::before,
 html.dark .post-content blockquote::after {
-    opacity: 0.25;
+    color: var(--primary-color);
+    opacity: 0.65;
 }
 
 html.dark .post-content blockquote:hover::before,
 html.dark .post-content blockquote:hover::after {
-    opacity: 0.45;
+    opacity: 0.9;
+}
+
+html.dark .post-content blockquote:hover {
+    background: oklch(28% 0.08 245);
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
     .post-content blockquote {
         margin: var(--space-md) 0;
-        padding: var(--space-xs) var(--space-sm) var(--space-xs) calc(var(--space-sm) + 0.5rem);
+        padding: var(--space-sm) var(--space-md);
     }
 
     .post-content blockquote::before {
-        left: calc(var(--space-sm) + 0.5rem);
+        font-size: 2rem;
+        left: var(--space-xs);
     }
 
     .post-content blockquote::after {
+        font-size: 2rem;
         right: var(--space-sm);
     }
 }
