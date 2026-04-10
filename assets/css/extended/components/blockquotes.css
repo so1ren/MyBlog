@@ -1,56 +1,56 @@
 /* ============================================================
-   blockquotes.css v7 — 「」对称双引号版
-   「 和 」 作为主识别元素，视觉权重一致
+   blockquotes.css v8 — 阅读型「」方案
+   「」贴近正文排版，作为阅读语义标记而非角落装饰
    ============================================================ */
 
 .post-content blockquote {
     position: relative;
     margin: var(--space-lg) 0;
-    padding: var(--space-md) var(--space-lg);
-    border: 1px solid var(--border-subtle);
+    padding: var(--space-md) var(--space-md) var(--space-md) calc(var(--space-md) + 0.75rem);
+    background: color-mix(in oklab, var(--primary-subtle) 70%, var(--bg) 30%);
     border-left: 3px solid var(--primary-color);
     border-radius: var(--radius-md);
-    background: var(--primary-subtle);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--border-subtle) 80%, transparent);
     transition:
         border-left-color var(--t-smooth),
         box-shadow var(--t-smooth),
         background var(--t-smooth);
 }
 
-/* 「 开引号 — 左上角大字，清晰可见 */
+/* 「 开引号 — 贴近正文起始，像排版入口符号 */
 .post-content blockquote::before {
     content: "「";
     position: absolute;
-    top: -0.15em;
-    left: var(--space-sm);
-    font-size: 2.4rem;
+    top: 0.55em;
+    left: 0.35em;
+    font-size: 1.45rem;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
-    opacity: 0.75;
+    opacity: 0.7;
     pointer-events: none;
     user-select: none;
 }
 
-/* 」 闭引号 — 右下角大字，视觉权重与 「 对称 */
+/* 」 闭引号 — 贴近正文结束，像句尾收束符号 */
 .post-content blockquote::after {
     content: "」";
     position: absolute;
-    bottom: -0.3em;
-    right: var(--space-md);
-    font-size: 2.4rem;
+    bottom: 0.6em;
+    right: 0.55em;
+    font-size: 1.45rem;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
-    opacity: 0.75;
+    opacity: 0.7;
     pointer-events: none;
     user-select: none;
 }
 
 .post-content blockquote:hover {
     border-left-color: var(--primary-hover);
-    box-shadow: var(--shadow-sm);
-    background: oklch(92% 0.04 245);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary-color) 40%, transparent);
+    background: color-mix(in oklab, var(--primary-subtle) 80%, var(--bg) 20%);
 }
 
 .post-content blockquote:hover::before,
@@ -62,7 +62,7 @@
     margin: 0;
     color: var(--text-color);
     font-size: var(--font-base);
-    line-height: 1.75;
+    line-height: 1.8;
     font-style: normal;
 }
 
@@ -70,12 +70,13 @@
     margin-top: var(--space-sm);
 }
 
-/* 嵌套引用块 — 降级处理，避免双层强装饰 */
+/* 嵌套引用块 — 降级处理，去掉「」强装饰 */
 .post-content blockquote blockquote {
     margin: var(--space-md) 0;
     border-left-width: 2px;
     border-left-color: var(--border);
     border-radius: var(--radius-sm);
+    background: color-mix(in oklab, var(--bg) 92%, var(--primary-subtle) 8%);
 }
 
 .post-content blockquote blockquote::before,
@@ -85,39 +86,47 @@
 
 /* 暗色模式 */
 html.dark .post-content blockquote {
-    background: oklch(25% 0.06 245);
-    border-color: var(--border);
+    background: color-mix(in oklab, var(--primary-subtle) 65%, var(--bg) 35%);
+    border-left-color: var(--primary-color);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--border-subtle) 60%, transparent);
 }
 
 html.dark .post-content blockquote::before,
 html.dark .post-content blockquote::after {
     color: var(--primary-color);
-    opacity: 0.65;
+    opacity: 0.55;
 }
 
 html.dark .post-content blockquote:hover::before,
 html.dark .post-content blockquote:hover::after {
-    opacity: 0.9;
+    opacity: 0.85;
 }
 
 html.dark .post-content blockquote:hover {
-    background: oklch(28% 0.08 245);
+    background: color-mix(in oklab, var(--primary-subtle) 80%, var(--bg) 20%);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary-color) 50%, transparent);
+}
+
+html.dark .post-content blockquote blockquote {
+    background: color-mix(in oklab, var(--bg) 88%, var(--primary-subtle) 12%);
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
     .post-content blockquote {
         margin: var(--space-md) 0;
-        padding: var(--space-sm) var(--space-md);
+        padding: var(--space-sm) var(--space-sm) var(--space-sm) calc(var(--space-sm) + 0.6rem);
     }
 
     .post-content blockquote::before {
-        font-size: 2rem;
-        left: var(--space-xs);
+        font-size: 1.2rem;
+        top: 0.6em;
+        left: 0.25em;
     }
 
     .post-content blockquote::after {
-        font-size: 2rem;
-        right: var(--space-sm);
+        font-size: 1.2rem;
+        bottom: 0.65em;
+        right: 0.4em;
     }
 }
