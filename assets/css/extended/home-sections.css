@@ -1,0 +1,269 @@
+/* ============================================================
+   首页结构样式（spec P2 Task 2.1）
+   ============================================================ */
+
+/* ---- A. 站点题记区 ---- */
+.home-header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-xl);
+}
+
+.home-header-inner {
+    max-width: var(--main-width, 720px);
+    margin: 0 auto;
+    padding: 0 var(--gap);
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.home-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.home-header-text {
+    flex: 1;
+}
+
+.home-title {
+    font-size: var(--font-xl, 1.75rem);
+    font-weight: var(--fw-bold, 700);
+    color: var(--text-color);
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+}
+
+.home-subtitle {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+.home-header .social-icons {
+    justify-content: flex-start;
+}
+
+/* ---- 主页主内容 ---- */
+.home-main {
+    max-width: var(--main-width, 720px);
+    margin: 0 auto;
+    padding: 0 var(--gap);
+    padding-bottom: var(--space-xl);
+}
+
+/* ---- 各 section 通用 ---- */
+.home-section {
+    margin-bottom: var(--space-xl);
+}
+
+.section-header {
+    margin-bottom: var(--space-md);
+}
+
+.section-title {
+    font-size: var(--font-md);
+    font-weight: var(--fw-semibold, 600);
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+/* ============================================================
+   B. 最近更新区
+   ============================================================ */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.post-list-item {
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.post-list-item:first-child {
+    border-top: none;
+}
+
+.post-list-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.post-date {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.post-category {
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.post-category::before {
+    content: '·';
+    margin-right: var(--space-sm);
+}
+
+.post-list-title {
+    font-size: var(--font-base);
+    font-weight: var(--fw-semibold, 600);
+    color: var(--text-color);
+    margin: 0 0 4px;
+    line-height: 1.4;
+}
+
+.post-list-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.post-list-title a:hover {
+    color: var(--accent-link);
+}
+
+.post-list-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* ============================================================
+   C. 长期主题 / 系列区
+   ============================================================ */
+.series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-md);
+}
+
+.series-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.series-card-inner {
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius, 6px);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    background: var(--surface);
+}
+
+.series-card:hover .series-card-inner {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.06));
+}
+
+.series-name {
+    font-size: var(--font-base);
+    font-weight: var(--fw-semibold, 600);
+    color: var(--text-color);
+    margin: 0 0 4px;
+}
+
+.series-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ============================================================
+   D. 分类地图
+   ============================================================ */
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius, 6px);
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.category-item:hover {
+    background: var(--surface);
+}
+
+.category-name {
+    font-size: var(--font-base);
+    font-weight: var(--fw-medium, 500);
+    color: var(--text-color);
+}
+
+.category-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* ============================================================
+   E. 关于区
+   ============================================================ */
+.home-about {
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+}
+
+.about-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 var(--space-sm);
+}
+
+.about-link {
+    font-size: 13px;
+    color: var(--accent-link);
+    text-decoration: none;
+}
+
+.about-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 768px) {
+    .home-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+    }
+
+    .home-avatar {
+        width: 64px;
+        height: 64px;
+    }
+
+    .series-grid {
+        grid-template-columns: 1fr;
+    }
+}
