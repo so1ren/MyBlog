@@ -39,7 +39,7 @@
 <main class="home-main">
 
     {{/* ============================================================
-       B. 最近更新区
+       B. 最近更新区（清单感条目）
        ============================================================ */}}
     {{- $recentPages := where site.RegularPages "Type" "in" site.Params.mainSections }}
     {{- $recentPages = where $recentPages "Params.hiddenInHomeList" "!=" "true" }}
@@ -57,6 +57,7 @@
                     <time class="post-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年01月02日" }}</time>
                     {{- with .Params.categories }}
                     {{- range first 1 . }}
+                    <span class="post-category-sep">·</span>
                     <span class="post-category">{{ . }}</span>
                     {{- end }}
                     {{- end }}
@@ -74,52 +75,41 @@
     {{- end }}
 
     {{/* ============================================================
-       C. 长期主题 / 系列区
+       C. 长期主题 / 系列区（康德批判系列，最新3篇）
+       参考 spec 5.2：系列文章比普通文章更突出连续性
        ============================================================ */}}
-    {{- $sections := where site.Sections "Type" "in" (slice "series") }}
-    {{- if $sections }}
+    {{- $seriesKey := "kant-critique" }}
+    {{- $seriesPages := index site.Taxonomies.series $seriesKey }}
+    {{- $seriesPages = $seriesPages | last 3 }}
+
+    {{- if $seriesPages }}
     <section class="home-section" id="series">
         <div class="section-header">
             <h2 class="section-title">长期主题</h2>
+            <a class="section-more" href="/series/kant-critique/">全部 {{ len (index site.Taxonomies.series $seriesKey) }} 篇 →</a>
         </div>
-        <div class="series-grid">
-            {{- range $sections }}
-            <a class="series-card" href="{{ .Permalink }}">
-                <div class="series-card-inner">
-                    <h3 class="series-name">{{ .Title }}</h3>
-                    {{- with .Description }}
-                    <p class="series-desc">{{ . }}</p>
-                    {{- end }}
+        <div class="post-list">
+            {{- range $seriesPages }}
+            <article class="post-list-item series-item">
+                <div class="post-list-meta">
+                    <span class="series-badge">康德纯粹理性批判</span>
+                    <span class="post-category-sep">·</span>
+                    <time class="post-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年01月02日" }}</time>
                 </div>
-            </a>
-            {{- end }}
-        </div>
-    </section>
-    {{- end }}
-
-    {{/* ============================================================
-       D. 分类地图
-       ============================================================ */}}
-    {{- with site.Taxonomies.categories }}
-    <section class="home-section" id="categories">
-        <div class="section-header">
-            <h2 class="section-title">分类</h2>
-        </div>
-        <div class="category-list">
-            {{- range sort . "Count" "desc" }}
-            <a class="category-item" href="{{ .Page.Permalink }}">
-                <span class="category-name">{{ .Page.Title }}</span>
-                {{- with .Page.Description }}
-                <span class="category-desc">{{ . }}</span>
+                <h3 class="post-list-title">
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                </h3>
+                {{- with .Params.list_intro }}
+                <p class="post-list-summary">{{ . }}</p>
                 {{- end }}
-            </a>
+            </article>
             {{- end }}
         </div>
     </section>
     {{- end }}
 
     {{/* ============================================================
-       E. 关于区
+       E. 关于区（克制，不简历堆砌）
        ============================================================ */}}
     {{- with site.GetPage "/about" }}
     <section class="home-section home-about" id="about">
@@ -130,7 +120,9 @@
             {{- with .Description }}
             <p class="about-desc">{{ . }}</p>
             {{- end }}
-            <a class="about-link" href="{{ .Permalink }}">继续阅读 →</a>
+            {{- with .Content }}
+            <div class="about-body">{{ . }}</div>
+            {{- end }}
         </div>
     </section>
     {{- end }}

@@ -64,15 +64,30 @@
 
 .section-header {
     margin-bottom: var(--space-md);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
 }
 
 .section-title {
-    font-size: var(--font-md);
-    font-weight: var(--fw-semibold, 600);
-    color: var(--text-secondary);
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
     font-size: 12px;
+    font-weight: var(--fw-semibold, 600);
+    color: var(--text-tertiary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.section-more {
+    font-size: 13px;
+    color: var(--accent-link);
+    text-decoration: none;
+    font-weight: var(--fw-normal, 400);
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.section-more:hover {
+    text-decoration: underline;
 }
 
 /* ============================================================
@@ -103,18 +118,19 @@
 }
 
 .post-date {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-tertiary);
+}
+
+.post-category-sep {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin: 0 2px;
 }
 
 .post-category {
-    color: var(--text-tertiary);
-    font-size: 12px;
-}
-
-.post-category::before {
-    content: '·';
-    margin-right: var(--space-sm);
+    color: var(--text-secondary);
+    font-size: 13px;
 }
 
 .post-list-title {
@@ -136,9 +152,9 @@
 }
 
 .post-list-summary {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.65;
     margin: 0;
     overflow: hidden;
     display: -webkit-box;
@@ -232,20 +248,34 @@
 }
 
 .about-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin: 0 0 var(--space-md);
+}
+
+.about-body {
     font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.7;
+}
+
+.about-body p {
     margin: 0 0 var(--space-sm);
 }
 
-.about-link {
-    font-size: 13px;
-    color: var(--accent-link);
-    text-decoration: none;
+.about-body p:first-child {
+    color: var(--text-color);
 }
 
-.about-link:hover {
-    text-decoration: underline;
+.series-badge {
+    font-size: 12px;
+    color: var(--primary-color);
+    font-weight: var(--fw-medium, 500);
+    letter-spacing: 0.01em;
+    background: var(--primary-subtle);
+    padding: 1px 6px;
+    border-radius: 3px;
 }
 
 /* ============================================================
