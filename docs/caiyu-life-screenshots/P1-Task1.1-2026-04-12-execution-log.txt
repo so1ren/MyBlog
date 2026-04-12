@@ -1,0 +1,50 @@
+# Task 1.1 执行记录 — 全站设计 Token
+
+**时间：** 2026-04-12 16:40
+**改动文件：**
+- `/home/caiyu/MyBlog/assets/css/extended/custom.css`（主要）
+- `/home/caiyu/MyBlog/themes/PaperMod/assets/css/core/theme-vars.css`（同步）
+
+**对应 spec：** memory/working/caiyu-life-design-spec.md 第 2 节（颜色策略）
+
+---
+
+## 改动明细
+
+### custom.css — CSS 变量更新
+
+| 变量 | 旧值 | 新值 | spec 依据 |
+|------|------|------|-----------|
+| --bg（亮色背景） | `oklch(99% 0.005 250)` 偏蓝白 | `oklch(98% 0.012 50)` 温暖纸白 | spec 2.2 |
+| --text-color（正文） | `oklch(30% 0.02 250)` 蓝黑 | `oklch(25% 0.02 50)` 深墨色 | spec 2.2 |
+| --text-secondary | `oklch(48% 0.015 250)` 蓝灰 | `oklch(48% 0.015 50)` 暖灰 | spec 2.2 |
+| --accent-link | `oklch(48% 0.18 240)` 亮蓝 | `var(--primary-color)` 墨蓝 | spec 2.2 |
+| 加粗文字 | `#ff1492` 亮粉 | `oklch(40% 0.10 50)` 深墨色系 | spec 2.2 禁止杂色 |
+| --primary-color | `oklch(55% 0.14 245)` 亮蓝 | `oklch(48% 0.10 245)` 墨蓝（低饱和） | spec 2.2 |
+| 暗色背景 | `oklch(18% 0.02 250)` 冷调深色 | `oklch(20% 0.015 250)` 蓝灰暖调 | spec 2.2 |
+
+### theme-vars.css — PaperMod 基础变量同步
+
+| 变量 | 旧值 | 新值 |
+|------|------|------|
+| --theme/--entry（亮色） | `rgb(255,255,255)` 纯白 | `rgb(250,248,245)` 温暖纸白 |
+| --primary（亮色） | `rgb(30,30,30)` | `rgb(40,40,42)` 深墨色 |
+| --code-bg（亮色） | `rgb(245,245,245)` 冷灰 | `rgb(243,242,240)` 暖灰 |
+| --border（亮色） | `rgb(238,238,238)` | `rgb(228,226,222)` 轻暖分割线 |
+| --radius | `8px` | `6px`（克制） |
+
+### 删掉的违规样式
+- `.post-content strong { color: #ff1492 }`（亮粉）— 已删除并替换
+
+### 保留的动效（spec 8.2 允许）
+- `fadeIn 0.4s ease`（轻微淡入）— 符合"轻微淡入"规范
+- 链接 hover 过渡 — 保留
+- 按钮 hover 微移 — 保留
+
+---
+
+## 截图
+- 首页：`docs/caiyu-life-screenshots/P1-Task1.1-2026-04-12-home.png`
+- 文章列表：`docs/caiyu-life-screenshots/P1-Task1.1-2026-04-12-posts.png`
+
+Hugo server 仍在跑（localhost:1313），可继续截图。

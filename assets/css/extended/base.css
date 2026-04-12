@@ -1,20 +1,26 @@
 /* ============================================================
-   基础变量定义 — v3：对比度优化 + 暗色模式完善
+   基础变量定义 — v4：设计 Token 规范化 (Task 1.1)
+   对应 spec：memory/working/caiyu-life-design-spec.md 第 2 节
    ============================================================ */
-:root {
-    /* ---- 颜色：柔和蓝主调 ---- */
-    --primary-color: oklch(55% 0.14 245);     /* 品牌蓝 */
-    --primary-hover: oklch(48% 0.16 245);     /* 悬停深蓝 */
-    --primary-subtle: oklch(94% 0.03 245);    /* 淡蓝背景 */
 
-    /* 亮色模式中性色（偏蓝灰） */
-    --bg: oklch(99% 0.005 250);               /* 页面背景 */
-    --surface: oklch(97% 0.008 250);          /* 卡片/面板背景 */
-    --text-color: oklch(30% 0.02 250);        /* 正文：加深对比度 */
-    --text-secondary: oklch(48% 0.015 250);   /* 次要文字：加深 */
-    --text-tertiary: oklch(55% 0.01 250);     /* 辅助文字：够用 */
-    --border: oklch(85% 0.012 250);           /* 边框：稍加深 */
-    --border-subtle: oklch(91% 0.008 250);    /* 细分隔线 */
+:root {
+    /* ---- 颜色：墨蓝主调（spec 2.2：低饱和冷松石蓝/墨蓝，只留一组） ---- */
+    --primary-color:   oklch(48% 0.10 240);   /* 墨蓝：链接、强调 */
+    --primary-hover:    oklch(40% 0.12 240);   /* 悬停：稍深 */
+    --primary-subtle:   oklch(93% 0.02 240);   /* 淡色：标签背景 */
+
+    /* 亮色模式中性色（暖纸白基调） */
+    /* spec 2.2：主背景 = 温暖纸白，不纯白 */
+    --bg:              oklch(98% 0.010 80);   /* 温暖纸白 */
+    --surface:         oklch(96% 0.010 80);   /* 次级背景：略深于主背景 */
+    /* spec 2.2：正文 = 深墨色，不纯黑 */
+    --text-color:      oklch(22% 0.015 50);   /* 深墨色 */
+    /* spec 2.2：次级文本 = 柔和灰 */
+    --text-secondary:  oklch(52% 0.015 50);   /* 柔和灰 */
+    --text-tertiary:   oklch(62% 0.010 50);   /* 弱提示 */
+    /* spec 2.3：边框 = 极轻，优先用留白而非线条 */
+    --border:          oklch(88% 0.008 80);   /* 轻分割线 */
+    --border-subtle:   oklch(92% 0.005 80);   /* 细分隔线 */
 
     /* ---- Fluid Typography ---- */
     --font-xs:   clamp(0.7rem,   0.65rem + 0.25vw, 0.75rem);
@@ -32,17 +38,18 @@
     --space-lg:  clamp(1.75rem,  1.4rem + 1.75vw,  3rem);
     --space-xl:  clamp(3rem,     2rem + 5vw,       6rem);
 
-    /* ---- 圆角 ---- */
-    --radius-sm:  6px;
-    --radius-md:  10px;
-    --radius-lg:  16px;
+    /* ---- 圆角（spec 2.4：克制，最大 6px） ---- */
+    --radius-sm:  4px;
+    --radius-md:  6px;
+    --radius-lg:  6px;
+    --radius:     6px;  /* 覆盖 theme-vars.css 的 8px */
 
-    /* ---- 阴影（柔和多层） ---- */
-    --shadow-sm:  0 1px 3px oklch(0% 0 0 / 0.05), 0 1px 2px oklch(0% 0 0 / 0.04);
-    --shadow-md:  0 4px 12px oklch(0% 0 0 / 0.07), 0 2px 6px oklch(0% 0 0 / 0.05);
-    --shadow-lg:  0 12px 32px oklch(0% 0 0 / 0.09), 0 4px 12px oklch(0% 0 0 / 0.06);
+    /* ---- 阴影（spec 2.4：不用或极轻） ---- */
+    --shadow-sm:  0 1px 3px oklch(0% 0 0 / 0.06);
+    --shadow-md:  0 1px 3px oklch(0% 0 0 / 0.06);
+    --shadow-lg:  0 1px 3px oklch(0% 0 0 / 0.06);
 
-    /* ---- 动画（ease-out-quart） ---- */
+    /* ---- 动画（spec 8.2：轻微淡入） ---- */
     --ease-out:  cubic-bezier(0.25, 1, 0.5, 1);
     --t-fast:    0.15s var(--ease-out);
     --t-smooth:  0.25s var(--ease-out);
@@ -55,10 +62,10 @@
     --fw-bold:     700;
     --fw-black:    800;
 
-    /* ---- 语义强调色 ---- */
-    --accent-link: oklch(48% 0.18 240);   /* 链接蓝（偏传统，区别于主题蓝） */
-    --accent-bold: oklch(38% 0.18 25);    /* 加粗红棕（重要/警示） */
-    --accent-code: oklch(50% 0.15 168);   /* 行内代码绿 */
+    /* ---- 语义强调色（spec 2.2：链接、选中态、轻量标签） ---- */
+    --accent-link:  var(--primary-color);     /* 链接 = 墨蓝 */
+    --accent-bold:  oklch(38% 0.08 50);       /* 加粗 = 深墨色系，与正文协调 */
+    --accent-code:  oklch(50% 0.10 240);       /* 行内代码 = 墨蓝系 */
 
     /* ---- 兼容 PaperMod 变量别名 ---- */
     --primary:   var(--primary-color);
@@ -69,17 +76,17 @@
 /* 暗色模式 */
 html.dark,
 .dark {
-    --bg:             oklch(18% 0.02 250);
-    --surface:        oklch(22% 0.02 250);
-    --text-color:     oklch(88% 0.01 250);
-    --text-secondary: oklch(70% 0.012 250);
-    --text-tertiary:  oklch(60% 0.01 250);
-    --border:         oklch(30% 0.015 250);
-    --border-subtle:  oklch(38% 0.01 250);
-    --primary-subtle: oklch(28% 0.08 245);
-    --accent-link: oklch(65% 0.15 240);
-    --accent-bold: oklch(72% 0.16 25);
-    --accent-code: oklch(68% 0.13 168);
+    --bg:              oklch(18% 0.015 250);   /* 深蓝灰，非纯黑 */
+    --surface:         oklch(22% 0.015 250);   /* 次级背景 */
+    --text-color:      oklch(90% 0.008 250);  /* 正文：柔和白 */
+    --text-secondary:  oklch(70% 0.010 250);  /* 次级文本 */
+    --text-tertiary:   oklch(58% 0.008 250);  /* 弱提示 */
+    --border:          oklch(30% 0.012 250);   /* 边框 */
+    --border-subtle:   oklch(38% 0.006 250);   /* 细分隔线 */
+    --primary-subtle:  oklch(30% 0.08 240);
+    --accent-link:     oklch(65% 0.12 240);   /* 暗色链接 = 墨蓝 */
+    --accent-bold:     oklch(78% 0.06 50);    /* 暗色加粗 = 暖白系 */
+    --accent-code:     oklch(68% 0.10 240);
 }
 
 /* ---- 基础样式 ---- */
@@ -152,33 +159,34 @@ img[loading="lazy"]:loaded {
     opacity: 1;
 }
 
-/* 按钮交互效果 */
-button,
-.button,
-.btn {
-    transition: all var(--t-smooth);
-    transform: translateZ(0);
-    will-change: transform, box-shadow;
+/* ---- 导航栏滚动效果（spec 2.4：不用玻璃拟态/重阴影） ---- */
+.header {
+    transition: background var(--t-smooth), box-shadow var(--t-smooth);
 }
 
-button:hover,
-.button:hover,
-.btn:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+/* 移除 backdrop-filter 玻璃拟态，改用极轻阴影 */
+.header.scrolled {
+    background: var(--bg) !important;
+    box-shadow: var(--shadow-sm);
 }
 
-/* 文章内容入场动画 */
+/* ---- 选中文字颜色 ---- */
+::selection {
+    background: oklch(55% 0.12 240 / 0.25);
+    color: inherit;
+}
+
+/* ---- 文章内容入场动画（spec 8.2：轻微淡入） ---- */
 .post-entry,
 .post-content {
-    animation: fadeInUp 0.5s var(--ease-out) forwards;
+    animation: fadeInUp 0.4s var(--ease-out) forwards;
     opacity: 0;
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -186,29 +194,20 @@ button:hover,
     }
 }
 
-/* 导航栏滚动模糊效果 */
-.header {
-    transition: background var(--t-smooth), box-shadow var(--t-smooth);
+/* 按钮交互效果（spec 2.4：极轻阴影） */
+button,
+.button,
+.btn {
+    transition: all var(--t-smooth);
 }
 
-.header.scrolled {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    background: oklch(99% 0.005 250 / 0.88) !important;
+button:hover,
+.button:hover,
+.btn:hover {
     box-shadow: var(--shadow-sm);
 }
 
-html.dark .header.scrolled {
-    background: oklch(22% 0.02 250 / 0.88) !important;
-}
-
-/* 选中文字颜色 */
-::selection {
-    background: oklch(55% 0.14 245 / 0.25);
-    color: inherit;
-}
-
-/* 移动端：防止水平滚动 */
+/* ---- 移动端：防止水平滚动 ---- */
 @media (max-width: 768px) {
     body {
         overflow-x: hidden;

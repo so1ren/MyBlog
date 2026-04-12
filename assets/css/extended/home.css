@@ -4,17 +4,15 @@
    - 按钮蓝色边框风格
    ============================================================ */
 
-/* 头像悬停效果 */
+/* spec 2.4：最大 6px 圆角，spec 2.4：极轻阴影 */
 .profile .profile_inner img {
-    transition:
-        transform var(--t-smooth),
-        box-shadow var(--t-smooth);
-    border-radius: var(--radius-lg);
+    transition: transform var(--t-smooth), box-shadow var(--t-smooth);
+    border-radius: 6px;
 }
 
 .profile .profile_inner img:hover {
     transform: scale(1.03);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
 }
 
 /* 社交图标动画 */

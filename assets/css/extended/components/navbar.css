@@ -36,6 +36,7 @@
     }
     
     /* 导航容器 - 横向滚动 + 分隔线风格 */
+    /* spec 2.4：最大 6px 圆角 */
     #menu {
         display: flex;
         flex-wrap: nowrap;
@@ -45,7 +46,7 @@
         scrollbar-width: none;
         -ms-overflow-style: none;
         background: rgba(0, 0, 0, 0.03);
-        border-radius: 10px;
+        border-radius: 6px;
         padding: 4px;
         gap: 4px;
     }
@@ -66,7 +67,7 @@
         font-size: 1rem !important;
         font-weight: 600 !important;
         padding: 0.5rem 0.9rem !important;
-        border-radius: 8px;
+        border-radius: 6px;
         color: var(--text-color) !important;
         background: transparent;
         transition: all 0.2s ease;

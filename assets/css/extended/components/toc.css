@@ -159,7 +159,7 @@ html.dark .toc ul ul {
         margin-bottom: 20px;
         padding: 12px;
         border: 1px solid var(--border-color, #e5e7eb) !important;
-        border-radius: 8px !important;
+        border-radius: 6px !important;
         background: var(--c-bg, rgba(255,255,255,0.05)) !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
     }

@@ -1,31 +1,22 @@
 /* 
-  自定义样式覆盖
-  此文件用于添加特定样式覆盖或临时修复
+  caiyu.life 自定义样式 - 组件层
+  对应 spec：memory/working/caiyu-life-design-spec.md
+  设计方向：研究者的网络自留地，vercal秩序骨架 + editorial阅读温度
 */
 
-/* 加粗文字：亮粉红色 */
-.post-content strong {
-    color: #ff1492;
-    font-weight: 600;
-}
-
-html.dark .post-content strong {
-    color: #ff69b4;
-}
-
 /* ============================================================
-   回到顶部按钮 — Mintlify 风格
+   回到顶部按钮（spec 2.4：最大 6px 圆角，极轻阴影）
    ============================================================ */
 
 #top-link,
 .top-link {
     width: 42px !important;
     height: 42px !important;
-    border-radius: 12px !important;
+    border-radius: 6px !important;
     background: var(--surface) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: opacity var(--t-smooth), background var(--t-fast) !important;
     visibility: hidden;
     opacity: 0;
 }
@@ -38,11 +29,158 @@ html.dark .post-content strong {
 html.dark #top-link,
 html.dark .top-link {
     background: var(--surface) !important;
-    border-color: rgba(255,255,255,0.08) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    border-color: var(--border) !important;
 }
 
-html.dark #top-link svg,
-html.dark .top-link svg {
-    color: var(--text-color) !important;
+/* ============================================================
+   基础样式（对应 spec 3.x：字体与排版）
+   ============================================================ */
+
+body {
+    font-family: 'LXGW', Arial, sans-serif;
+    font-size: var(--font-base, 17px);
+    line-height: 1.85;
+    word-break: break-word;
+    background: var(--bg);
+    color: var(--text-color);
+    font-display: swap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- 全局背景一致性 ---- */
+.main,
+.list,
+.single,
+.page-content,
+.post-content,
+article .entry-container {
+    background: transparent;
+}
+
+/* ---- 确保暗色模式背景正确 ---- */
+html.dark body,
+html.dark .main,
+html.dark .list,
+html.dark .single,
+html.dark .post-content,
+html.dark article {
+    background: var(--bg);
+    color: var(--text-color);
+}
+
+/* ---- 加粗文字：深墨色系，与正文协调（spec 2.2） ---- */
+.post-content strong {
+    color: var(--accent-bold);
+    font-weight: var(--fw-bold, 700);
+}
+
+/* ---- 链接：墨蓝色调（spec 2.2 强调色） ---- */
+.post-content a,
+.toc a:hover {
+    color: var(--accent-link);
+    box-shadow: 0 1px 0 var(--accent-link);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+/* ---- 选中文字颜色 ---- */
+::selection {
+    background: oklch(55% 0.12 240 / 0.25);
+    color: inherit;
+}
+
+/* ---- 链接平滑过渡 ---- */
+a {
+    transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+/* ---- 图片加载淡入 ---- */
+img {
+    opacity: 1;
+    transition: opacity 0.25s ease;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+}
+
+img[loading="lazy"].loaded,
+img[loading="lazy"]:loaded {
+    opacity: 1;
+}
+
+/* ---- 文章内容入场动画（轻微淡入，不夸张） ---- */
+/* spec 8.2：轻微淡入是可接受的动效 */
+.post-entry,
+.post-content {
+    animation: fadeIn 0.4s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ============================================================
+   移动端：防止水平滚动
+   ============================================================ */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+}
+
+/* ============================================================
+   文章页标题区（spec 6.2）
+   ============================================================ */
+
+/* 分类/系列标签：小、柔和，不与标题争抢 */
+.breadcrumbs {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+}
+
+.breadcrumbs a {
+    font-size: 13px !important;
+    color: var(--text-tertiary) !important;
+    transition: color 0.15s ease;
+}
+
+.breadcrumbs a:hover {
+    color: var(--accent-link) !important;
+}
+
+/* 文章元数据（spec 6.2：清楚可见，但不抢标题主导权） */
+.post-meta {
+    font-size: 13px !important;
+    color: var(--text-secondary);
+    font-weight: var(--fw-normal, 400);
+    margin-top: 0;
+    margin-bottom: var(--space-md, 1rem);
+    /* 不用底部分割线，用留白建立层次 */
+}
+
+@media (max-width: 768px) {
+    .post-meta {
+        font-size: 12px !important;
+    }
+}
+
+/* ============================================================
+   引用块（spec 6.4：研究摘录气质，不喧宾夺主）
+   ============================================================ */
+.post-content blockquote {
+    margin: 24px 0;
+    padding: 8px 18px;
+    border-inline-start: 2px solid var(--primary-color, oklch(48% 0.10 245));
+    background: transparent;
+    color: var(--text-color);
+    font-style: normal;
+}
+
+.post-content blockquote p:last-child {
+    margin-bottom: 0;
 }

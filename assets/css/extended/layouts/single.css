@@ -1,11 +1,11 @@
-/* 文章大标题 */
+/* 文章大标题（spec 6.2：稳、重，但不广告化） */
 .post-title {
     font-size: var(--font-2xl) !important;
-    font-weight: var(--fw-black);
-    line-height: 1.2;
+    font-weight: var(--fw-bold);           /* spec 6.2：不广告化，700 而非 800 */
+    line-height: 1.25;
     color: var(--text-color);
     letter-spacing: -0.02em;
-    margin-bottom: var(--space-sm);
+    margin-bottom: 18px;                  /* spec 6.2：标题与 metadata 之间有呼吸感 */
 }
 
 /* 文章内容正文宽度 */
