@@ -64,7 +64,7 @@
 
     /* ---- 语义强调色（spec 2.2：链接、选中态、轻量标签） ---- */
     --accent-link:  var(--primary-color);     /* 链接 = 墨蓝 */
-    --accent-bold:  oklch(38% 0.08 50);       /* 加粗 = 深墨色系，与正文协调 */
+    --accent-bold:  oklch(48% 0.12 245);       /* 加粗 = 墨蓝色，与正文明显区分，比链接色稍暗 */
     --accent-code:  oklch(50% 0.10 240);       /* 行内代码 = 墨蓝系 */
 
     /* ---- 兼容 PaperMod 变量别名 ---- */
@@ -85,17 +85,21 @@ html.dark,
     --border-subtle:   oklch(38% 0.006 250);   /* 细分隔线 */
     --primary-subtle:  oklch(30% 0.08 240);
     --accent-link:     oklch(65% 0.12 240);   /* 暗色链接 = 墨蓝 */
-    --accent-bold:     oklch(78% 0.06 50);    /* 暗色加粗 = 暖白系 */
+    --accent-bold:     oklch(72% 0.08 245);    /* 暗色加粗 = 亮蓝白，与正文区分 */
     --accent-code:     oklch(68% 0.10 240);
 }
 
-/* ---- 基础样式 ---- */
+/* ---- 背景在 html/body 层就固定，所有子元素透明继承 ---- */
+html {
+    background: var(--bg);
+}
+
 body {
     font-family: 'LXGW', Arial, sans-serif;
     font-size: var(--font-base);
     line-height: 1.75;
     word-break: break-word;
-    background: var(--bg);
+    background: transparent;  /* 继承 html 的 bg，不再独立设 bg */
     color: var(--text-color);
     font-display: swap;
     -webkit-font-smoothing: antialiased;
