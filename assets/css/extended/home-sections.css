@@ -96,17 +96,30 @@
 .home-recent-list {
     display: flex;
     flex-direction: column;
+    gap: 0;
 }
 
 .home-recent-entry {
     position: relative;
-    padding: 0.6rem 0 0.6rem 1.25rem;
-    border-left: 2px solid var(--border);
-    transition: border-color 150ms;
+    padding: 0.9rem 0 0.9rem 1.5rem;
+    margin-bottom: 0.35rem;
 }
 
-.home-recent-entry:hover {
-    border-left-color: var(--primary-color);
+/* 独立短线，不连在一起 */
+.home-recent-entry::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    width: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    transition: background 150ms;
+}
+
+.home-recent-entry:hover::before {
+    background: var(--primary-color);
 }
 
 .home-recent-title {
