@@ -39,7 +39,7 @@
 <main class="home-main">
 
     {{/* ============================================================
-       B. 最近更新区（清单感条目）
+       B. 最近更新区（归档式纵向清单）
        ============================================================ */}}
     {{- $recentPages := where site.RegularPages "Type" "in" site.Params.mainSections }}
     {{- $recentPages = where $recentPages "Params.hiddenInHomeList" "!=" "true" }}
@@ -75,56 +75,42 @@
     {{- end }}
 
     {{/* ============================================================
-       C. 长期主题 / 系列区（康德批判系列，最新3篇）
-       参考 spec 5.2：系列文章比普通文章更突出连续性
+       C. 长期主题 / 系列区（展示系列本身，不展示文章列表）
        ============================================================ */}}
     {{- $seriesKey := "kant-critique" }}
-    {{- $seriesPages := index site.Taxonomies.series $seriesKey }}
-    {{- $seriesPages = $seriesPages | last 3 }}
+    {{- $seriesPage := site.GetPage (printf "/series/%s" $seriesKey) }}
 
-    {{- if $seriesPages }}
+    {{- if $seriesPage }}
     <section class="home-section" id="series">
         <div class="section-header">
             <h2 class="section-title">长期主题</h2>
-            <a class="section-more" href="/series/kant-critique/">全部 {{ len (index site.Taxonomies.series $seriesKey) }} 篇 →</a>
         </div>
-        <div class="post-list">
-            {{- range $seriesPages }}
-            <article class="post-list-item series-item">
-                <div class="post-list-meta">
-                    <span class="series-badge">康德纯粹理性批判</span>
-                    <span class="post-category-sep">·</span>
-                    <time class="post-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年01月02日" }}</time>
-                </div>
-                <h3 class="post-list-title">
-                    <a href="{{ .Permalink }}">{{ .Title }}</a>
-                </h3>
-                {{- with .Params.list_intro }}
-                <p class="post-list-summary">{{ . }}</p>
-                {{- end }}
-            </article>
+        <div class="series-block">
+            {{- with $seriesPage }}
+            <h3 class="series-name">{{ .Title }}</h3>
+            <p class="series-desc">{{ .Description }}</p>
+            <p class="series-status">长期讲义项目</p>
+            <a class="series-link" href="{{ .Permalink }}">查看系列</a>
             {{- end }}
         </div>
     </section>
     {{- end }}
 
     {{/* ============================================================
-       E. 关于区（克制，不简历堆砌）
+       E. 关于区（尾注式短自述）
        ============================================================ */}}
     {{- with site.GetPage "/about" }}
+    {{- if .Content }}
     <section class="home-section home-about" id="about">
         <div class="section-header">
             <h2 class="section-title">关于</h2>
         </div>
         <div class="about-content">
-            {{- with .Description }}
-            <p class="about-desc">{{ . }}</p>
-            {{- end }}
-            {{- with .Content }}
-            <div class="about-body">{{ . }}</div>
-            {{- end }}
+            <p class="about-self">在读研究生，电化学方向。记录知识笔记与阅读感想的小站。</p>
+            <a class="about-link" href="{{ .Permalink }}">关于我</a>
         </div>
     </section>
+    {{- end }}
     {{- end }}
 
 </main>
