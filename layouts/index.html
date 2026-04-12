@@ -39,7 +39,7 @@
 <main class="home-main">
 
     {{/* ============================================================
-       B. 最近更新区（归档式纵向清单）
+       B. 最近更新区（复用 archives 的 archive-entry 形式）
        ============================================================ */}}
     {{- $recentPages := where site.RegularPages "Type" "in" site.Params.mainSections }}
     {{- $recentPages = where $recentPages "Params.hiddenInHomeList" "!=" "true" }}
@@ -50,32 +50,20 @@
         <div class="section-header">
             <h2 class="section-title">最近更新</h2>
         </div>
-        <div class="post-list">
+        <div class="home-recent-list">
             {{- range $recentPages }}
-            <article class="post-list-item">
-                <div class="post-list-meta">
-                    <time class="post-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年01月02日" }}</time>
-                    {{- with .Params.categories }}
-                    {{- range first 1 . }}
-                    <span class="post-category-sep">·</span>
-                    <span class="post-category">{{ . }}</span>
-                    {{- end }}
-                    {{- end }}
-                </div>
-                <h3 class="post-list-title">
-                    <a href="{{ .Permalink }}">{{ .Title }}</a>
-                </h3>
-                {{- if or .Description .Summary }}
-                <p class="post-list-summary">{{ or .Description (.Summary | truncate 120) }}</p>
-                {{- end }}
-            </article>
+            <div class="home-recent-entry">
+                <h3 class="home-recent-title">{{ .Title }}</h3>
+                <div class="home-recent-meta">{{- partial "post_meta.html" . -}}</div>
+                <a class="home-recent-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+            </div>
             {{- end }}
         </div>
     </section>
     {{- end }}
 
     {{/* ============================================================
-       C. 长期主题 / 系列区（展示系列本身，不展示文章列表）
+       C. 长期主题 / 系列区（复用 archives 的 archive-series-item 形式）
        ============================================================ */}}
     {{- $seriesKey := "kant-critique" }}
     {{- $seriesPage := site.GetPage (printf "/series/%s" $seriesKey) }}
@@ -85,12 +73,21 @@
         <div class="section-header">
             <h2 class="section-title">长期主题</h2>
         </div>
-        <div class="series-block">
+        <div class="home-series-list">
             {{- with $seriesPage }}
-            <h3 class="series-name">{{ .Title }}</h3>
-            <p class="series-desc">{{ .Description }}</p>
-            <p class="series-status">长期讲义项目</p>
-            <a class="series-link" href="{{ .Permalink }}">查看系列</a>
+            <a href="{{ .Permalink }}" class="home-series-item">
+                <div class="home-series-count">
+                    <span class="home-series-n">{{ len (site.Taxonomies.series.Get $seriesKey).Pages }}</span>
+                    <span class="home-series-n-label">篇</span>
+                </div>
+                <div class="home-series-body">
+                    <h3 class="home-series-name">{{ .Title }}</h3>
+                    {{- with .Description }}
+                    <p class="home-series-desc">{{ . }}</p>
+                    {{- end }}
+                </div>
+                <span class="home-series-arrow">→</span>
+            </a>
             {{- end }}
         </div>
     </section>
