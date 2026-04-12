@@ -72,9 +72,9 @@
 .section-title {
     font-size: var(--font-sm);
     font-weight: var(--fw-semibold, 600);
-    color: var(--text-tertiary);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    text-transform: none;
 }
 
 .section-more {
@@ -224,7 +224,7 @@
 }
 
 .home-series-name {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
     font-weight: 600;
     margin: 0 0 0.3rem;
     color: var(--text-color);
@@ -236,7 +236,7 @@
 }
 
 .home-series-desc {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     margin: 0;
     line-height: 1.55;
