@@ -70,10 +70,13 @@
 }
 
 .section-title {
-    font-size: var(--font-sm);
-    font-weight: var(--fw-semibold, 600);
-    color: var(--text-secondary);
-    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 600;
+    color: var(--text-color);
+    letter-spacing: 0.01em;
     text-transform: none;
 }
 
