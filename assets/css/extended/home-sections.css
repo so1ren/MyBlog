@@ -2,6 +2,27 @@
    首页结构样式（spec P2 Task 2.1）
    ============================================================ */
 
+/* ---- series.terms.html 页面头部 ---- */
+.series-index-header {
+    padding: 2.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+.series-index-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--primary-color);
+}
+
+.series-index-sub {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
 /* ---- A. 站点题记区 ---- */
 .home-header {
     padding: 48px 0 40px;

@@ -1,4 +1,4 @@
-{{- /* Series taxonomy index — editorial list aligned with PaperMod TOC styling */ -}}
+{{- /* Series taxonomy index — aligned with archives.html archive-series-* form */ -}}
 {{- define "main" }}
 
 <header class="page-header series-index-header">
@@ -6,148 +6,109 @@
   <p class="series-index-sub">长期写作与持续研究的系列专题</p>
 </header>
 
-<div class="series-index-list">
+<div class="archive-series-list">
   {{- range site.Taxonomies.series }}
-    <a href="{{ .Page.Permalink }}" class="series-index-item">
-      <div class="series-index-count">
-        <span class="series-index-n">{{ len .Pages }}</span>
-        <span class="series-index-n-label">篇</span>
+    <a href="{{ .Page.Permalink }}" class="archive-series-item">
+      <div class="archive-series-count">
+        <span class="archive-series-n">{{ len .Pages }}</span>
+        <span class="archive-series-n-label">篇</span>
       </div>
-      <div class="series-index-body">
-        <h2 class="series-index-name">{{ .Page.Title }}</h2>
+      <div class="archive-series-body">
+        <h2 class="archive-series-name">{{ .Page.Title }}</h2>
         {{- with .Page.Description }}
-        <p class="series-index-desc">{{ . }}</p>
+        <p class="archive-series-desc">{{ . }}</p>
         {{- end }}
       </div>
-      <span class="series-index-arrow">→</span>
+      <span class="archive-series-arrow">→</span>
     </a>
   {{- end }}
 </div>
 
 <style>
-.series-index-header {
-  padding: 2.5rem 0 2rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-.series-index-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.5rem;
-  color: var(--primary);
-}
-.series-index-sub {
-  color: var(--secondary);
-  font-size: 1rem;
-  margin: 0;
-}
-.series-index-list {
+/* series-index-header is styled in home-sections.css */
+
+/* archive-series-* styles — aligned with archives.html */
+.archive-series-list {
   display: flex;
   flex-direction: column;
 }
-.series-index-item {
+.archive-series-item {
   display: grid;
   grid-template-columns: 5rem 1fr 2rem;
   align-items: center;
   gap: 1.5rem;
-  padding: 1.75rem 0.5rem;
-  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
   text-decoration: none;
   color: inherit;
   position: relative;
   transition: padding-left 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
-/* left accent bar — matches PaperMod blockquote/TOC 3px solid var(--primary) */
-.series-index-item::before {
+.archive-series-item::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  left: 0; top: 0; bottom: 0;
   width: 3px;
-  background: var(--primary);
+  background: var(--primary-color);
   border-radius: 0 2px 2px 0;
   opacity: 0;
   transform: scaleY(0.6);
   transform-origin: center;
-  transition:
-    opacity 150ms cubic-bezier(0.25, 1, 0.5, 1),
-    transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 150ms, transform 150ms;
 }
-.series-index-item:hover {
-  padding-left: 1.5rem;
-}
-.series-index-item:hover::before {
-  opacity: 1;
-  transform: scaleY(1);
-}
-.series-index-item:last-child {
-  border-bottom: none;
-}
-.series-index-count {
+.archive-series-item:hover { padding-left: 1.5rem; }
+.archive-series-item:hover::before { opacity: 1; transform: scaleY(1); }
+.archive-series-item:last-child { border-bottom: none; }
+.archive-series-count {
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 1;
 }
-.series-index-n {
+.archive-series-n {
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.04em;
-  color: var(--primary);
+  color: var(--text-secondary);
   line-height: 1;
 }
-.series-index-n-label {
+.archive-series-n-label {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--secondary);
+  color: var(--text-tertiary);
   margin-top: 0.2rem;
 }
-.series-index-body {
-  min-width: 0;
-}
-.series-index-name {
-  font-size: 1.15rem;
+.archive-series-body { min-width: 0; }
+.archive-series-name {
+  font-size: 1.05rem;
   font-weight: 600;
   margin: 0 0 0.3rem;
-  color: var(--primary);
-  transition: opacity 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  color: var(--text-color);
+  transition: color 150ms;
 }
-.series-index-item:hover .series-index-name {
-  opacity: 0.75;
-}
-.series-index-desc {
-  font-size: 0.9rem;
-  color: var(--secondary);
+.archive-series-item:hover .archive-series-name { color: var(--primary-color); }
+.archive-series-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.55;
 }
-.series-index-arrow {
+.archive-series-arrow {
   font-size: 1.25rem;
-  color: var(--tertiary);
-  transition:
-    transform 200ms cubic-bezier(0.25, 1, 0.5, 1),
-    color 200ms;
+  color: var(--text-tertiary);
+  transition: transform 200ms, color 200ms;
   align-self: center;
 }
-.series-index-item:hover .series-index-arrow {
+.archive-series-item:hover .archive-series-arrow {
   transform: translateX(6px);
-  color: var(--primary);
+  color: var(--primary-color);
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .series-index-item,
-  .series-index-item::before,
-  .series-index-name,
-  .series-index-arrow {
-    transition: none;
-  }
-  .series-index-item::before {
-    opacity: 1;
-    transform: none;
-  }
+  .archive-series-item,
+  .archive-series-item::before,
+  .archive-series-arrow { transition: none; }
+  .archive-series-item::before { opacity: 1; transform: none; }
 }
 </style>
 
