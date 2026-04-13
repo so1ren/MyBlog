@@ -1,80 +1,47 @@
 /* ============================================================
-   list.css v2 — 与新主题统一
-   - 使用 CSS 变量（不再硬编码颜色）
-   - 与 post-list.css 保持一致
+   list.css v3 — 档案式条目列表
+   - 移除卡片感：去边框/阴影/radius
+   - 轻分隔线代替边框包裹
+   - 只保留标题 / 摘要 / 日期 / 分类
    ============================================================ */
 
-/*  ------------  页面头部隐藏（使用自定义样式）  ------------  */
+/*  ------------  页面头部隐藏  ------------  */
 .page-header { display: none !important; }
 
-/*  ------------  网格容器（与 post-list.css 保持一致）  ------------  */
+/*  ------------  纵向条目容器  ------------  */
 .post-entries {
     display: flex;
     flex-direction: column;
 }
 
-/*  ------------  文章卡片（透明背景 + 悬停效果）  ------------  */
+/*  ------------  文章条目：档案式纵向条目，无卡片包裹感  ------------  */
 .post-entry {
     background: transparent;
-    border-radius: var(--radius-md);
-    padding: var(--space-md);
-    border: 1px solid var(--border-subtle);
+    padding: var(--space-sm) 0;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border-subtle);
     position: relative;
-    transition:
-        border-color var(--t-smooth),
-        box-shadow var(--t-smooth),
-        transform var(--t-smooth),
-        background var(--t-smooth);
+    transition: none;
+    /* 不再有 hover 阴影/边框/位移 */
+}
+
+.post-entry:first-child {
+    border-top: 1px solid var(--border-subtle);
 }
 
 .post-entry:hover {
-    border-color: var(--primary-color);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-1px);
-    background: var(--surface);
+    /* 仅标题颜色变化，无卡片感 */
 }
 
-/*  ------------  标签（柔和粉改为主题蓝）  ------------  */
-.entry-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-xs);
-}
-
-.tag-link {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.2rem 0.6rem;
-    background: var(--primary-subtle);
-    color: var(--primary-color);
-    font-size: var(--font-xs);
-    font-weight: 500;
+/*  ------------  链接热区  ------------  */
+.entry-link-area {
     text-decoration: none;
-    border-radius: var(--radius-sm);
-    border: 1px solid transparent;
-    transition:
-        background var(--t-fast),
-        color var(--t-fast),
-        border-color var(--t-fast);
-    letter-spacing: 0.01em;
+    color: inherit;
+    display: block;
 }
 
-.tag-link svg {
-    width: 11px;
-    height: 11px;
-    margin-right: 0.25rem;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-}
-
-.tag-link:hover {
-    background: var(--primary-color);
-    color: var(--bg);
-}
-
-/*  ------------  标题 & 摘要  ------------  */
+/*  ------------  标题  ------------  */
 .entry-header h2 {
     font-size: var(--font-md);
     font-weight: 600;
@@ -84,28 +51,38 @@
     letter-spacing: -0.01em;
 }
 
+.entry-header h2 a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--t-fast);
+}
+
+.entry-header h2 a:hover {
+    color: var(--primary-color);
+}
+
+/*  ------------  摘要  ------------  */
 .entry-content p {
     color: var(--text-secondary);
     font-size: var(--font-sm);
-    line-height: 1.7;
-    margin: 0;
+    line-height: 1.65;
+    margin: 0 0 var(--space-xs);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-/*  ------------  元数据栏  ------------  */
+/*  ------------  元数据栏：克制冷淡  ------------  */
 .entry-footer {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     font-size: var(--font-xs);
     color: var(--text-tertiary);
     padding-top: var(--space-xs);
-    border-top: 1px solid var(--border-subtle);
-    margin-top: var(--space-xs);
+    /* 无顶部分隔线，靠间距自然建立层级 */
 }
 
 .meta-item {
@@ -119,75 +96,27 @@
 .meta-item:hover { color: var(--primary-color); }
 
 .meta-item svg {
-    width: 13px;
-    height: 13px;
+    width: 12px;
+    height: 12px;
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
     flex-shrink: 0;
+    opacity: 0.6; /* 弱化图标存在 */
 }
 
 a.meta-category {
     color: var(--text-tertiary);
     text-decoration: none;
+    font-size: var(--font-xs);
     transition: color var(--t-fast);
 }
 
 a.meta-category:hover { color: var(--primary-color); }
 
-/*  ------------  分页  ------------  */
-.page-footer {
-    margin-top: var(--space-lg);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--border-subtle);
-}
-
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-sm);
-}
-
-.pagination a {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-xs) var(--space-md);
-    border-radius: var(--radius-md);
-    background: var(--surface);
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: var(--font-sm);
-    font-weight: 500;
-    border: 1px solid var(--border);
-    transition:
-        background var(--t-smooth),
-        color var(--t-smooth),
-        border-color var(--t-smooth);
-}
-
-.pagination a:hover {
-    background: var(--primary-subtle);
-    border-color: var(--primary-color);
-    color: var(--primary-hover);
-}
-
-/*  ------------  响应式  ------------  */
+/*  ------------  移动端  ------------  */
 @media (max-width: 768px) {
-    .post-entry {
-        padding: var(--space-sm);
-        margin-bottom: var(--space-xs);
-    }
-
     .entry-header h2 {
         font-size: var(--font-base);
-    }
-
-    .pagination {
-        flex-direction: column;
-    }
-
-    .pagination a {
-        justify-content: center;
-        text-align: center;
     }
 }

@@ -1,114 +1,32 @@
 /* ============================================================
-   post-list.css v3 — 极简统一风格
-   - 移除首篇 Featured Card（所有卡片统一）
-   - 明确边框，悬停蓝色高亮
+   post-list.css v4 — 档案式条目列表
+   - 与 list.css 协同，共同建立无卡片感的条目列表
+   - post-entry 不再有边框包裹感，以轻分隔线代替
    ============================================================ */
 
-/* ---- 文章卡片网格 ---- */
-.post-entries {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-/* ---- 文章卡片：透明背景 + 悬停效果 ---- */
+/* ---- 文章条目：档案式，轻分隔 ---- */
 .post-entry {
     position: relative;
-    margin-bottom: var(--space-sm);
-    padding: var(--space-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    transition:
-        box-shadow var(--t-smooth),
-        border-color var(--t-smooth);
+    padding: var(--space-sm) 0;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
     background: transparent;
     text-align: left;
+    transition: none;
+    box-shadow: none !important;
 }
 
-.post-entry:hover {
-    box-shadow: var(--shadow-sm);
-    border-color: var(--primary-color);
+.post-entry:first-child {
+    border-top: 1px solid var(--border-subtle);
 }
 
-/* ---- 文章链接热区 ---- */
-.entry-link-area {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-/* ---- 标题 ---- */
-.entry-header h2 {
-    font-size: var(--font-md);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
-    margin: 0 0 var(--space-xs);
-    color: var(--text-color);
-}
-
-.entry-header h2 a {
-    text-decoration: none;
-    color: inherit;
-    transition: color var(--t-fast);
-}
-
-.entry-header h2 a:hover {
-    color: var(--primary-color);
-}
-
-/* ---- 摘要文字 ---- */
-.entry-content {
-    font-size: var(--font-sm);
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin: 0;
-}
-
-.entry-content p {
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* ---- 标签 pill ---- */
-.entry-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-xs);
-}
-
-.entry-tags .tag-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: var(--font-xs);
-    font-weight: 500;
-    padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-sm);
-    background: var(--primary-subtle);
-    color: var(--primary-color);
-    text-decoration: none;
-    transition:
-        background var(--t-fast),
-        color var(--t-fast);
-    letter-spacing: 0.01em;
-}
-
-.entry-tags .tag-link:hover {
-    background: var(--primary-color);
-    color: var(--bg);
-}
-
-/* ---- 元信息栏 ---- */
+/* ---- 元信息栏：克制冷淡 ---- */
 .entry-footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     margin-top: var(--space-xs);
     font-size: var(--font-xs);
     color: var(--text-tertiary);
@@ -117,12 +35,29 @@
 .meta-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
+    color: var(--text-tertiary);
 }
 
 .meta-item svg {
     flex-shrink: 0;
-    opacity: 0.7;
+    opacity: 0.6;
+}
+
+/* ---- 摘要文字 ---- */
+.entry-content {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0 0 var(--space-xs);
+}
+
+.entry-content p {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 /* ---- 分页导航 ---- */
@@ -163,17 +98,8 @@
 
 /* ---- 移动端 ---- */
 @media (max-width: 640px) {
-    .post-entry {
-        padding: var(--space-sm);
-        margin-bottom: var(--space-xs);
-    }
-
     .entry-header h2 {
         font-size: var(--font-base);
-    }
-
-    .entry-tags .tag-link:nth-child(n+3) {
-        display: none;
     }
 
     .pagination {
@@ -189,15 +115,8 @@
 
 /* ---- 减少动画 ---- */
 @media (prefers-reduced-motion: reduce) {
-    .post-entry,
-    .entry-tags .tag-link,
-    .pagination .prev,
-    .pagination .next {
+    .post-entry {
         transition: none;
         animation: none !important;
-    }
-
-    .post-entry {
-        opacity: 1;
     }
 }
