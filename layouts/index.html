@@ -59,9 +59,8 @@
                     <span class="meta-date">{{- .Date | time.Format "2006-01-02" -}}</span>
                     <span class="meta-sep">·</span>
                     <span class="meta-words">{{ .WordCount }}字</span>
-                    {{- $seriesVal := index (.Params.series) 0 -}}
-                    {{- with $seriesVal }}
-                    {{- $seriesPage := site.GetPage (printf "/series/%s" .) }}
+                    {{- with index (.Params.series) 0 }}
+                    {{- $seriesPage := site.GetPage "series" . }}
                     <span class="meta-sep">·</span>
                     <span class="meta-series">{{ or ($seriesPage.Title) . }}</span>
                     {{- end }}

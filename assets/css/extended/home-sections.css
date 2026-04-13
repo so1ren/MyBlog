@@ -167,31 +167,6 @@
     font-size: 0.8rem;
 }
 
-/* ---- 入口文字+箭头（自然链接形式，Task A 统一更新） ---- */
-.section-entry-link {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-decoration: none;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: color 150ms;
-}
-
-.section-entry-link:hover {
-    color: var(--primary-color);
-}
-
-.entry-arrow {
-    margin-left: 0.3em;
-    display: inline-block;
-    transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1), color 150ms;
-}
-
-.section-entry-link:hover .entry-arrow {
-    transform: translateX(3px);
-}
-
 /* ============================================================
    B. 最近更新区（复用 archives 的 archive-entry 形式）
    ============================================================ */
