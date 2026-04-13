@@ -1,0 +1,96 @@
+{{- define "main" }}
+
+<main class="about-page">
+  <header class="about-header">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="about-title">{{ .Title }}</h1>
+    {{- if .Description }}
+    <p class="about-lead">{{ .Description }}</p>
+    {{- end }}
+  </header>
+
+  <div class="about-content-wrapper">
+    {{- if .Content }}
+    <div class="about-content">
+      {{- .Content }}
+    </div>
+    {{- end }}
+  </div>
+
+  {{- if (.Param "comments") }}
+  {{- partial "comments.html" . }}
+  {{- end }}
+</main>
+
+<style>
+.about-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+.about-header {
+  margin-bottom: 3rem;
+}
+
+.about-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0.75rem 0 0;
+  line-height: 1.3;
+}
+
+.about-lead {
+  font-size: 1.05rem;
+  color: #555;
+  margin: 0.75rem 0 0;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.about-content-wrapper {
+  border-top: 1px solid #e8e8e8;
+  padding-top: 2rem;
+}
+
+.about-content {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #2a2a2a;
+}
+
+.about-content h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 2.5rem 0 0.75rem;
+  border: none;
+  padding: 0;
+}
+
+.about-content h2:first-child {
+  margin-top: 0;
+}
+
+.about-content p {
+  margin: 0 0 1.2rem;
+}
+
+.about-content strong {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.about-content a {
+  color: #4a6fa5;
+  text-decoration: none;
+  border-bottom: 1px solid #c5d4e8;
+}
+
+.about-content a:hover {
+  border-bottom-color: #4a6fa5;
+}
+</style>
+
+{{- end }}
