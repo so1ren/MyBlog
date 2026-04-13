@@ -36,23 +36,6 @@
     {{ end }}
     {{- end }}
 
-    <!-- 标签：位于 meta 下方，带轻量图标的次级补充索引 -->
-    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
-    {{- with ($.GetTerms $tags) }}
-    <div class="post-tags-after">
-      <span class="post-tags-icon" aria-hidden="true">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2z"/>
-          <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/>
-        </svg>
-      </span>
-      {{- range $i, $t := . }}
-        {{- if $i }}<span class="tag-sep">，</span>{{ end }}
-        <a class="tag-link" href="{{ $t.Permalink }}" title="标签: {{ $t.LinkTitle }}">{{ $t.LinkTitle }}</a>
-      {{- end }}
-    </div>
-    {{- end }}
-  </header>
 
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
