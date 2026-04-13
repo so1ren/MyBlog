@@ -155,6 +155,23 @@
   .pagination { flex-direction: column; }
   .pagination .prev, .pagination .next { width: 100%; text-align: center; }
 }
+
+/* ---- 统一 hover 规则：文字不变色，只保留边缘反馈 ---- */
+.archive-entry-title,
+.archive-entry-title:hover,
+.archive-meta,
+.archive-meta:hover {
+  color: inherit;
+  transition: none;
+}
+.meta-item,
+.meta-item:hover {
+  color: var(--text-tertiary);
+}
+a.meta-category,
+a.meta-category:hover {
+  color: var(--text-tertiary);
+}
 </style>
 
 {{- end }}{{- /* end main */ -}}
