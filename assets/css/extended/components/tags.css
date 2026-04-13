@@ -1,51 +1,65 @@
 /* ============================================================
-   tags.css v2 — 与主色调统一，使用 CSS 变量
+   tags.css v3 — 极轻文本式补充索引
+   原则：tag 只承担最轻的补充索引角色，不抢 series/category 的主轴存在感
    ============================================================ */
 
+/* 主容器：flex 行，更小字体，克制间距 */
 .post-tags-between {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs);
-    margin: var(--space-sm) 0 var(--space-md);
-    font-size: var(--font-xs);
-}
-
-.post-tags-between .tag-link {
-    display: inline-flex;
     align-items: center;
-    padding: 0.2rem 0.6rem;
-    background: var(--primary-subtle);
-    color: var(--primary-color);
-    font-weight: 500;
+    gap: 0;
+    margin: var(--space-xs) 0 var(--space-sm);
     font-size: var(--font-xs);
-    text-decoration: none;
-    border-radius: var(--radius-sm);
-    border: 1px solid transparent;
-    transition:
-        background var(--t-fast),
-        color var(--t-fast),
-        border-color var(--t-fast),
-        transform var(--t-fast);
+    color: var(--text-secondary);
 }
 
-.post-tags-between .tag-link svg {
-    width: 12px;
-    height: 12px;
-    margin-right: 0.25rem;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
+/* 标签文字 */
+.post-tags-label {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    margin-right: 0.35rem;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+/* 链接：纯链接，无背景无圆角无图标，只有下划线 hover */
+.post-tags-between .tag-link {
+    font-size: var(--font-xs);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 400;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    transition: color var(--t-fast);
+    line-height: inherit;
 }
 
 .post-tags-between .tag-link:hover {
-    background: var(--primary-color);
-    color: var(--bg);
-    border-color: var(--primary-color);
-    transform: scale(1.02);
+    color: var(--primary-color);
+    background: none;
+    border: none;
+    transform: none;
+}
+
+/* 分隔符 */
+.tag-sep {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    margin: 0 0.1rem;
+    user-select: none;
 }
 
 /* 暗色模式 */
 html.dark .post-tags-between .tag-link {
-    background: var(--primary-subtle);
+    color: var(--text-secondary);
+    background: none;
+}
+
+html.dark .post-tags-between .tag-link:hover {
     color: var(--primary-color);
+    background: none;
+    border: none;
 }
