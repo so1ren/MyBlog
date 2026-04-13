@@ -41,6 +41,12 @@
             <span>{{- .Date | time.Format (default "January 2, 2006" site.Params.DateFormat) -}}</span>
             <span class="meta-sep">&nbsp;·&nbsp;</span>
             <span>{{- .WordCount -}} 字</span>
+            {{- $seriesVal := index (.Params.series) 0 -}}
+            {{- with $seriesVal }}
+            {{- $seriesPage := site.GetPage (printf "/series/%s" .) }}
+            <span class="meta-sep">&nbsp;·&nbsp;</span>
+            <span>{{ or ($seriesPage.Title) . }}</span>
+            {{- end }}
           </div>
           <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
         </div>
