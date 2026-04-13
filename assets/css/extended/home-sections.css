@@ -118,6 +118,54 @@
     background: var(--primary-subtle);
 }
 
+/* ---- 右上角自然文字入口（Task A） ---- */
+.section-entry-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 150ms;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.section-entry-link:hover {
+    color: var(--primary-color);
+}
+
+.entry-arrow {
+    display: inline-block;
+    transition: transform 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.section-entry-link:hover .entry-arrow {
+    transform: translateX(4px);
+}
+
+/* ---- 最近更新区 metadata（Task B & C） ---- */
+.home-recent-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+}
+
+.home-recent-meta .meta-sep {
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+}
+
+.home-recent-meta .meta-series {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
 /* ---- 入口文字+箭头（自然链接形式） ---- */
 .section-entry-link {
     font-size: 13px;
