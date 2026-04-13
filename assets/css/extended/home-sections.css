@@ -226,11 +226,6 @@
     margin: 0;
     line-height: 1.5;
     color: var(--text-color);
-    transition: color 150ms cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.home-recent-entry:hover .home-recent-title {
-    color: var(--primary-color);
 }
 
 .home-recent-meta {
@@ -336,11 +331,6 @@
     font-weight: 600;
     margin: 0 0 0.3rem;
     color: var(--text-color);
-    transition: color 150ms;
-}
-
-.home-series-item:hover .home-series-name {
-    color: var(--primary-color);
 }
 
 .home-series-desc {

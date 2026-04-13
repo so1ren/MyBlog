@@ -118,11 +118,7 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
   text-align: right;
-  transition: color 150ms cubic-bezier(0.25, 1, 0.5, 1);
   flex-shrink: 0;
-}
-.seriesTOC-item:hover .seriesTOC-num {
-  color: var(--primary-color);
 }
 .seriesTOC-body {
   display: flex;
@@ -135,27 +131,16 @@
   font-weight: 500;
   color: var(--primary-color);
   line-height: 1.45;
-  transition: opacity 150ms cubic-bezier(0.25, 1, 0.5, 1);
-}
-.seriesTOC-item:hover .seriesTOC-title {
-  opacity: 0.75;
 }
 .seriesTOC-meta {
   font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1;
-  transition: color 150ms cubic-bezier(0.25, 1, 0.5, 1);
-}
-.seriesTOC-item:hover .seriesTOC-meta {
-  color: var(--primary-color);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .seriesTOC-item,
-  .seriesTOC-item::before,
-  .seriesTOC-num,
-  .seriesTOC-title,
-  .seriesTOC-meta {
+  .seriesTOC-item::before {
     transition: none;
   }
   .seriesTOC-item::before {
