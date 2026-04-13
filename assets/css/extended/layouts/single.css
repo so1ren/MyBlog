@@ -1,11 +1,20 @@
 /* 文章大标题（spec 6.2：稳、重，但不广告化） */
 .post-title {
-    font-size: var(--font-2xl) !important;
-    font-weight: var(--fw-bold);           /* spec 6.2：不广告化，700 而非 800 */
+    font-size: var(--font-xl);             /* 从 font-2xl 收紧到 font-xl，阅读页更均衡 */
+    font-weight: var(--fw-bold);
     line-height: 1.25;
     color: var(--text-color);
     letter-spacing: -0.02em;
-    margin-bottom: 18px;                  /* spec 6.2：标题与 metadata 之间有呼吸感 */
+    margin-bottom: 12px;                  /* 减小间距，标题与 description/metadata 更紧凑 */
+}
+
+/* post-description 作为标题与 meta 之间的稳定中间层 */
+.post-description {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 /* 文章内容正文宽度 */

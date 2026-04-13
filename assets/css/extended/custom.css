@@ -155,17 +155,16 @@ img[loading="lazy"]:loaded {
 
 /* 文章元数据（spec 6.2：清楚可见，但不抢标题主导权） */
 .post-meta {
-    font-size: 13px !important;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     font-weight: var(--fw-normal, 400);
     margin-top: 0;
-    margin-bottom: var(--space-md, 1rem);
-    /* 不用底部分割线，用留白建立层次 */
+    margin-bottom: var(--space-md);
 }
 
 @media (max-width: 768px) {
     .post-meta {
-        font-size: 12px !important;
+        font-size: var(--font-sm);
     }
 }
 
