@@ -1,122 +1,155 @@
-{{- /* Hugo + PaperMod 文章列表重构版：保留全部视觉与功能，仅做结构优化 */ -}}
 {{- define "main" }}
 
-{{- /* 1. 首页 Profile 模式兼容 */ -}}
-{{- if and site.Params.profileMode.enabled .IsHome }}
-  {{- partial "index_profile.html" . }}
-{{- else }}
-  {{- /* 2. 页面内容（若有） */ -}}
-  {{- if .Content }}
-    <div class="post-content">
-      {{- if not (.Param "disableAnchoredHeadings") }}
-        {{- partial "anchored_headings.html" .Content -}}
-      {{- else }}
-        {{ .Content }}
-      {{- end }}
-    </div>
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">{{ .Description }}</div>
   {{- end }}
+</header>
 
-  {{- /* 3. 构建文章列表数据集 */ -}}
-  {{- $pages := union .RegularPages .Sections }}
-  {{- if .IsHome }}
-    {{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
-    {{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true" }}
-  {{- end }}
-  {{- $paginator := .Paginate $pages }}
+{{- /* ===== 时间线归档区块（复用 archives 的结构与样式） ===== */ -}}
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- if site.Params.ShowAllPagesInArchive }}
+{{- $pages = site.RegularPages }}
+{{- end }}
 
-  {{- /* 4. 缺失变量补定义：标签页判断用 */ -}}
-  {{- $term := .Data.Term }}
+{{- $paginator := .Paginate $pages }}
 
-  {{- /* 5. 首页信息块（仅首页第一页） */ -}}
-  {{- if and .IsHome site.Params.homeInfoParams (eq $paginator.PageNumber 1) }}
-    {{- partial "home_info.html" . }}
-  {{- end }}
-
-  {{- /* 6. 文章卡片网格 */ -}}
-  <div class="post-entries">
-    {{- range $index, $page := $paginator.Pages }}
-      {{- /* 6-1 动态卡片类：首篇特殊 / 标签页 / 普通 */ -}}
-      {{- $cardClass := "post-entry" }}
-      {{- $userPref  := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
-      {{- if and $.IsHome (eq $paginator.PageNumber 1) (eq $index 0) (not $userPref) }}
-        {{- $cardClass = "first-entry" }}
-      {{- else if $term }}
-        {{- $cardClass = "post-entry tag-entry" }}
-      {{- end }}
-
-      <article class="{{ $cardClass }}">
-        {{- /* 6-2 封面图 */ -}}
-        {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
-        {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
-
-
-
-        {{- /* 6-4 标题+摘要（点击跳转文章） */ -}}
-        <a class="entry-link-area" href="{{ .Permalink }}" aria-label="post link to {{ .Title | plainify }}">
-          <header class="entry-header">
-            <h2 class="entry-hint-parent">
-              {{ .Title }}
-              {{- if .Draft }}<span class="entry-hint" title="Draft"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></span>{{- end }}
-            </h2>
-          </header>
-          {{- if ne (.Param "hideSummary") true }}
-            <div class="entry-content">
-              {{- $summary := "" }}
-              {{- /* 优先使用 front matter list_intro（显式摘要），其次用正文第一段 */ -}}
-              {{- $summary := "" }}
-              {{- if .Param "list_intro" }}
-                {{- $summary = .Param "list_intro" }}
-              {{- else }}
-                {{- $content := .Content }}
-                {{- $firstHeader := findRE "<h[1-6][^>]*>.*?</h[1-6]>" $content 1 }}
-                {{- if $firstHeader }}
-                  {{- $headerTag := index $firstHeader 0 }}
-                  {{- $parts := split $content $headerTag }}
-                  {{- $summary = index $parts 0 | plainify | htmlUnescape | truncate 200 }}
-                {{- else }}
-                  {{- $summary = .Summary | plainify | htmlUnescape }}
-                {{- end }}
-              {{- end }}
-              <p>{{ $summary | plainify | htmlUnescape | truncate 80 }}</p>
-            </div>
-          {{- end }}
-        </a>
-
-        {{- /* 6-5 元数据栏 */ -}}
-        {{- if not (.Param "hideMeta") }}
-          <footer class="entry-footer">
-            <span class="meta-item meta-date">
-              <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
-            </span>
-
-            {{- with .Params.categories }}
-              <a class="meta-item meta-category" href="{{ "/categories/" | relURL }}{{ index . 0 | urlize }}" title="查看分类: {{ index . 0 }}">
-                {{ index . 0 }}
-              </a>
-            {{- end }}
-          </footer>
+<div class="archive-timeline-section">
+  {{- range $paginator.Pages.GroupByPublishDate "2006" }}
+  {{- if ne .Key "0001" }}
+  <div class="archive-year">
+    <h2 class="archive-year-header" id="{{ .Key }}">
+      <a class="archive-header-link" href="#{{ .Key }}">{{- .Key -}}</a>
+      <sup class="archive-count">&nbsp;{{ len .Pages }}</sup>
+    </h2>
+    {{- range .Pages.GroupByDate "January" }}
+    <div class="archive-month">
+      <h3 class="archive-month-header" id="{{ $.Key }}-{{ .Key }}">
+        <a class="archive-header-link" href="#{{ $.Key }}-{{ .Key }}">{{- .Key -}}</a>
+        <sup class="archive-count">&nbsp;{{ len .Pages }}</sup>
+      </h3>
+      <div class="archive-posts">
+        {{- range .Pages }}
+        {{- if eq .Kind "page" }}
+        <div class="archive-entry">
+          <h3 class="archive-entry-title entry-hint-parent">
+            {{- .Title | markdownify }}
+            {{- if .Draft }}<span class="entry-hint" title="Draft"><svg xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" fill="currentColor"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></span>{{- end }}
+          </h3>
+          <div class="archive-meta">{{- partial "post_meta.html" . -}}</div>
+          <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+        </div>
         {{- end }}
-      </article>
+        {{- end }}
+      </div>
+    </div>
     {{- end }}
   </div>
-
-  {{- /* 7. 分页导航 */ -}}
-  {{- if gt $paginator.TotalPages 1 }}
-    <footer class="page-footer">
-      <nav class="pagination">
-        {{- if $paginator.HasPrev }}
-          <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
-            «&nbsp;{{ i18n "prev_page" }}&nbsp;{{- if (.Param "ShowPageNums") }}{{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}{{- end }}
-          </a>
-        {{- end }}
-        {{- if $paginator.HasNext }}
-          <a class="next" href="{{ $paginator.Next.URL | absURL }}">
-            {{- i18n "next_page" }}&nbsp;{{- if (.Param "ShowPageNums") }}{{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}{{- end }}&nbsp;»
-          </a>
-        {{- end }}
-      </nav>
-    </footer>
   {{- end }}
+  {{- end }}
+</div>
+
+{{- /* 分页导航 */ -}}
+{{- if gt $paginator.TotalPages 1 }}
+<footer class="page-footer">
+  <nav class="pagination">
+    {{- if $paginator.HasPrev }}
+      <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
+        «&nbsp;{{ i18n "prev_page" }}&nbsp;{{- if (.Param "ShowPageNums") }}{{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}{{- end }}
+      </a>
+    {{- end }}
+    {{- if $paginator.HasNext }}
+      <a class="next" href="{{ $paginator.Next.URL | absURL }}">
+        {{- i18n "next_page" }}&nbsp;{{- if (.Param "ShowPageNums") }}{{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}{{- end }}&nbsp;»
+      </a>
+    {{- end }}
+  </nav>
+</footer>
 {{- end }}
+
+<style>
+/* ===== 时间线区块样式（直接复用 archives 的 archive-timeline-section） ===== */
+.archive-timeline-section { margin-top: 0; }
+.archive-year { margin-bottom: 2rem; }
+.archive-year-header {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  margin: 2.5rem 0 1rem;
+  color: var(--text-color);
+  letter-spacing: -0.02em;
+}
+.archive-year:first-child .archive-year-header { margin-top: 0; }
+.archive-month-header {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+.archive-entry {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 1.25rem;
+  border-left: 2px solid var(--border);
+  transition: border-color 150ms;
+}
+.archive-entry:hover { border-left-color: var(--primary-color); }
+.archive-entry-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+  color: var(--text-color);
+  transition: color 150ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+.archive-entry:hover .archive-entry-title {
+  color: var(--primary-color);
+}
+.archive-meta { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem; }
+.entry-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.archive-header-link { text-decoration: none; color: inherit; }
+/* 分页 */
+.page-footer {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-subtle);
+}
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.pagination .prev,
+.pagination .next {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--primary-color);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.pagination .prev:hover,
+.pagination .next:hover {
+  background: var(--primary-subtle);
+  border-color: var(--primary-color);
+}
+@media (prefers-reduced-motion: reduce) {
+  .archive-entry,
+  .archive-entry-title,
+  .pagination .prev,
+  .pagination .next { transition: none; }
+}
+@media (max-width: 640px) {
+  .pagination { flex-direction: column; }
+  .pagination .prev, .pagination .next { width: 100%; text-align: center; }
+}
+</style>
 
 {{- end }}{{- /* end main */ -}}
