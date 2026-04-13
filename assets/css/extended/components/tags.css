@@ -72,12 +72,21 @@ html.dark .post-tags-between .tag-link:hover {
     align-items: center;
     gap: 0;
     margin-top: var(--space-xs);
-    font-size: var(--font-sm);
+    font-size: var(--font-base);
     color: var(--text-secondary);
 }
 
+/* 轻量 tag 图标 */
+.post-tags-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-tertiary);
+    margin-right: 0.3rem;
+    flex-shrink: 0;
+}
+
 .post-tags-after .tag-link {
-    font-size: var(--font-sm);
+    font-size: var(--font-base);
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 400;
@@ -89,7 +98,7 @@ html.dark .post-tags-between .tag-link:hover {
 }
 
 .post-tags-after .tag-sep {
-    font-size: var(--font-sm);
+    font-size: var(--font-base);
     color: var(--text-tertiary);
     margin: 0 0.15rem;
     user-select: none;
@@ -97,3 +106,4 @@ html.dark .post-tags-between .tag-link:hover {
 
 html.dark .post-tags-after .tag-link { color: var(--text-secondary); }
 html.dark .post-tags-after .tag-link:hover { color: var(--primary-color); }
+html.dark .post-tags-icon { color: var(--text-tertiary); }
