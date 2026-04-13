@@ -63,3 +63,37 @@ html.dark .post-tags-between .tag-link:hover {
     background: none;
     border: none;
 }
+
+
+/* ── tags below meta（post-tags-after）: 最轻的次级索引 ── */
+.post-tags-after {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin-top: var(--space-xs);
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+}
+
+.post-tags-after .tag-link {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color var(--t-fast);
+}
+
+.post-tags-after .tag-link:hover {
+    color: var(--primary-color);
+}
+
+.post-tags-after .tag-sep {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    margin: 0 0.1rem;
+    user-select: none;
+}
+
+html.dark .post-tags-after .tag-link { color: var(--text-tertiary); }
+html.dark .post-tags-after .tag-link:hover { color: var(--primary-color); }

@@ -17,18 +17,6 @@
       {{- end }}
     </h1>
 
-    <!-- 标签：位于标题与元数据之间，极轻的文本式补充索引 -->
-    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
-    {{- with ($.GetTerms $tags) }}
-    <div class="post-tags-between">
-      <span class="post-tags-label">标签：</span>
-      {{- range $i, $t := . }}
-        {{- if $i }}<span class="tag-sep">/</span>{{ end }}
-        <a class="tag-link" href="{{ $t.Permalink }}" title="查看标签: {{ $t.LinkTitle }}">{{ $t.LinkTitle }}</a>
-      {{- end }}
-    </div>
-    {{- end }}
-
     {{- if .Description }}
     <div class="post-description">
       {{ .Description }}
@@ -46,6 +34,17 @@
       <span> · 共{{ .WordCount }}字</span>
     </div>
     {{ end }}
+    {{- end }}
+
+    <!-- 标签：位于 meta 下方，极轻的次级补充索引 -->
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    {{- with ($.GetTerms $tags) }}
+    <div class="post-tags-after">
+      {{- range $i, $t := . }}
+        {{- if $i }}<span class="tag-sep">，</span>{{ end }}
+        <a class="tag-link" href="{{ $t.Permalink }}" title="标签: {{ $t.LinkTitle }}">{{ $t.LinkTitle }}</a>
+      {{- end }}
+    </div>
     {{- end }}
   </header>
 
