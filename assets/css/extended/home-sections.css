@@ -65,9 +65,14 @@
 .section-header {
     margin-bottom: var(--space-md);
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-sm);
+    padding-top: 2px; /* 补偿 title icon 垂直偏移，使标题顶边对齐按钮 */
+}
+
+.section-header .section-title {
+    line-height: 1.2;
 }
 
 .section-title {
