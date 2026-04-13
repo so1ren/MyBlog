@@ -134,9 +134,9 @@ params:
           
 menu:
   main:
-    - identifier: categories
-      name: 分类
-      url: /categories/
+    - identifier: series
+      name: Series
+      url: /series/
       weight: 10
     # - identifier: tags
     #   name: 标签
