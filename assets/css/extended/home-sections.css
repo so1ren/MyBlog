@@ -66,6 +66,7 @@
     margin-bottom: var(--space-md);
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
     gap: var(--space-sm);
 }
 
@@ -91,6 +92,25 @@
 
 .section-more:hover {
     text-decoration: underline;
+}
+
+.section-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: color 150ms, border-color 150ms, background 150ms;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.section-btn:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    background: var(--primary-subtle);
 }
 
 /* ============================================================
