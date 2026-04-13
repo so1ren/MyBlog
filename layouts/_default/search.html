@@ -19,13 +19,13 @@
     <ul id="searchResults" aria-label="search results">
         <li class="search-empty-state" id="searchEmptyState">
             <span class="search-empty-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
             </span>
-            <span class="search-empty-text">输入关键词开始搜索</span>
+            <span class="search-empty-text">输入关键词，开始在标题、摘要与正文中检索</span>
         </li>
     </ul>
 </div>
@@ -125,58 +125,50 @@
     border-radius: 8px;
     margin-top: 0.75rem;
 }
+
+/* ── 搜索结果：文字 hover 不变色（覆盖外部 list.css 的规则） ── */
+#searchResults li.post-entry .entry-header,
+#searchResults li.post-entry .entry-header:hover,
+#searchResults .meta-item,
+#searchResults .meta-item:hover {
+    color: inherit;
+    transition: none;
+}
+#searchResults a.post-entry-link:hover {
+    /* 保留边缘引导线变色，文字本身不变 */
+}
 </style>
 
 <script src="{{ "assets/js/search.223552a329301ea0e7056102626b22a7e93b2910a1e3efe3130e59fa4b324bf1.js" | absURL }}"></script>
 <script>
-// 空状态 / 无结果 UI 补丁（补充 fastsearch.js 的基础行为）
+// 搜索页 UI 状态管理（兼容 fastsearch.js）
 (function () {
-    var sInput = document.getElementById('searchInput');
-    var resList = document.getElementById('searchResults');
-    var emptyState = document.getElementById('searchEmptyState');
+    var sInput   = document.getElementById('searchInput');
+    var resList  = document.getElementById('searchResults');
 
-    function showEmpty() {
-        resList.innerHTML = '';
-        var el = document.createElement('li');
-        el.id = 'searchEmptyState';
-        el.className = 'search-empty-state';
-        el.innerHTML =
-            '<span class="search-empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>' +
-            '<span class="search-empty-text">输入关键词开始搜索</span>';
-        resList.appendChild(el);
+    // 空状态
+    function renderEmpty() {
+        resList.innerHTML =
+            '<li class="search-empty-state">' +
+            '<span class="search-empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>' +
+            '<span class="search-empty-text">输入关键词，开始在标题、摘要与正文中检索</span>' +
+            '</li>';
     }
 
-    function showNoResults() {
-        resList.innerHTML = '';
-        var el = document.createElement('li');
-        el.className = 'search-no-results';
-        el.innerHTML = '<span>没有找到相关内容</span>';
-        resList.appendChild(el);
+    // 无结果状态
+    function renderNoResults() {
+        resList.innerHTML = '<li class="search-no-results"><span>没有找到相关内容</span></li>';
     }
 
-    // 监听 fastsearch 结果
+    // 每次 keyup：空关键词 → 空状态
     sInput.addEventListener('keyup', function () {
-        var val = sInput.value.trim();
-        if (!val) {
-            showEmpty();
+        if (!sInput.value.trim()) {
+            renderEmpty();
         }
     });
 
-    // 初始状态
-    showEmpty();
-
-    // 覆盖 fastsearch 结果回调（向上挂接）
-    // fastsearch.js 在 results.length === 0 时把 resList.innerHTML = ''
-    // 我们用 MutationObserver 监听 resList 内容变化做兜底
-    var observer = new MutationObserver(function () {
-        var val = sInput.value.trim();
-        if (!val) {
-            showEmpty();
-        } else if (!resList.querySelector('.post-entry') && resList.children.length > 0) {
-            showNoResults();
-        }
-    });
-    observer.observe(resList, { childList: true, subtree: true });
+    // 初始
+    renderEmpty();
 })();
 </script>
 
