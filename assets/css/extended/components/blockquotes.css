@@ -1,6 +1,6 @@
 /* ============================================================
-   blockquotes.css v9 — 研究引文版
-   书卷气 + 设计感，比 v8 更像"研究摘录"而非 UI 组件
+   blockquotes.css v10 — 研究引文版（无引号）
+   书卷气 + 设计感，无「」引号，hover 不变色
    ============================================================ */
 
 .post-content blockquote {
@@ -11,51 +11,10 @@
     border-left: 2px solid color-mix(in oklab, var(--primary-color) 70%, var(--border-subtle) 30%);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     transition:
-        border-left-color var(--t-smooth),
-        background var(--t-smooth);
+        border-left-color var(--t-smooth);
 }
 
-/* 「 开引号 — 放大，视觉焦点，书卷气 */
-.post-content blockquote::before {
-    content: "「";
-    position: absolute;
-    top: 0.45em;
-    left: 0.3em;
-    font-size: 2rem;
-    font-weight: 400;
-    line-height: 1;
-    color: var(--primary-color);
-    opacity: 0.75;
-    pointer-events: none;
-    user-select: none;
-    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
-}
-
-/* 」 闭引号 — 放大，与开头呼应 */
-.post-content blockquote::after {
-    content: "」";
-    position: absolute;
-    bottom: 0.5em;
-    right: 0.5em;
-    font-size: 2rem;
-    font-weight: 400;
-    line-height: 1;
-    color: var(--primary-color);
-    opacity: 0.75;
-    pointer-events: none;
-    user-select: none;
-    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
-}
-
-.post-content blockquote:hover {
-    border-left-color: var(--primary-color);
-    background: color-mix(in oklab, var(--primary-subtle) 60%, var(--bg) 40%);
-}
-
-.post-content blockquote:hover::before,
-.post-content blockquote:hover::after {
-    opacity: 1;
-}
+/* 无引号，纯研究引文风格 */
 
 .post-content blockquote p {
     margin: 0;
@@ -96,19 +55,7 @@ html.dark .post-content blockquote {
     border-left-color: color-mix(in oklab, var(--primary-color) 55%, var(--border-subtle) 45%);
 }
 
-html.dark .post-content blockquote::before,
-html.dark .post-content blockquote::after {
-    color: var(--primary-color);
-    opacity: 0.5;
-}
-
-html.dark .post-content blockquote:hover::before,
-html.dark .post-content blockquote:hover::after {
-    opacity: 0.8;
-}
-
 html.dark .post-content blockquote:hover {
-    background: color-mix(in oklab, var(--primary-subtle) 50%, var(--bg) 50%);
     border-left-color: var(--primary-color);
 }
 
@@ -125,17 +72,5 @@ html.dark .post-content blockquote blockquote {
     .post-content blockquote {
         margin: var(--space-md) 0;
         padding: var(--space-sm) var(--space-sm) var(--space-sm) calc(var(--space-sm) + 0.75rem);
-    }
-
-    .post-content blockquote::before {
-        font-size: 1.6rem;
-        top: 0.5em;
-        left: 0.2em;
-    }
-
-    .post-content blockquote::after {
-        font-size: 1.6rem;
-        bottom: 0.55em;
-        right: 0.35em;
     }
 }
