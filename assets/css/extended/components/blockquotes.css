@@ -1,56 +1,55 @@
 /* ============================================================
-   blockquotes.css v8 — 阅读型「」方案
-   「」贴近正文排版，作为阅读语义标记而非角落装饰
+   blockquotes.css v9 — 研究引文版
+   书卷气 + 设计感，比 v8 更像"研究摘录"而非 UI 组件
    ============================================================ */
 
 .post-content blockquote {
     position: relative;
     margin: var(--space-lg) 0;
-    padding: var(--space-md) var(--space-md) var(--space-md) calc(var(--space-md) + 0.75rem);
-    background: color-mix(in oklab, var(--primary-subtle) 70%, var(--bg) 30%);
-    border-left: 3px solid var(--primary-color);
-    border-radius: var(--radius-md);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--border-subtle) 80%, transparent);
+    padding: var(--space-md) var(--space-md) var(--space-md) calc(var(--space-md) + 1rem);
+    background: color-mix(in oklab, var(--primary-subtle) 45%, var(--bg) 55%);
+    border-left: 2px solid color-mix(in oklab, var(--primary-color) 70%, var(--border-subtle) 30%);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     transition:
         border-left-color var(--t-smooth),
-        box-shadow var(--t-smooth),
         background var(--t-smooth);
 }
 
-/* 「 开引号 — 贴近正文起始，像排版入口符号 */
+/* 「 开引号 — 放大，视觉焦点，书卷气 */
 .post-content blockquote::before {
     content: "「";
     position: absolute;
-    top: 0.55em;
-    left: 0.35em;
-    font-size: 1.45rem;
+    top: 0.45em;
+    left: 0.3em;
+    font-size: 2rem;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
-    opacity: 0.7;
+    opacity: 0.75;
     pointer-events: none;
     user-select: none;
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
 }
 
-/* 」 闭引号 — 贴近正文结束，像句尾收束符号 */
+/* 」 闭引号 — 放大，与开头呼应 */
 .post-content blockquote::after {
     content: "」";
     position: absolute;
-    bottom: 0.6em;
-    right: 0.55em;
-    font-size: 1.45rem;
+    bottom: 0.5em;
+    right: 0.5em;
+    font-size: 2rem;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-color);
-    opacity: 0.7;
+    opacity: 0.75;
     pointer-events: none;
     user-select: none;
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
 }
 
 .post-content blockquote:hover {
-    border-left-color: var(--primary-hover);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary-color) 40%, transparent);
-    background: color-mix(in oklab, var(--primary-subtle) 80%, var(--bg) 20%);
+    border-left-color: var(--primary-color);
+    background: color-mix(in oklab, var(--primary-subtle) 60%, var(--bg) 40%);
 }
 
 .post-content blockquote:hover::before,
@@ -61,8 +60,8 @@
 .post-content blockquote p {
     margin: 0;
     color: var(--text-color);
-    font-size: var(--font-base);
-    line-height: 1.8;
+    font-size: 1.06em;
+    line-height: 1.85;
     font-style: normal;
 }
 
@@ -70,13 +69,20 @@
     margin-top: var(--space-sm);
 }
 
-/* 嵌套引用块 — 降级处理，去掉「」强装饰 */
+/* 出处/作者 — 次级信息，更小更淡 */
+.post-content blockquote p:last-child {
+    font-size: 0.88em;
+    color: color-mix(in oklab, var(--text-color) 65%, transparent);
+    margin-top: var(--space-md);
+}
+
+/* 嵌套引用块 — 降级处理 */
 .post-content blockquote blockquote {
     margin: var(--space-md) 0;
     border-left-width: 2px;
     border-left-color: var(--border);
-    border-radius: var(--radius-sm);
-    background: color-mix(in oklab, var(--bg) 92%, var(--primary-subtle) 8%);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: color-mix(in oklab, var(--bg) 94%, var(--primary-subtle) 6%);
 }
 
 .post-content blockquote blockquote::before,
@@ -86,47 +92,50 @@
 
 /* 暗色模式 */
 html.dark .post-content blockquote {
-    background: color-mix(in oklab, var(--primary-subtle) 65%, var(--bg) 35%);
-    border-left-color: var(--primary-color);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--border-subtle) 60%, transparent);
+    background: color-mix(in oklab, var(--primary-subtle) 35%, var(--bg) 65%);
+    border-left-color: color-mix(in oklab, var(--primary-color) 55%, var(--border-subtle) 45%);
 }
 
 html.dark .post-content blockquote::before,
 html.dark .post-content blockquote::after {
     color: var(--primary-color);
-    opacity: 0.55;
+    opacity: 0.5;
 }
 
 html.dark .post-content blockquote:hover::before,
 html.dark .post-content blockquote:hover::after {
-    opacity: 0.85;
+    opacity: 0.8;
 }
 
 html.dark .post-content blockquote:hover {
-    background: color-mix(in oklab, var(--primary-subtle) 80%, var(--bg) 20%);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary-color) 50%, transparent);
+    background: color-mix(in oklab, var(--primary-subtle) 50%, var(--bg) 50%);
+    border-left-color: var(--primary-color);
+}
+
+html.dark .post-content blockquote p:last-child {
+    color: color-mix(in oklab, var(--text-color) 60%, transparent);
 }
 
 html.dark .post-content blockquote blockquote {
-    background: color-mix(in oklab, var(--bg) 88%, var(--primary-subtle) 12%);
+    background: color-mix(in oklab, var(--bg) 90%, var(--primary-subtle) 10%);
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
     .post-content blockquote {
         margin: var(--space-md) 0;
-        padding: var(--space-sm) var(--space-sm) var(--space-sm) calc(var(--space-sm) + 0.6rem);
+        padding: var(--space-sm) var(--space-sm) var(--space-sm) calc(var(--space-sm) + 0.75rem);
     }
 
     .post-content blockquote::before {
-        font-size: 1.2rem;
-        top: 0.6em;
-        left: 0.25em;
+        font-size: 1.6rem;
+        top: 0.5em;
+        left: 0.2em;
     }
 
     .post-content blockquote::after {
-        font-size: 1.2rem;
-        bottom: 0.65em;
-        right: 0.4em;
+        font-size: 1.6rem;
+        bottom: 0.55em;
+        right: 0.35em;
     }
 }
