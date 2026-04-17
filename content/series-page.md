@@ -6,4 +6,4 @@ url: /series/
 
 当前已建立的系列：
 
-- [康德《纯粹理性批判》精讲](/series/kant-critique/)
+- [《纯粹理性批判》讲演录](/series/kant-critique/)
