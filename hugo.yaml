@@ -27,6 +27,15 @@ outputs:
     - HTML
     - RSS
     - JSON # 用于搜索引擎索引
+  section:
+    - HTML
+    - RSS
+  taxonomy:
+    - HTML
+    - RSS
+  term:
+    - HTML
+    - RSS
 
 # 相关文章配置
 related:

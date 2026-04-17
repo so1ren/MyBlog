@@ -60,7 +60,7 @@
                     <span class="meta-sep">·</span>
                     <span class="meta-words">{{ .WordCount }}字</span>
                     {{- with index (.Params.series) 0 }}
-                    {{- $seriesPage := site.GetPage "series" . }}
+                    {{- $seriesPage := site.GetPage (printf "/series/%s" .) }}
                     <span class="meta-sep">·</span>
                     <span class="meta-series">{{ or ($seriesPage.Title) . }}</span>
                     {{- end }}
