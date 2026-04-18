@@ -28,8 +28,8 @@
     margin-top: var(--space-sm);
 }
 
-/* 出处/作者 — 次级信息，更小更淡 */
-.post-content blockquote p:last-child {
+/* 出处/作者 — 仅在多段引用时把最后一段降为次级信息 */
+.post-content blockquote p:last-child:not(:first-child) {
     font-size: 0.88em;
     color: color-mix(in oklab, var(--text-color) 65%, transparent);
     margin-top: var(--space-md);
@@ -59,7 +59,7 @@ html.dark .post-content blockquote:hover {
     border-left-color: var(--primary-color);
 }
 
-html.dark .post-content blockquote p:last-child {
+html.dark .post-content blockquote p:last-child:not(:first-child) {
     color: color-mix(in oklab, var(--text-color) 60%, transparent);
 }
 
