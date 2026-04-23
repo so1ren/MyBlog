@@ -1,17 +1,23 @@
 {{- define "main" -}}
 
+{{- $scratch := newScratch -}}
+{{- $pages := .Pages -}}
+
+{{- if not (eq (len $pages) 0) -}}
+{{- $total := len $pages -}}
+
 <header class="series-header">
   <h1>{{ .Title }}</h1>
   {{- if .Description -}}
   <p class="series-description">{{ .Description }}</p>
   {{- end }}
   <p class="series-meta-count">
-    共 <strong>{{ len .Pages }}</strong> 讲
+    共 <strong>{{ $total }}</strong> 讲
   </p>
 </header>
 
 <div class="series-lesson-list">
-  {{- range .Pages.ByParam "series_order" -}}
+  {{- range $pages.ByParam "series_order" -}}
   <a href="{{ .RelPermalink }}" class="series-lesson-item">
     <span class="series-lesson-order">{{ .Params.series_order | default "?" }}</span>
     <div class="series-lesson-body">
@@ -22,5 +28,7 @@
   </a>
   {{- end -}}
 </div>
+
+{{- end -}}
 
 {{- end -}}
