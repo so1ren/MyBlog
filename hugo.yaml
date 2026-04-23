@@ -156,6 +156,9 @@ menu:
 
 
 markup:
+  goldmark:
+    renderer:
+      unsafe: true
   math:
     enable: true
   highlight:
