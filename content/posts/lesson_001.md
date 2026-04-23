@@ -1,7 +1,7 @@
 ---
 title: "绪论：康德哲学的入门路径"
 date: 2026-04-23
-series: "kant-critique"
+series: ["kant-critique"]
 series_order: 1
 categories: ["哲学"]
 tags: ["康德《纯粹理性批判》精讲系列", "康德哲学的背景", "读懂康德的方法", "康德的问题意识"]

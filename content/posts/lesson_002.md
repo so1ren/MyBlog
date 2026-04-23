@@ -1,7 +1,7 @@
 ---
 title: "第一讲：纯粹理性批判的主要思路"
 date: 2026-04-23
-series: "kant-critique"
+series: ["kant-critique"]
 series_order: 2
 categories: ["哲学"]
 tags: ["康德《纯粹理性批判》精讲系列", "批判理性的必要性", "批判的含义", "现象与物自体的区分"]
