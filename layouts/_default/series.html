@@ -1,153 +1,33 @@
-{{- /* Series taxonomy page — editorial TOC aligned with PaperMod TOC styling */ -}}
-{{- define "main" }}
+{{- define "main" -}}
 
-<header class="page-header series-header">
-  <p class="series-header-label">系列</p>
-  <h1 class="series-header-title">{{ .Title }}</h1>
-  {{- with .Description }}
-  <p class="series-header-desc">{{ . }}</p>
+{{- $scratch := newScratch -}}
+{{- $pages := .Pages -}}
+
+{{- if not (eq (len $pages) 0) -}}
+{{- $total := len $pages -}}
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- if .Description -}}
+  <div class="post-description">{{ .Description | markdownify }}</div>
   {{- end }}
-  <p class="series-header-meta">共 {{ len .Data.Pages }} 讲</p>
+  <p class="series-meta">
+    共 <strong>{{ $total }}</strong> 讲
+  </p>
 </header>
 
-<div class="seriesTOC">
-  {{- $entries := sort .Data.Pages "File.BaseFileName" }}
-  {{- range $entries }}
-    {{- $filename := .File.BaseFileName }}
-    {{- $seq := "" }}
-    {{- $match := findRE `_(\d{2})_` $filename }}
-    {{- if $match }}
-      {{- $seq = trim (index $match 0) "_" }}
-    {{- end }}
-    <a href="{{ .Permalink }}" class="seriesTOC-item">
-      <span class="seriesTOC-num">{{ $seq }}</span>
-      <span class="seriesTOC-body">
-        <span class="seriesTOC-title">{{ .Title }}</span>
-        <span class="seriesTOC-meta">
-          {{ .Date.Format "2006-01-02" }}
-          &nbsp;·&nbsp;
-          {{ .WordCount }} 字
-        </span>
-      </span>
+<ul class="series-article-list">
+  {{- range $pages.ByParam "series_order" -}}
+  <li class="series-article-item">
+    <a href="{{ .RelPermalink }}" class="series-article-link">
+      <span class="series-article-order">{{ .Params.series_order | default "?" }}</span>
+      <span class="series-article-title">{{ .Title }}</span>
     </a>
-  {{- end }}
-</div>
+    <span class="series-article-date">{{ .Date.Format "2006年01月02日" }}</span>
+  </li>
+  {{- end -}}
+</ul>
 
-<style>
-.series-header {
-  padding: 2.5rem 0 2rem;
-  border-bottom: 2px solid var(--border);
-  margin-bottom: 0;
-}
-.series-header-label {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-secondary);
-  margin: 0 0 0.75rem;
-}
-.series-header-title {
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-  margin: 0 0 0.75rem;
-  color: var(--primary-color);
-}
-.series-header-desc {
-  font-size: 1.05rem;
-  color: var(--text-secondary);
-  margin: 0 0 0.75rem;
-  max-width: 55ch;
-  line-height: 1.6;
-}
-.series-header-meta {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin: 0;
-}
-.seriesTOC {
-  display: flex;
-  flex-direction: column;
-}
-.seriesTOC-item {
-  display: grid;
-  grid-template-columns: 3.75rem 1fr;
-  gap: 0 1rem;
-  align-items: center;
-  padding: 1.25rem 0.5rem;
-  border-bottom: 1px solid var(--border);
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  transition:
-    padding-left 150ms cubic-bezier(0.25, 1, 0.5, 1),
-    border-bottom-color 150ms;
-}
-/* left accent bar — matches PaperMod blockquote/TOC 3px solid var(--primary) */
-.seriesTOC-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--primary-color);
-  border-radius: 0 2px 2px 0;
-  opacity: 0;
-  transform: scaleY(0.6);
-  transform-origin: center;
-  transition:
-    opacity 150ms cubic-bezier(0.25, 1, 0.5, 1),
-    transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
-}
-.seriesTOC-item:hover {
-  padding-left: 1.5rem;
-}
-.seriesTOC-item:hover::before {
-  opacity: 1;
-  transform: scaleY(1);
-}
-.seriesTOC-item:last-child {
-  border-bottom: none;
-}
-.seriesTOC-num {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-  text-align: right;
-  flex-shrink: 0;
-}
-.seriesTOC-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  min-width: 0;
-}
-.seriesTOC-title {
-  font-size: 1.0625rem;
-  font-weight: 500;
-  color: var(--primary-color);
-  line-height: 1.45;
-}
-.seriesTOC-meta {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1;
-}
+{{- end -}}
 
-@media (prefers-reduced-motion: reduce) {
-  .seriesTOC-item,
-  .seriesTOC-item::before {
-    transition: none;
-  }
-  .seriesTOC-item::before {
-    opacity: 1;
-    transform: none;
-  }
-}
-</style>
-
-{{- end }}{{- /* end main */ -}}
+{{- end -}}

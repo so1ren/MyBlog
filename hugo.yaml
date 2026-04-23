@@ -19,8 +19,6 @@ languages:
   zh:
      languageName: "中文"
      taxonomies:
-      category: categories
-      tag: tags
       series: series
 outputs:
   home:
@@ -43,10 +41,6 @@ related:
   threshold: 80
   toLower: false
   indices:
-    - name: tags
-      weight: 100
-    - name: categories
-      weight: 80
     - name: series
       weight: 60
 
