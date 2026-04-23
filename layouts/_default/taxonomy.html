@@ -1,28 +1,15 @@
-{{- define "main" -}}
-
-<header class="series-index-header">
-  <h1 class="series-index-title">{{ .Title }}</h1>
-  {{- if .Description -}}
-  <p class="series-index-sub">{{ .Description }}</p>
-  {{- end }}
+{{- define "main" }}
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
 </header>
-
-<div class="series-card-list">
-  {{- range .Pages -}}
-    <a href="{{ .Permalink }}" class="series-card-item">
-      <div class="series-card-count">
-        <span class="series-card-count-n">{{ len .Pages }}</span>
-        <span class="series-card-count-label">篇</span>
-      </div>
-      <div class="series-card-body">
-        <h2 class="series-card-name">{{ .Title }}</h2>
-        {{- with .Description }}
-        <p class="series-card-desc">{{ . }}</p>
-        {{- end }}
-      </div>
-      <span class="series-card-arrow">→</span>
-    </a>
-  {{- end -}}
+<div class="taxonomy-series">
+  {{- range .Pages }}
+  <div class="taxonomy-item">
+    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    {{- with .Description }}
+    <p>{{ . }}</p>
+    {{- end }}
+  </div>
+  {{- end }}
 </div>
-
-{{- end -}}
+{{- end }}

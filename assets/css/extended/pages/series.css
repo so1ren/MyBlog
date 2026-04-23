@@ -1,11 +1,9 @@
-/* ============================================================
-   系列页面专用样式 — series.css
-   基于 caiyu.life 设计系统，与首页长期主题区风格一致
-   ============================================================ */
+/* ============================================
+   Series Pages — 系列页面专用样式
+   与 caiyu.life 设计系统一致
+   ============================================ */
 
-/* ==========================================
-   A. 系列详情页 (series.html)
-   ========================================== */
+/* -------------------- Series Detail Page -------------------- */
 
 /* 系列页面标题区 */
 .series-header {
@@ -142,9 +140,26 @@
     color: var(--primary-color);
 }
 
-/* ==========================================
-   B. 系列索引页 (series.terms.html)
-   ========================================== */
+/* 响应式 */
+@media (max-width: 640px) {
+    .series-lesson-item {
+        grid-template-columns: 2.5rem 1fr;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+    }
+
+    .series-lesson-arrow {
+        display: none;
+    }
+
+    .series-lesson-order {
+        width: 2rem;
+        height: 2rem;
+        font-size: var(--font-xs);
+    }
+}
+
+/* -------------------- Series Index Page -------------------- */
 
 /* 系列索引页 - 与首页长期主题区风格一致 */
 .series-index-header {
@@ -271,37 +286,18 @@
     color: var(--primary-color);
 }
 
-/* ==========================================
-   响应式
-   ========================================== */
-
+/* 响应式 */
 @media (max-width: 640px) {
-    .series-lesson-item {
-        grid-template-columns: 2.5rem 1fr;
-        gap: 0.75rem;
-        padding: 0.875rem 1rem;
-    }
-    
-    .series-lesson-arrow {
-        display: none;
-    }
-    
-    .series-lesson-order {
-        width: 2rem;
-        height: 2rem;
-        font-size: var(--font-xs);
-    }
-    
     .series-card-item {
         grid-template-columns: 3.5rem 1fr;
         gap: 1rem;
         padding: 1.25rem 1rem;
     }
-    
+
     .series-card-arrow {
         display: none;
     }
-    
+
     .series-card-count-n {
         font-size: 1.5rem;
     }

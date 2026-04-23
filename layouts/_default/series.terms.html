@@ -1,29 +1,24 @@
-{{- define "main" -}}
-<!-- SERIES_TERMS_MARKER -->
-
+{{- /* Series taxonomy index */ -}}
+{{- define "main" }}
 <header class="series-index-header">
-  <h1 class="series-index-title">{{ .Title }}</h1>
-  {{- if .Description -}}
-  <p class="series-index-sub">{{ .Description }}</p>
-  {{- end }}
+  <h1 class="series-index-title">专题系列</h1>
+  <p class="series-index-sub">长期写作与持续研究的系列专题</p>
 </header>
-
 <div class="series-card-list">
-  {{- range .Pages -}}
-    <a href="{{ .Permalink }}" class="series-card-item">
+  {{- range site.Taxonomies.series }}
+    <a href="{{ .Page.Permalink }}" class="series-card-item">
       <div class="series-card-count">
         <span class="series-card-count-n">{{ len .Pages }}</span>
         <span class="series-card-count-label">篇</span>
       </div>
       <div class="series-card-body">
-        <h2 class="series-card-name">{{ .Title }}</h2>
-        {{- with .Description }}
+        <h2 class="series-card-name">{{ .Page.Title }}</h2>
+        {{- with .Page.Description }}
         <p class="series-card-desc">{{ . }}</p>
         {{- end }}
       </div>
       <span class="series-card-arrow">→</span>
     </a>
-  {{- end -}}
+  {{- end }}
 </div>
-
-{{- end -}}
+{{- end }}
