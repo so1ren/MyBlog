@@ -23,8 +23,9 @@
         <h3 class="series-timeline-title">{{ .Title }}</h3>
       </div>
       <div class="series-timeline-meta">
-        <span class="series-timeline-date">{{ .Date.Format "2006年01月02日" }}</span>
-        <span class="series-timeline-words">{{ .WordCount }} 字</span>
+        <span>{{ .Date.Format "2006年01月02日" }}</span>
+        <span class="meta-sep">·</span>
+        <span>{{ .WordCount }} 字</span>
       </div>
     </div>
   </a>

@@ -1,10 +1,10 @@
 /* ============================================
-   Series Pages — 纯文字排版风格
-   无卡片、无背景变化、无圆角、无阴影
+   Series Pages — Swiss Modernism 2.0
+   核心：强烈层级 + 全部左对齐 + 大量留白 + 去除装饰
    ============================================ */
 
 /* ============================================================
-   系列索引页（/series/）— 档案索引式
+   系列索引页（/series/）
    ============================================================ */
 
 .series-index-header {
@@ -27,7 +27,7 @@
     margin: 0;
 }
 
-/* 列表：纯间距分隔，无卡片 */
+/* 列表：大间距，无卡片，全部左对齐 */
 .series-index-list {
     display: flex;
     flex-direction: column;
@@ -35,88 +35,44 @@
 
 .series-index-item {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 2rem;
-    padding: 1.5rem 0;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 2rem 0;
     border-top: 1px solid var(--border-subtle);
     text-decoration: none;
     color: inherit;
-    transition: none;
 }
 
-.series-index-main {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    flex: 1;
-}
-
+/* 系列名称：视觉焦点，大字号 */
 .series-index-name {
-    font-size: var(--font-base);
-    font-weight: var(--fw-semibold);
+    font-size: var(--font-lg);
+    font-weight: var(--fw-bold);
     color: var(--text-color);
     margin: 0;
-    line-height: 1.4;
-    transition: color var(--t-fast);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
 }
 
-.series-index-item:hover .series-index-name {
-    color: var(--primary-color);
-}
-
+/* 描述：正文色，限制宽度 */
 .series-index-desc {
-    font-size: var(--font-sm);
+    font-size: var(--font-base);
     color: var(--text-secondary);
     margin: 0;
-    line-height: 1.55;
-    max-width: 480px;
+    line-height: 1.65;
+    max-width: 560px;
 }
 
+/* 元信息：一行小字 */
 .series-index-meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-    flex-shrink: 0;
+    gap: 0.5rem;
     font-size: var(--font-xs);
     color: var(--text-tertiary);
-    white-space: nowrap;
+    margin-top: 0.25rem;
 }
 
-.series-index-latest {
-    color: var(--text-secondary);
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: right;
-}
-
-.series-index-date,
-.series-index-count {
-    color: var(--text-tertiary);
-}
-
-/* 响应式 */
-@media (max-width: 640px) {
-    .series-index-item {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: flex-start;
-    }
-
-    .series-index-meta {
-        align-items: flex-start;
-        flex-direction: row;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    .series-index-latest {
-        text-align: left;
-        max-width: 100%;
-    }
+.series-index-meta .meta-sep {
+    opacity: 0.5;
 }
 
 /* ============================================================
@@ -176,17 +132,16 @@
     display: flex;
     align-items: flex-start;
     gap: 1.25rem;
-    padding: 1.25rem 0 1.25rem 0;
+    padding: 1.5rem 0 1.5rem 0;
     text-decoration: none;
     color: inherit;
-    transition: none;
 }
 
 /* 圆点标记 */
 .series-timeline-dot {
     position: absolute;
     left: -1.25rem;
-    top: 1.75rem;
+    top: 2rem;
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -205,14 +160,14 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.4rem;
     flex: 1;
 }
 
 .series-timeline-main {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.15rem;
 }
 
 .series-timeline-order {
@@ -228,34 +183,39 @@
     color: var(--text-color);
     margin: 0;
     line-height: 1.4;
-    transition: color var(--t-fast);
-}
-
-.series-timeline-item:hover .series-timeline-title {
-    color: var(--primary-color);
 }
 
 .series-timeline-meta {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
     font-size: var(--font-xs);
     color: var(--text-tertiary);
 }
 
-/* 响应式 */
+.series-timeline-meta .meta-sep {
+    opacity: 0.5;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
 @media (max-width: 640px) {
     .series-timeline {
         padding-left: 1rem;
     }
-
+    
     .series-timeline-item {
         gap: 1rem;
     }
-
+    
     .series-timeline-dot {
         left: -1rem;
         width: 6px;
         height: 6px;
         transform: translateX(-2px);
+    }
+    
+    .series-index-item {
+        padding: 1.5rem 0;
     }
 }

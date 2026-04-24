@@ -1,4 +1,4 @@
-{{- /* Series taxonomy index — 档案索引式 */ -}}
+{{- /* Series taxonomy index — Swiss Modernism style */ -}}
 {{- define "main" }}
 
 <header class="series-index-header">
@@ -11,18 +11,16 @@
   {{- $seriesPages := .Pages }}
   {{- $latest := index (sort $seriesPages "Date" "desc") 0 }}
   <a href="{{ .Page.Permalink }}" class="series-index-item">
-    <div class="series-index-main">
-      <h2 class="series-index-name">{{ .Page.Title }}</h2>
-      {{- with .Page.Description }}
-      <p class="series-index-desc">{{ . }}</p>
-      {{- end }}
-    </div>
+    <h2 class="series-index-name">{{ .Page.Title }}</h2>
+    {{- with .Page.Description }}
+    <p class="series-index-desc">{{ . }}</p>
+    {{- end }}
     <div class="series-index-meta">
+      <span>{{ len $seriesPages }} 篇</span>
       {{- with $latest }}
-      <span class="series-index-latest">最新：{{ .Title }}</span>
-      <span class="series-index-date">{{ .Date.Format "2006-01-02" }}</span>
+      <span class="meta-sep">·</span>
+      <span>最近更新 {{ .Date.Format "2006-01-02" }}</span>
       {{- end }}
-      <span class="series-index-count">{{ len $seriesPages }} 篇</span>
     </div>
   </a>
   {{- end }}
