@@ -1,4 +1,4 @@
-{{- /* Series taxonomy index — Swiss Modernism style */ -}}
+{{- /* Series taxonomy index — archive-entry style */ -}}
 {{- define "main" }}
 
 <header class="series-index-header">
@@ -6,21 +6,23 @@
   <p class="series-index-sub">长期写作与持续研究的系列专题</p>
 </header>
 
-<div class="series-index-list">
+<div class="series-archive-list">
   {{- range site.Taxonomies.series }}
   {{- $seriesPages := .Pages }}
   {{- $latest := index (sort $seriesPages "Date" "desc") 0 }}
-  <a href="{{ .Page.Permalink }}" class="series-index-item">
-    <h2 class="series-index-name">{{ .Page.Title }}</h2>
-    {{- with .Page.Description }}
-    <p class="series-index-desc">{{ . }}</p>
-    {{- end }}
-    <div class="series-index-meta">
-      <span>{{ len $seriesPages }} 篇</span>
-      {{- with $latest }}
-      <span class="meta-sep">·</span>
-      <span>最近更新 {{ .Date.Format "2006-01-02" }}</span>
+  <a href="{{ .Page.Permalink }}" class="series-archive-item">
+    <div class="series-archive-body">
+      <h2 class="series-archive-name">{{ .Page.Title }}</h2>
+      {{- with .Page.Description }}
+      <p class="series-archive-desc">{{ . }}</p>
       {{- end }}
+      <div class="series-archive-meta">
+        <span>{{ len $seriesPages }} 篇</span>
+        {{- with $latest }}
+        <span class="meta-sep">·</span>
+        <span>{{ .Date.Format "2006-01-02" }}</span>
+        {{- end }}
+      </div>
     </div>
   </a>
   {{- end }}

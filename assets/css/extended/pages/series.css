@@ -1,10 +1,10 @@
 /* ============================================
-   Series Pages — Swiss Modernism 2.0
-   核心：强烈层级 + 全部左对齐 + 大量留白 + 去除装饰
+   Series Pages — Swiss Modernism / Archive Entry
+   核心：左侧竖线 + 留白分隔 + 无hover颜色变化
    ============================================ */
 
 /* ============================================================
-   系列索引页（/series/）
+   系列索引页（/series/）— 档案条目式
    ============================================================ */
 
 .series-index-header {
@@ -27,51 +27,71 @@
     margin: 0;
 }
 
-/* 列表：大间距，无卡片，全部左对齐 */
-.series-index-list {
+/* 档案列表：左侧竖线标记 */
+.series-archive-list {
     display: flex;
     flex-direction: column;
 }
 
-.series-index-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border-subtle);
+.series-archive-item {
+    position: relative;
+    display: block;
+    padding: 1.25rem 0 1.25rem 1.5rem;
     text-decoration: none;
     color: inherit;
 }
 
-/* 系列名称：视觉焦点，大字号 */
-.series-index-name {
-    font-size: var(--font-lg);
-    font-weight: var(--fw-bold);
-    color: var(--text-color);
-    margin: 0;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
+/* 左侧竖线 */
+.series-archive-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.25rem;
+    bottom: 1.25rem;
+    width: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    transition: background var(--t-fast);
 }
 
-/* 描述：正文色，限制宽度 */
-.series-index-desc {
+.series-archive-item:hover::before {
+    background: var(--primary-color);
+}
+
+.series-archive-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+/* 系列名称：视觉焦点 */
+.series-archive-name {
     font-size: var(--font-base);
+    font-weight: var(--fw-semibold);
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* 描述 */
+.series-archive-desc {
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     margin: 0;
-    line-height: 1.65;
+    line-height: 1.6;
     max-width: 560px;
 }
 
-/* 元信息：一行小字 */
-.series-index-meta {
+/* 元信息 */
+.series-archive-meta {
     display: flex;
     gap: 0.5rem;
     font-size: var(--font-xs);
     color: var(--text-tertiary);
-    margin-top: 0.25rem;
+    margin-top: 0.15rem;
 }
 
-.series-index-meta .meta-sep {
+.series-archive-meta .meta-sep {
     opacity: 0.5;
 }
 
@@ -200,6 +220,10 @@
    响应式
    ============================================================ */
 @media (max-width: 640px) {
+    .series-archive-item {
+        padding-left: 1.25rem;
+    }
+    
     .series-timeline {
         padding-left: 1rem;
     }
@@ -213,9 +237,5 @@
         width: 6px;
         height: 6px;
         transform: translateX(-2px);
-    }
-    
-    .series-index-item {
-        padding: 1.5rem 0;
     }
 }
