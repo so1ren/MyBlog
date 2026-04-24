@@ -16,6 +16,7 @@
 <div class="series-lesson-list">
   {{- range $pages.ByParam "series_order" -}}
   <a href="{{ .RelPermalink }}" class="series-lesson-item">
+    <span class="series-lesson-order">{{ .Params.series_order | default "?" }}</span>
     <div class="series-lesson-body">
       <h3 class="series-lesson-title">{{ .Title }}</h3>
       <p class="series-lesson-date">{{ .Date.Format "2006年01月02日" }}</p>
