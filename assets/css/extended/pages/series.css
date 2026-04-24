@@ -1,112 +1,145 @@
 /* ============================================
-   Series Pages — 系列页面专用样式
-   与 caiyu.life 设计系统一致
+   Series Pages — 系列页面样式
+   风格与 post-list.css 一致：极简、无卡片感、轻分隔线
    ============================================ */
 
-/* -------------------- Series Detail Page -------------------- */
+/* ============================================================
+   系列索引页（series.terms.html）
+   与文章列表风格一致：无边框、无背景、极简条目
+   ============================================================ */
 
-/* 系列页面标题区 */
+.series-index-header {
+    padding: 2.5rem 0 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 0;
+}
+
+.series-index-title {
+    font-size: var(--font-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.02em;
+    margin: 0 0 0.35rem;
+    color: var(--text-color);
+    line-height: 1.3;
+}
+
+.series-index-sub {
+    font-size: var(--font-sm);
+    color: var(--text-tertiary);
+    margin: 0;
+}
+
+/* 系列条目 — 档案式，极简分隔线 */
+.series-card-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    text-decoration: none;
+    color: inherit;
+    transition: none;
+}
+
+.series-card-item:first-child {
+    border-top: 1px solid var(--border-subtle);
+}
+
+.series-card-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.series-card-name {
+    font-size: var(--font-base);
+    font-weight: var(--fw-semibold);
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.4;
+    transition: color var(--t-fast);
+}
+
+.series-card-item:hover .series-card-name {
+    color: var(--primary-color);
+}
+
+.series-card-desc {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.series-card-count {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   系列详情页（series.html）
+   与文章列表条目风格一致
+   ============================================================ */
+
 .series-header {
-    padding: 2.5rem 0 2rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2rem;
+    padding: 2.5rem 0 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 0;
 }
 
 .series-header h1 {
     font-size: var(--font-xl);
     font-weight: var(--fw-bold);
     letter-spacing: -0.02em;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
     color: var(--text-color);
+    line-height: 1.3;
 }
 
-.series-header .series-description {
-    font-size: var(--font-base);
+.series-description {
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     line-height: 1.65;
-    margin: 0 0 1rem;
-    max-width: 640px;
+    margin: 0 0 0.5rem;
 }
 
-.series-header .series-meta-count {
-    font-size: var(--font-sm);
+.series-meta-count {
+    font-size: var(--font-xs);
     color: var(--text-tertiary);
     margin: 0;
 }
 
-.series-header .series-meta-count strong {
-    color: var(--primary-color);
-    font-weight: var(--fw-semibold);
-}
-
-/* 系列文章列表 - 卡片式 */
+/* 课程条目 — 档案式，轻分隔线 */
 .series-lesson-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    max-width: min(720px, 100%);
-    margin: 0 auto;
 }
 
 .series-lesson-item {
-    display: grid;
-    grid-template-columns: 3rem 1fr auto;
-    align-items: center;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: var(--surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-subtle);
     text-decoration: none;
     color: inherit;
-    transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
-    position: relative;
-    overflow: hidden;
+    transition: none;
 }
 
-.series-lesson-item::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--primary-color);
-    opacity: 0;
-    transition: opacity var(--t-fast);
+.series-lesson-item:first-child {
+    border-top: 1px solid var(--border-subtle);
 }
 
-.series-lesson-item:hover {
-    border-color: var(--border);
-    transform: translateX(4px);
-    box-shadow: var(--shadow-sm);
-}
-
-.series-lesson-item:hover::before {
-    opacity: 1;
-}
-
-/* 课程序号 */
-.series-lesson-order {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    background: var(--primary-subtle);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-sm);
-    font-weight: var(--fw-semibold);
-    color: var(--primary-color);
-    line-height: 1;
-}
-
-/* 课程内容区 */
 .series-lesson-body {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
 }
 
 .series-lesson-title {
@@ -128,177 +161,13 @@
     margin: 0;
 }
 
-/* 阅读状态指示 */
-.series-lesson-arrow {
-    font-size: 1.25rem;
-    color: var(--text-tertiary);
-    transition: transform var(--t-smooth), color var(--t-smooth);
-}
-
-.series-lesson-item:hover .series-lesson-arrow {
-    transform: translateX(4px);
-    color: var(--primary-color);
-}
-
-/* 响应式 */
+/* ============================================================
+   响应式
+   ============================================================ */
 @media (max-width: 640px) {
+    .series-card-item,
     .series-lesson-item {
-        grid-template-columns: 2.5rem 1fr;
-        gap: 0.75rem;
-        padding: 0.875rem 1rem;
-    }
-
-    .series-lesson-arrow {
-        display: none;
-    }
-
-    .series-lesson-order {
-        width: 2rem;
-        height: 2rem;
-        font-size: var(--font-xs);
-    }
-}
-
-/* -------------------- Series Index Page -------------------- */
-
-/* 系列索引页 - 与首页长期主题区风格一致 */
-.series-index-header {
-    padding: 2.5rem 0 2rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2rem;
-}
-
-.series-index-title {
-    font-size: var(--font-xl);
-    font-weight: var(--fw-bold);
-    letter-spacing: -0.02em;
-    margin: 0 0 0.5rem;
-    color: var(--text-color);
-}
-
-.series-index-sub {
-    font-size: var(--font-base);
-    color: var(--text-secondary);
-    margin: 0;
-}
-
-/* 系列卡片列表 */
-.series-card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: min(720px, 100%);
-    margin: 0 auto;
-}
-
-.series-card-item {
-    display: grid;
-    grid-template-columns: 4rem 1fr 2rem;
-    align-items: center;
-    gap: 1.25rem;
-    padding: 1.5rem 1.25rem;
-    background: var(--surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    color: inherit;
-    transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
-    position: relative;
-    overflow: hidden;
-}
-
-.series-card-item::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--primary-color);
-    opacity: 0;
-    transform: scaleY(0.6);
-    transform-origin: center;
-    transition: opacity var(--t-fast), transform var(--t-fast);
-}
-
-.series-card-item:hover {
-    border-color: var(--border);
-    transform: translateX(4px);
-    box-shadow: var(--shadow-sm);
-}
-
-.series-card-item:hover::before {
-    opacity: 1;
-    transform: scaleY(1);
-}
-
-.series-card-count {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
-}
-
-.series-card-count-n {
-    font-size: 1.75rem;
-    font-weight: var(--fw-bold);
-    letter-spacing: -0.04em;
-    color: var(--text-secondary);
-    line-height: 1;
-}
-
-.series-card-count-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary);
-    margin-top: 0.2rem;
-}
-
-.series-card-body {
-    min-width: 0;
-}
-
-.series-card-name {
-    font-size: var(--font-md);
-    font-weight: var(--fw-semibold);
-    margin: 0 0 0.35rem;
-    color: var(--text-color);
-    line-height: 1.3;
-}
-
-.series-card-desc {
-    font-size: var(--font-sm);
-    color: var(--text-secondary);
-    margin: 0;
-    line-height: 1.55;
-}
-
-.series-card-arrow {
-    font-size: 1.25rem;
-    color: var(--text-tertiary);
-    transition: transform var(--t-smooth), color var(--t-smooth);
-    align-self: center;
-}
-
-.series-card-item:hover .series-card-arrow {
-    transform: translateX(6px);
-    color: var(--primary-color);
-}
-
-/* 响应式 */
-@media (max-width: 640px) {
-    .series-card-item {
-        grid-template-columns: 3.5rem 1fr;
-        gap: 1rem;
-        padding: 1.25rem 1rem;
-    }
-
-    .series-card-arrow {
-        display: none;
-    }
-
-    .series-card-count-n {
-        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 0.2rem;
     }
 }

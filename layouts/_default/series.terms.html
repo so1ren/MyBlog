@@ -1,4 +1,4 @@
-{{- /* Series taxonomy index — uses series.css for styling */ -}}
+{{- /* Series taxonomy index — 极简档案式风格 */ -}}
 {{- define "main" }}
 
 <header class="series-index-header">
@@ -9,17 +9,13 @@
 <div class="series-card-list">
   {{- range site.Taxonomies.series }}
     <a href="{{ .Page.Permalink }}" class="series-card-item">
-      <div class="series-card-count">
-        <span class="series-card-count-n">{{ len .Pages }}</span>
-        <span class="series-card-count-label">篇</span>
-      </div>
       <div class="series-card-body">
         <h2 class="series-card-name">{{ .Page.Title }}</h2>
         {{- with .Page.Description }}
         <p class="series-card-desc">{{ . }}</p>
         {{- end }}
       </div>
-      <span class="series-card-arrow">→</span>
+      <span class="series-card-count">{{ len .Pages }} 篇</span>
     </a>
   {{- end }}
 </div>
