@@ -35,8 +35,7 @@
         font-size: 1.3rem !important;
     }
     
-    /* 导航容器 - 横向滚动 + 分隔线风格 */
-    /* spec 2.4：最大 6px 圆角 */
+    /* 导航容器 - 简洁横向滚动 */
     #menu {
         display: flex;
         flex-wrap: nowrap;
@@ -45,17 +44,17 @@
         padding: 0;
         scrollbar-width: none;
         -ms-overflow-style: none;
-        background: rgba(0, 0, 0, 0.03);
-        border-radius: 6px;
-        padding: 4px;
-        gap: 4px;
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        gap: 0;
     }
     #menu::-webkit-scrollbar {
         display: none;
     }
     
     html.dark #menu {
-        background: rgba(255, 255, 255, 0.05);
+        background: transparent;
     }
     
     #menu li {
@@ -65,32 +64,34 @@
     
     #menu li a {
         font-size: 1rem !important;
-        font-weight: 600 !important;
-        padding: 0.5rem 0.9rem !important;
-        border-radius: 6px;
-        color: var(--text-color) !important;
+        font-weight: 500 !important;
+        padding: 0.4rem 0.6rem !important;
+        border-radius: 0;
+        color: var(--text-secondary) !important;
         background: transparent;
-        transition: all 0.2s ease;
+        transition: color var(--t-fast);
         white-space: nowrap;
         position: relative;
     }
     
-    #menu li a:hover,
-    #menu li a.active {
-        background: var(--primary-color) !important;
-        color: #fff !important;
+    #menu li a:hover {
+        color: var(--text-color) !important;
     }
     
-    /* 当前页面指示器 */
+    #menu li a.active {
+        color: var(--text-color) !important;
+        font-weight: 600 !important;
+    }
+    
+    /* 当前页面指示器 - 简化为底部短横线 */
     #menu li a.active::after {
         content: '';
         position: absolute;
-        bottom: 4px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 16px;
+        bottom: 0;
+        left: 0.6rem;
+        right: 0.6rem;
         height: 2px;
-        background: #fff;
+        background: var(--primary-color);
         border-radius: 1px;
     }
     
