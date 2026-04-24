@@ -1,6 +1,19 @@
 {{- if not (.Param "hideFooter") }}
 <footer class="footer">
-    <span>© {{ now.Year }} <a href="{{ "" | absLangURL }}">{{ site.Title }}</a></span>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <span class="footer-brand">{{ site.Title }}</span>
+            <span class="footer-motto">研究者的网络自留地</span>
+        </div>
+        <div class="footer-links">
+            <a href="/posts/">文章</a>
+            <a href="/series/">系列</a>
+            <a href="/about/">关于</a>
+        </div>
+        <div class="footer-right">
+            <span>© {{ now.Year }}</span>
+        </div>
+    </div>
 </footer>
 {{- end }}
 
