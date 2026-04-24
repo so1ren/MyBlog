@@ -13,13 +13,19 @@
   <p class="series-meta-count">共 {{ $total }} 讲</p>
 </header>
 
-<div class="series-lesson-list">
+<div class="series-timeline">
   {{- range $pages.ByParam "series_order" -}}
-  <a href="{{ .RelPermalink }}" class="series-lesson-item">
-    <span class="series-lesson-order">{{ .Params.series_order | default "?" }}</span>
-    <div class="series-lesson-body">
-      <h3 class="series-lesson-title">{{ .Title }}</h3>
-      <p class="series-lesson-date">{{ .Date.Format "2006年01月02日" }}</p>
+  <a href="{{ .RelPermalink }}" class="series-timeline-item">
+    <span class="series-timeline-dot"></span>
+    <div class="series-timeline-content">
+      <div class="series-timeline-main">
+        <span class="series-timeline-order">第 {{ .Params.series_order | default "?" }} 讲</span>
+        <h3 class="series-timeline-title">{{ .Title }}</h3>
+      </div>
+      <div class="series-timeline-meta">
+        <span class="series-timeline-date">{{ .Date.Format "2006年01月02日" }}</span>
+        <span class="series-timeline-words">{{ .WordCount }} 字</span>
+      </div>
     </div>
   </a>
   {{- end -}}

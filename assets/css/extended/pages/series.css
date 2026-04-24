@@ -1,14 +1,14 @@
 /* ============================================
-   Series Pages — 系列页面样式
+   Series Pages — 纯文字排版风格
+   无卡片、无背景变化、无圆角、无阴影
    ============================================ */
 
 /* ============================================================
-   系列索引页（series.terms.html）— 保持不变
+   系列索引页（/series/）— 档案索引式
    ============================================================ */
 
 .series-index-header {
-    padding: 2.5rem 0 1.5rem;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 2.5rem 0 2rem;
     margin-bottom: 0;
 }
 
@@ -16,7 +16,7 @@
     font-size: var(--font-xl);
     font-weight: var(--fw-bold);
     letter-spacing: -0.02em;
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.5rem;
     color: var(--text-color);
     line-height: 1.3;
 }
@@ -27,31 +27,33 @@
     margin: 0;
 }
 
-/* 系列条目 — 档案式，极简分隔线 */
-.series-card-item {
+/* 列表：纯间距分隔，无卡片 */
+.series-index-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.series-index-item {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 1rem;
-    padding: var(--space-sm) 0;
-    border-bottom: 1px solid var(--border-subtle);
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-subtle);
     text-decoration: none;
     color: inherit;
     transition: none;
 }
 
-.series-card-item:first-child {
-    border-top: 1px solid var(--border-subtle);
-}
-
-.series-card-body {
+.series-index-main {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.35rem;
+    flex: 1;
 }
 
-.series-card-name {
+.series-index-name {
     font-size: var(--font-base);
     font-weight: var(--fw-semibold);
     color: var(--text-color);
@@ -60,31 +62,69 @@
     transition: color var(--t-fast);
 }
 
-.series-card-item:hover .series-card-name {
+.series-index-item:hover .series-index-name {
     color: var(--primary-color);
 }
 
-.series-card-desc {
+.series-index-desc {
     font-size: var(--font-sm);
     color: var(--text-secondary);
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.55;
+    max-width: 480px;
 }
 
-.series-card-count {
+.series-index-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    flex-shrink: 0;
     font-size: var(--font-xs);
     color: var(--text-tertiary);
     white-space: nowrap;
-    flex-shrink: 0;
+}
+
+.series-index-latest {
+    color: var(--text-secondary);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+
+.series-index-date,
+.series-index-count {
+    color: var(--text-tertiary);
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+    .series-index-item {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .series-index-meta {
+        align-items: flex-start;
+        flex-direction: row;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .series-index-latest {
+        text-align: left;
+        max-width: 100%;
+    }
 }
 
 /* ============================================================
-   系列详情页（series.html）— 时间线风格
+   系列详情页（/series/kant-critique/）— 时间线主轴
    ============================================================ */
 
 .series-header {
-    padding: 2.5rem 0 1.5rem;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 2.5rem 0 2rem;
     margin-bottom: 0;
 }
 
@@ -102,6 +142,7 @@
     color: var(--text-secondary);
     line-height: 1.65;
     margin: 0 0 0.5rem;
+    max-width: 640px;
 }
 
 .series-meta-count {
@@ -110,65 +151,78 @@
     margin: 0;
 }
 
-/* 课程列表 — 时间线风格 */
-.series-lesson-list {
-    display: flex;
-    flex-direction: column;
+/* 时间线主轴 */
+.series-timeline {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-top: 2rem;
 }
 
-.series-lesson-item {
+/* 贯穿竖线 */
+.series-timeline::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: var(--border);
+    border-radius: 1px;
+}
+
+/* 时间线条目 — 大间距，无 border */
+.series-timeline-item {
     position: relative;
     display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    padding: var(--space-sm) 0 var(--space-sm) 1.5rem;
-    border-bottom: 1px solid var(--border-subtle);
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.25rem 0 1.25rem 0;
     text-decoration: none;
     color: inherit;
     transition: none;
 }
 
-.series-lesson-item:first-child {
-    border-top: 1px solid var(--border-subtle);
-}
-
-/* 左侧竖线标记 */
-.series-lesson-item::before {
-    content: "";
+/* 圆点标记 */
+.series-timeline-dot {
     position: absolute;
-    left: 0;
-    top: var(--space-sm);
-    bottom: var(--space-sm);
-    width: 2px;
+    left: -1.25rem;
+    top: 1.75rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     background: var(--border);
-    border-radius: 1px;
+    border: 2px solid var(--bg);
+    transform: translateX(-3px);
     transition: background var(--t-fast);
+    flex-shrink: 0;
 }
 
-.series-lesson-item:hover::before {
+.series-timeline-item:hover .series-timeline-dot {
     background: var(--primary-color);
 }
 
-/* 序号 */
-.series-lesson-order {
-    font-size: var(--font-xs);
-    font-weight: var(--fw-semibold);
-    color: var(--text-tertiary);
-    min-width: 1.5rem;
-    text-align: right;
-    flex-shrink: 0;
-    font-variant-numeric: tabular-nums;
-}
-
-.series-lesson-body {
+.series-timeline-content {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.35rem;
     flex: 1;
 }
 
-.series-lesson-title {
+.series-timeline-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.series-timeline-order {
+    font-size: var(--font-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+}
+
+.series-timeline-title {
     font-size: var(--font-base);
     font-weight: var(--fw-semibold);
     color: var(--text-color);
@@ -177,31 +231,31 @@
     transition: color var(--t-fast);
 }
 
-.series-lesson-item:hover .series-lesson-title {
+.series-timeline-item:hover .series-timeline-title {
     color: var(--primary-color);
 }
 
-.series-lesson-date {
+.series-timeline-meta {
+    display: flex;
+    gap: 0.75rem;
     font-size: var(--font-xs);
     color: var(--text-tertiary);
-    margin: 0;
 }
 
-/* ============================================================
-   响应式
-   ============================================================ */
+/* 响应式 */
 @media (max-width: 640px) {
-    .series-card-item {
-        flex-direction: column;
-        gap: 0.2rem;
+    .series-timeline {
+        padding-left: 1rem;
     }
 
-    .series-lesson-item {
-        padding-left: 1.25rem;
-        gap: 0.75rem;
+    .series-timeline-item {
+        gap: 1rem;
     }
 
-    .series-lesson-order {
-        min-width: 1.25rem;
+    .series-timeline-dot {
+        left: -1rem;
+        width: 6px;
+        height: 6px;
+        transform: translateX(-2px);
     }
 }

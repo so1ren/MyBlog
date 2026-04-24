@@ -1,4 +1,4 @@
-{{- /* Series taxonomy index — 极简档案式风格 */ -}}
+{{- /* Series taxonomy index — 档案索引式 */ -}}
 {{- define "main" }}
 
 <header class="series-index-header">
@@ -6,17 +6,25 @@
   <p class="series-index-sub">长期写作与持续研究的系列专题</p>
 </header>
 
-<div class="series-card-list">
+<div class="series-index-list">
   {{- range site.Taxonomies.series }}
-    <a href="{{ .Page.Permalink }}" class="series-card-item">
-      <div class="series-card-body">
-        <h2 class="series-card-name">{{ .Page.Title }}</h2>
-        {{- with .Page.Description }}
-        <p class="series-card-desc">{{ . }}</p>
-        {{- end }}
-      </div>
-      <span class="series-card-count">{{ len .Pages }} 篇</span>
-    </a>
+  {{- $seriesPages := .Pages }}
+  {{- $latest := index (sort $seriesPages "Date" "desc") 0 }}
+  <a href="{{ .Page.Permalink }}" class="series-index-item">
+    <div class="series-index-main">
+      <h2 class="series-index-name">{{ .Page.Title }}</h2>
+      {{- with .Page.Description }}
+      <p class="series-index-desc">{{ . }}</p>
+      {{- end }}
+    </div>
+    <div class="series-index-meta">
+      {{- with $latest }}
+      <span class="series-index-latest">最新：{{ .Title }}</span>
+      <span class="series-index-date">{{ .Date.Format "2006-01-02" }}</span>
+      {{- end }}
+      <span class="series-index-count">{{ len $seriesPages }} 篇</span>
+    </div>
+  </a>
   {{- end }}
 </div>
 
