@@ -59,7 +59,13 @@
                     <span class="meta-date">{{- .Date | time.Format "2006-01-02" -}}</span>
                     <span class="meta-sep">·</span>
                     <span class="meta-words">{{ .WordCount }}字</span>
-                    {{- with index (.Params.series) 0 }}
+                    {{- $seriesName := "" }}
+                    {{- if reflect.IsSlice .Params.series }}
+                      {{- $seriesName = index .Params.series 0 }}
+                    {{- else }}
+                      {{- $seriesName = .Params.series }}
+                    {{- end }}
+                    {{- with $seriesName }}
                     {{- $seriesPage := site.GetPage (printf "/series/%s" .) }}
                     <span class="meta-sep">·</span>
                     <span class="meta-series">{{ or ($seriesPage.Title) . }}</span>
@@ -75,7 +81,11 @@
     {{/* ============================================================
        C. 长期主题 / 系列区（复用 archives 的 archive-series-item 形式）
        ============================================================ */}}
-    {{- $seriesKey := "kant-critique" }}
+    {{- $seriesKey := "" }}
+    {{- range $name, $taxonomy := site.Taxonomies.series }}
+      {{- $seriesKey = $name }}
+      {{- break }}
+    {{- end }}
     {{- $seriesPage := site.GetPage (printf "/series/%s" $seriesKey) }}
 
     {{- if $seriesPage }}
