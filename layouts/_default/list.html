@@ -41,10 +41,14 @@
             <span>{{- .Date | time.Format (default "January 2, 2006" site.Params.DateFormat) -}}</span>
             <span class="meta-sep">&nbsp;·&nbsp;</span>
             <span>{{- .WordCount -}} 字</span>
-            {{- with index (.Params.series) 0 }}
-            {{- $seriesPage := site.GetPage (printf "/series/%s" .) }}
+            {{- with .Params.series }}
+            {{- $seriesName := . }}
+            {{- if reflect.IsSlice . }}
+            {{- $seriesName = index . 0 }}
+            {{- end }}
+            {{- $seriesPage := site.GetPage (printf "/series/%s" $seriesName) }}
             <span class="meta-sep">&nbsp;·&nbsp;</span>
-            <span>{{ or ($seriesPage.Title) . }}</span>
+            <span>{{ or ($seriesPage.Title) $seriesName }}</span>
             {{- end }}
           </div>
           <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
