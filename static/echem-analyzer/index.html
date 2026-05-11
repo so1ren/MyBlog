@@ -566,6 +566,7 @@ function extractCV() {
 function detectCycles(data) {
   if (data.length < 10) return [{ start: 0, end: data.length - 1, label: '全部数据' }];
 
+  // 1. Find direction changes
   const changes = [];
   for (let i = 1; i < data.length - 1; i++) {
     const d1 = data[i].e - data[i-1].e;
@@ -579,6 +580,7 @@ function detectCycles(data) {
     return [{ start: 0, end: data.length - 1, label: '全部数据' }];
   }
 
+  // 2. Build segments (scan direction segments)
   const segs = [];
   let prev = 0;
   for (const c of changes) {
@@ -587,18 +589,35 @@ function detectCycles(data) {
   }
   segs.push({ start: prev, end: data.length - 1 });
 
-  const result = [];
-  for (let i = 0; i < segs.length - 1; i += 2) {
-    if (i + 1 < segs.length) {
-      result.push({
-        start: segs[i].start,
-        end: segs[i+1].end,
-        label: '第 ' + (Math.floor(i/2)+1) + ' 圈'
-      });
+  // 3. Detect incomplete last segment (experiment stopped mid-scan)
+  const avgLen = segs.reduce((sum, s) => sum + (s.end - s.start + 1), 0) / segs.length;
+  let usableSegs = segs;
+  if (segs.length > 1) {
+    const lastLen = segs[segs.length - 1].end - segs[segs.length - 1].start + 1;
+    if (lastLen < avgLen * 0.3) {
+      usableSegs = segs.slice(0, -1); // Discard incomplete last segment
     }
   }
 
-  // If there's an odd last segment, it's a partial scan — don't make it a new cycle
+  // 4. Pair from BACK to FRONT: assume data ends with complete cycles
+  //    Any leftover incomplete data is at the BEGINNING
+  const rawCycles = [];
+  for (let i = usableSegs.length - 2; i >= 0; i -= 2) {
+    rawCycles.push({
+      start: usableSegs[i].start,
+      end: usableSegs[i + 1].end
+    });
+  }
+
+  // 5. Reverse to get chronological order: cycle 1, 2, 3...
+  const result = [];
+  for (let j = rawCycles.length - 1; j >= 0; j--) {
+    result.push({
+      start: rawCycles[j].start,
+      end: rawCycles[j].end,
+      label: '第 ' + (result.length + 1) + ' 圈'
+    });
+  }
 
   return result.length ? result : [{ start: 0, end: data.length - 1, label: '全部数据' }];
 }
