@@ -484,7 +484,7 @@ function previewRaw() {
   let headers = [];
 
   if (type === 'cv') {
-    headers = ['T(s)', 'E(V)', 'I(A/cm²)'];
+    headers = ['E(V)', 'I(A/cm²)'];
     previewRows = extractCV().slice(0, 100);
   } else if (type === 'eis') {
     headers = ['Freq(Hz)', "Z'(Ω)", "Z''(Ω)"];
@@ -498,7 +498,7 @@ function previewRaw() {
   for (const row of previewRows) {
     html += '<tr>';
     if (type === 'cv') {
-      html += '<td>' + formatNum(row.t) + '</td><td>' + formatNum(row.e) + '</td><td>' + formatNum(row.i) + '</td>';
+      html += '<td>' + formatNum(row.e) + '</td><td>' + formatNum(row.i) + '</td>';
     } else {
       html += '<td>' + formatNum(row.freq) + '</td><td>' + formatNum(row.zRe) + '</td><td>' + formatNum(row.zIm) + '</td>';
     }
