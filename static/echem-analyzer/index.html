@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电化学数据处理器 | EChem Analyzer</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #334155;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --accent: #38bdf8;
+    --accent2: #0ea5e9;
+    --success: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --border: #475569;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  header {
+    text-align: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  header h1 { font-size: 1.8rem; font-weight: 600; color: var(--accent); }
+  header p { color: var(--text2); margin-top: 0.5rem; }
+
+  .grid { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+  }
+  .panel h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(56, 189, 248, 0.03);
+  }
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: rgba(56, 189, 248, 0.08);
+  }
+  .dropzone .icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .dropzone p { color: var(--text2); font-size: 0.9rem; }
+  .dropzone .formats { color: var(--text2); font-size: 0.8rem; margin-top: 0.5rem; }
+  input[type="file"] { display: none; }
+
+  .file-info {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--surface2);
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+  .file-info .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+  .tag-cv { background: rgba(52, 211, 153, 0.2); color: var(--success); }
+  .tag-eis { background: rgba(251, 191, 36, 0.2); color: var(--warn); }
+
+  .param-group { margin-bottom: 1rem; }
+  .param-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-bottom: 0.35rem;
+  }
+  .param-group input, .param-group select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .param-group input:focus, .param-group select:focus {
+    border-color: var(--accent);
+  }
+  .param-group .hint {
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-top: 0.25rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--border); }
+  .btn-success {
+    background: rgba(52, 211, 153, 0.2);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+  .btn-success:hover { background: rgba(52, 211, 153, 0.3); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .val { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
+  .stat .lab { font-size: 0.75rem; color: var(--text2); }
+
+  .preview-box {
+    overflow-x: auto;
+    max-height: 400px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+  th, td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  td { color: var(--text); }
+  tr:hover td { background: rgba(56, 189, 248, 0.05); }
+
+  .output-area { margin-top: 1rem; }
+  textarea {
+    width: 100%;
+    min-height: 200px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.8rem;
+    padding: 1rem;
+    resize: vertical;
+    outline: none;
+  }
+  textarea:focus { border-color: var(--accent); }
+
+  .msg {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+  }
+  .msg-info { background: rgba(56, 189, 248, 0.1); border-left: 3px solid var(--accent); }
+  .msg-success { background: rgba(52, 211, 153, 0.1); border-left: 3px solid var(--success); }
+  .msg-error { background: rgba(248, 113, 113, 0.1); border-left: 3px solid var(--danger); }
+
+  .hidden { display: none !important; }
+
+  .cycle-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .cycle-btn {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .cycle-btn:hover { border-color: var(--accent); }
+  .cycle-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text2);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>⚡ EChem Analyzer</h1>
+    <p>电化学测试数据自动化处理工具 — 支持 CV / EIS 数据提取与 Origin 格式输出</p>
+  </header>
+
+  <div id="message-area"></div>
+
+  <div class="grid">
+    <div class="left-col">
+      <div class="panel">
+        <h2>📁 文件上传</h2>
+        <div class="dropzone" id="dropzone">
+          <div class="icon">📤</div>
+          <p>拖拽文件到此处，或点击选择</p>
+          <div class="formats">支持 .xlsx / .csv / .cor / .txt / .z</div>
+        </div>
+        <input type="file" id="fileInput" accept=".xlsx,.csv,.cor,.txt,.z">
+        <div id="fileInfo" class="file-info hidden"></div>
+      </div>
+
+      <div class="panel" style="margin-top: 1.5rem;">
+        <h2>⚙️ 处理参数</h2>
+
+        <div class="param-group">
+          <label>数据类型</label>
+          <select id="dataType">
+            <option value="auto">🔍 自动识别</option>
+            <option value="cv">📉 循环伏安 (CV)</option>
+            <option value="eis">📊 交流阻抗 (EIS)</option>
+          </select>
+        </div>
+
+        <div class="param-group">
+          <label>样品质量 (g)</label>
+          <input type="number" id="sampleMass" placeholder="留空则不进行质量归一化" step="0.0001">
+          <div class="hint">用于电流 / 阻抗的质量归一化 (A·g⁻¹ 或 Ω·g)</div>
+        </div>
+
+        <div id="cvOptions" class="hidden">
+          <div class="param-group">
+            <label>CV 循环选择</label>
+            <div class="cycle-selector" id="cycleSelector"></div>
+            <div class="hint" id="cycleHint">自动选择最后一圈</div>
+          </div>
+        </div>
+
+        <div id="eisOptions" class="hidden">
+          <div class="param-group">
+            <label>虚部处理</label>
+            <select id="imagOption">
+              <option value="negate">取相反数 (-Z'')</option>
+              <option value="original">保持原始值 (Z'')</option>
+            </select>
+            <div class="hint">Origin 绘图通常使用 -Z'' 作为纵坐标</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="processBtn" disabled>🚀 处理数据</button>
+        <button class="btn btn-secondary" id="resetBtn" style="margin-top:0.5rem;">🔄 重置</button>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="panel">
+        <h2>📋 数据预览</h2>
+        <div id="statsArea" class="stats hidden"></div>
+        <div class="preview-box">
+          <table id="previewTable">
+            <thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top: 1.5rem;">
+        <h2>📤 输出结果 (Origin 格式)</h2>
+        <div class="output-area">
+          <textarea id="outputArea" placeholder="处理后的数据将显示在这里...
+可直接复制粘贴到 Origin
+格式：制表符分隔，第一行为列标题"></textarea>
+        </div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+          <button class="btn btn-success" id="copyBtn" style="flex:1;">📋 复制到剪贴板</button>
+          <button class="btn btn-secondary" id="downloadBtn" style="flex:1;">💾 下载 .txt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    EChem Analyzer · 本地处理，数据不上传服务器 · 专为电化学工作站数据设计
+  </footer>
+</div>
+
+<script>
+let rawData = [];
+let fileName = '';
+let detectedType = '';
+let processedData = [];
+let cycles = [];
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const dataType = document.getElementById('dataType');
+const sampleMass = document.getElementById('sampleMass');
+const cvOptions = document.getElementById('cvOptions');
+const eisOptions = document.getElementById('eisOptions');
+const cycleSelector = document.getElementById('cycleSelector');
+const processBtn = document.getElementById('processBtn');
+const resetBtn = document.getElementById('resetBtn');
+const previewTable = document.getElementById('previewTable');
+const statsArea = document.getElementById('statsArea');
+const outputArea = document.getElementById('outputArea');
+const copyBtn = document.getElementById('copyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const messageArea = document.getElementById('message-area');
+
+function showMsg(text, type='info') {
+  const el = document.createElement('div');
+  el.className = `msg msg-${type}`;
+  el.textContent = text;
+  messageArea.appendChild(el);
+  setTimeout(() => el.remove(), 6000);
+}
+
+function formatNum(v, digits=4) {
+  if (v === null || v === undefined || isNaN(v)) return '';
+  return parseFloat(v).toPrecision(digits);
+}
+
+// ===================== File handling =====================
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  if (files.length) handleFile(files[0]);
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+async function handleFile(file) {
+  fileName = file.name;
+  const ext = file.name.split('.').pop().toLowerCase();
+  let rows = [];
+
+  try {
+    if (ext === 'xlsx' || ext === 'xls') {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data, { type: 'array' });
+      const wsName = wb.SheetNames.find(n => n !== 'File List') || wb.SheetNames[0];
+      const ws = wb.Sheets[wsName];
+      rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
+    } else {
+      const text = await file.text();
+      rows = parseTextFile(text);
+    }
+  } catch (err) {
+    showMsg('读取文件失败: ' + err.message, 'error');
+    return;
+  }
+
+  rawData = rows;
+  detectType();
+  showFileInfo();
+  previewRaw();
+  processBtn.disabled = false;
+  showMsg('成功读取 ' + rows.length + ' 行数据', 'success');
+}
+
+function parseTextFile(text) {
+  const lines = text.split(/\r?\n/);
+  return lines.map(l => l.split(/[\t,;]/).map(c => {
+    const t = c.trim();
+    const n = parseFloat(t);
+    return isNaN(n) ? t : n;
+  }));
+}
+
+// ===================== Type detection =====================
+function detectType() {
+  const headerText = rawData.slice(0, 150).map(r => r.join(' ')).join(' ');
+  if (headerText.includes('MultiStat_DCData') || headerText.includes('Cyclic Voltammogram')) {
+    detectedType = 'cv';
+  } else if (headerText.includes('MultiStat_ACData') || headerText.includes('Impedance')) {
+    detectedType = 'eis';
+  } else {
+    const numRows = rawData.filter(r => r.length >= 2 && typeof r[0] === 'number' && typeof r[1] === 'number');
+    if (numRows.length > 10) {
+      const hasWideCurrent = numRows.slice(0, 20).some(r => Math.abs(r[2] || 0) > 1e-4);
+      detectedType = hasWideCurrent ? 'cv' : 'eis';
+    }
+  }
+  if (dataType.value === 'auto') {
+    updateUIForType();
+  }
+}
+
+function updateUIForType() {
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  cvOptions.classList.toggle('hidden', type !== 'cv');
+  eisOptions.classList.toggle('hidden', type !== 'eis');
+}
+
+dataType.addEventListener('change', updateUIForType);
+
+function showFileInfo() {
+  const type = detectedType === 'cv' ? 'CV' : (detectedType === 'eis' ? 'EIS' : '未知');
+  const tagClass = detectedType === 'cv' ? 'tag-cv' : 'tag-eis';
+  fileInfo.innerHTML = '<strong>📄 ' + fileName + '</strong><span class="tag ' + tagClass + '">' + type + '</span><br><span style="color:var(--text2);">总行数: ' + rawData.length + ' 行</span>';
+  fileInfo.classList.remove('hidden');
+}
+
+// ===================== Preview =====================
+function previewRaw() {
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  let previewRows = [];
+  let headers = [];
+
+  if (type === 'cv') {
+    headers = ['T(s)', 'E(V)', 'I(A/cm²)'];
+    previewRows = extractCV().slice(0, 100);
+  } else if (type === 'eis') {
+    headers = ['Freq(Hz)', "Z'(Ω)", "Z''(Ω)"];
+    previewRows = extractEIS().slice(0, 100);
+  } else {
+    previewTable.innerHTML = '<thead><tr><th>请先选择数据类型</th></tr></thead><tbody></tbody>';
+    return;
+  }
+
+  let html = '<thead><tr>' + headers.map(h => '<th>' + h + '</th>').join('') + '</tr></thead><tbody>';
+  for (const row of previewRows) {
+    html += '<tr>';
+    if (type === 'cv') {
+      html += '<td>' + formatNum(row.t) + '</td><td>' + formatNum(row.e) + '</td><td>' + formatNum(row.i) + '</td>';
+    } else {
+      html += '<td>' + formatNum(row.freq) + '</td><td>' + formatNum(row.zRe) + '</td><td>' + formatNum(row.zIm) + '</td>';
+    }
+    html += '</tr>';
+  }
+  html += '</tbody>';
+  previewTable.innerHTML = html;
+
+  statsArea.innerHTML = '<div class="stat"><div class="val">' + previewRows.length + '+</div><div class="lab">数据点</div></div>' +
+    '<div class="stat"><div class="val">' + (type==='cv' ? (cycles.length || 1) + ' 圈' : 'Nyquist') + '</div><div class="lab">' + (type==='cv'?'循环':'类型') + '</div></div>';
+  statsArea.classList.remove('hidden');
+}
+
+// ===================== CV extraction =====================
+function extractCV() {
+  let dataStart = 0;
+  let tIdx = 0, eIdx = 1, iIdx = 2;
+  let hasHeader = false;
+
+  for (let i = 0; i < Math.min(rawData.length, 200); i++) {
+    const row = rawData[i];
+    const line = row.join(' ');
+    if (line.includes('T(Seconds)') && line.includes('E(V)') && line.includes('I(A')) {
+      for (let j = 0; j < row.length; j++) {
+        const h = String(row[j] || '').toLowerCase();
+        if (h.includes('t(') || h.includes('time')) tIdx = j;
+        if (h.includes('e(') || h.includes('potential') || h.includes('volt')) eIdx = j;
+        if (h.includes('i(') || h.includes('current') || h.includes('amp')) iIdx = j;
+      }
+      dataStart = i + 1;
+      hasHeader = true;
+      break;
+    }
+    if (line.includes('End Header')) {
+      dataStart = i + 1;
+    }
+  }
+
+  if (!hasHeader && dataStart === 0) {
+    for (let i = 0; i < rawData.length; i++) {
+      if (rawData[i].length >= 3 && typeof rawData[i][0] === 'number' && typeof rawData[i][1] === 'number') {
+        dataStart = i;
+        break;
+      }
+    }
+  }
+
+  const data = [];
+  for (let i = dataStart; i < rawData.length; i++) {
+    const row = rawData[i];
+    if (row.length < 3) continue;
+    const t = parseFloat(row[tIdx]);
+    const e = parseFloat(row[eIdx]);
+    const curr = parseFloat(row[iIdx]);
+    if (!isNaN(t) && !isNaN(e) && !isNaN(curr)) {
+      data.push({ t, e, i: curr });
+    }
+  }
+
+  cycles = detectCycles(data);
+  renderCycleSelector();
+  return data;
+}
+
+function detectCycles(data) {
+  if (data.length < 10) return [{ start: 0, end: data.length - 1, label: '全部数据' }];
+
+  const changes = [];
+  for (let i = 1; i < data.length - 1; i++) {
+    const d1 = data[i].e - data[i-1].e;
+    const d2 = data[i+1].e - data[i].e;
+    if (d1 * d2 < -1e-8) {
+      changes.push(i);
+    }
+  }
+
+  if (changes.length < 2) {
+    return [{ start: 0, end: data.length - 1, label: '全部数据' }];
+  }
+
+  const segs = [];
+  let prev = 0;
+  for (const c of changes) {
+    segs.push({ start: prev, end: c });
+    prev = c;
+  }
+  segs.push({ start: prev, end: data.length - 1 });
+
+  const result = [];
+  for (let i = 0; i < segs.length - 1; i += 2) {
+    if (i + 1 < segs.length) {
+      result.push({
+        start: segs[i].start,
+        end: segs[i+1].end,
+        label: '第 ' + (Math.floor(i/2)+1) + ' 圈'
+      });
+    }
+  }
+
+  // If there's an odd last segment, it's a partial scan — don't make it a new cycle
+
+  return result.length ? result : [{ start: 0, end: data.length - 1, label: '全部数据' }];
+}
+
+function renderCycleSelector() {
+  cycleSelector.innerHTML = '';
+  if (cycles.length <= 1) {
+    cycleSelector.innerHTML = '<span style="color:var(--text2);font-size:0.8rem;">未检测到多圈循环</span>';
+    return;
+  }
+  cycles.forEach((c, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'cycle-btn' + (idx === cycles.length - 1 ? ' active' : '');
+    btn.textContent = c.label;
+    btn.dataset.index = idx;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cycle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+    cycleSelector.appendChild(btn);
+  });
+  document.getElementById('cycleHint').textContent = '共检测到 ' + cycles.length + ' 圈，默认选择最后一圈';
+}
+
+// ===================== EIS extraction =====================
+function extractEIS() {
+  let dataStart = 0;
+  let freqIdx = 0, zReIdx = 4, zImIdx = 5;
+  let hasHeader = false;
+
+  for (let i = 0; i < Math.min(rawData.length, 200); i++) {
+    const row = rawData[i];
+    const line = row.join(' ');
+    if (line.includes("Z'(a)") && line.includes("Z''(b)") && line.includes('Freq')) {
+      for (let j = 0; j < row.length; j++) {
+        const h = String(row[j] || '').toLowerCase();
+        if (h.includes('freq')) freqIdx = j;
+        if (h.includes("z'(a)") || h.includes('z.real') || h.includes('re(z)')) zReIdx = j;
+        if (h.includes("z''(b)") || h.includes('z.imag') || h.includes('im(z)')) zImIdx = j;
+      }
+      dataStart = i + 1;
+      hasHeader = true;
+      break;
+    }
+    if (line.includes('End Header')) {
+      dataStart = i + 1;
+    }
+  }
+
+  if (!hasHeader && dataStart === 0) {
+    for (let i = 0; i < rawData.length; i++) {
+      if (rawData[i].length >= 5 && typeof rawData[i][0] === 'number' && typeof rawData[i][4] === 'number') {
+        dataStart = i;
+        break;
+      }
+    }
+  }
+
+  const data = [];
+  for (let i = dataStart; i < rawData.length; i++) {
+    const row = rawData[i];
+    if (row.length < 6) continue;
+    const freq = parseFloat(row[freqIdx]);
+    const zRe = parseFloat(row[zReIdx]);
+    const zIm = parseFloat(row[zImIdx]);
+    if (!isNaN(freq) && !isNaN(zRe) && !isNaN(zIm)) {
+      data.push({ freq, zRe, zIm });
+    }
+  }
+  return data;
+}
+
+// ===================== Processing =====================
+processBtn.addEventListener('click', () => {
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  const mass = parseFloat(sampleMass.value);
+  const massNorm = !isNaN(mass) && mass > 0;
+
+  if (type === 'cv') {
+    const allData = extractCV();
+    if (!allData.length) { showMsg('未提取到 CV 数据', 'error'); return; }
+
+    let activeBtn = document.querySelector('.cycle-btn.active');
+    let cycleIdx = activeBtn ? parseInt(activeBtn.dataset.index) : cycles.length - 1;
+    if (cycleIdx < 0 || cycleIdx >= cycles.length) cycleIdx = cycles.length - 1;
+    const c = cycles[cycleIdx];
+    const cycleData = allData.slice(c.start, c.end + 1);
+
+    // Build output
+    const lines = ['E(V)\tI(A/cm²)' + (massNorm ? '\tI/g(A·g⁻¹)' : '')];
+    for (const pt of cycleData) {
+      let line = pt.e.toExponential(6) + '\t' + pt.i.toExponential(6);
+      if (massNorm) line += '\t' + (pt.i / mass).toExponential(6);
+      lines.push(line);
+    }
+
+    processedData = cycleData;
+    outputArea.value = lines.join('\n');
+    showMsg('CV 处理完成 — 已提取 ' + cycleData.length + ' 点 (' + c.label + ')', 'success');
+
+  } else if (type === 'eis') {
+    const data = extractEIS();
+    if (!data.length) { showMsg('未提取到 EIS 数据', 'error'); return; }
+
+    const negate = document.getElementById('imagOption').value === 'negate';
+    const lines = ['Freq(Hz)\tZ\'(Ω)\t-Z\'\'(Ω)' + (massNorm ? '\tZ\'/g\t-Z\'\'/g' : '')];
+    for (const pt of data) {
+      const zImOut = negate ? -pt.zIm : pt.zIm;
+      let line = pt.freq.toExponential(4) + '\t' + pt.zRe.toExponential(6) + '\t' + zImOut.toExponential(6);
+      if (massNorm) {
+        line += '\t' + (pt.zRe / mass).toExponential(6) + '\t' + (zImOut / mass).toExponential(6);
+      }
+      lines.push(line);
+    }
+
+    processedData = data;
+    outputArea.value = lines.join('\n');
+    showMsg('EIS 处理完成 — ' + data.length + ' 个频率点', 'success');
+  }
+});
+
+// ===================== Output actions =====================
+copyBtn.addEventListener('click', () => {
+  if (!outputArea.value) { showMsg('没有可复制的内容', 'warn'); return; }
+  navigator.clipboard.writeText(outputArea.value).then(() => {
+    showMsg('已复制到剪贴板', 'success');
+  }).catch(() => {
+    showMsg('复制失败，请手动复制', 'error');
+  });
+});
+
+downloadBtn.addEventListener('click', () => {
+  if (!outputArea.value) { showMsg('没有可下载的内容', 'warn'); return; }
+  const blob = new Blob([outputArea.value], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const base = fileName.replace(/\.[^.]+$/, '');
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  a.download = base + '_' + (type==='cv'?'CV':'EIS') + '_processed.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showMsg('文件已下载', 'success');
+});
+
+// ===================== Reset =====================
+resetBtn.addEventListener('click', () => {
+  rawData = [];
+  fileName = '';
+  detectedType = '';
+  processedData = [];
+  cycles = [];
+  fileInput.value = '';
+  fileInfo.classList.add('hidden');
+  fileInfo.innerHTML = '';
+  previewTable.innerHTML = '<thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead><tbody></tbody>';
+  statsArea.classList.add('hidden');
+  statsArea.innerHTML = '';
+  outputArea.value = '';
+  cycleSelector.innerHTML = '';
+  cvOptions.classList.add('hidden');
+  eisOptions.classList.add('hidden');
+  processBtn.disabled = true;
+  dataType.value = 'auto';
+  sampleMass.value = '';
+  showMsg('已重置', 'info');
+});
+
+// ===================== Keyboard shortcut =====================
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'Enter' && !processBtn.disabled) {
+    processBtn.click();
+  }
+});
+</script>
+</body>
+</html>
