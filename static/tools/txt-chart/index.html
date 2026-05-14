@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TXT 数据可视化 — 快速作图</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
+      --border: #e5e7eb;
+      --border-hover: #d1d5db;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: rgba(59, 130, 246, 0.08);
+      --danger: #ef4444;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115;
+        --surface: #1a1d23;
+        --text: #e8eaed;
+        --text-muted: #9aa0a6;
+        --text-faint: #5f6368;
+        --border: #2d3139;
+        --border-hover: #3c4047;
+        --accent: #60a5fa;
+        --accent-hover: #3b82f6;
+        --accent-light: rgba(96, 165, 250, 0.08);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px 32px;
+      text-align: center;
+      background: var(--surface);
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      box-shadow: var(--shadow);
+    }
+
+    .upload-zone .icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      color: var(--text-faint);
+      transition: color 0.2s ease;
+    }
+
+    .upload-zone:hover .icon,
+    .upload-zone.drag-over .icon {
+      color: var(--accent);
+    }
+
+    .upload-zone h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .upload-zone p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .upload-zone input {
+      display: none;
+    }
+
+    /* File List */
+    .file-list {
+      margin-bottom: 24px;
+    }
+
+    .file-list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .file-list-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .file-list-header .count {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .file-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .file-item:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .file-item .file-icon {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-light);
+      border-radius: var(--radius-sm);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .file-item .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .file-item .file-name {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-item .file-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .file-item .file-status {
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+
+    .file-item .file-status.ok {
+      color: #16a34a;
+      background: rgba(22, 163, 74, 0.08);
+    }
+
+    .file-item .file-status.error {
+      color: var(--danger);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .file-item .file-remove {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      color: var(--text-faint);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .file-item .file-remove:hover {
+      background: rgba(239, 68, 68, 0.08);
+      color: var(--danger);
+    }
+
+    .clear-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .clear-all:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    /* Error Banner */
+    .error-banner {
+      padding: 12px 16px;
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.15);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: var(--danger);
+    }
+
+    /* Chart Grid */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .chart-card:hover {
+      box-shadow: var(--shadow);
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .chart-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      height: 300px;
+    }
+
+    .chart-canvas-wrap canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      color: var(--text-faint);
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      max-width: 320px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .sample-data {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+      color: var(--text-muted);
+      text-align: left;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .sample-data code {
+      display: block;
+      line-height: 1.8;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 20px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📈 TXT 数据可视化</h1>
+      <p>拖拽上传 TXT 文件，自动生成折线图</p>
+    </header>
+
+    <div class="upload-zone" id="uploadZone">
+      <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <h3>点击或拖拽上传 TXT 文件</h3>
+      <p>支持批量上传，自动解析空格/制表符分隔数据</p>
+      <input type="file" id="fileInput" accept=".txt" multiple>
+    </div>
+
+    <div id="errorContainer"></div>
+
+    <div class="file-list" id="fileListSection" style="display:none;">
+      <div class="file-list-header">
+        <h3>已上传文件 <span class="count" id="fileCount"></span></h3>
+        <button class="clear-all" id="clearAll">🗑 清空全部</button>
+      </div>
+      <div class="file-items" id="fileItems"></div>
+    </div>
+
+    <div id="chartContainer">
+      <div class="empty-state" id="emptyState">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>还没有数据</h3>
+        <p>上传 TXT 文件，每行两个数值（空格分隔），即可生成折线图</p>
+        <div class="sample-data">
+          <code>
+# 这是注释行，会被忽略<br>
+0.0  1.2<br>
+0.1  2.5<br>
+0.2  3.1<br>
+0.3  2.8
+          </code>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>纯前端工具 · 数据不上传服务器</p>
+    </footer>
+  </div>
+
+  <script>
+    // ===== State =====
+    const files = new Map(); // name -> { file, data, error }
+    const charts = new Map(); // name -> Chart instance
+
+    // ===== DOM =====
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileListSection = document.getElementById('fileListSection');
+    const fileItems = document.getElementById('fileItems');
+    const fileCount = document.getElementById('fileCount');
+    const clearAllBtn = document.getElementById('clearAll');
+    const errorContainer = document.getElementById('errorContainer');
+    const chartContainer = document.getElementById('chartContainer');
+    const emptyState = document.getElementById('emptyState');
+
+    // ===== Upload Events =====
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+      uploadZone.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('drag-over');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+      fileInput.value = '';
+    });
+
+    clearAllBtn.addEventListener('click', clearAll);
+
+    // ===== File Handling =====
+    function handleFiles(fileList) {
+      const newFiles = Array.from(fileList).filter(f => f.name.endsWith('.txt'));
+      const rejected = Array.from(fileList).filter(f => !f.name.endsWith('.txt'));
+
+      if (rejected.length > 0) {
+        showError(`已跳过 ${rejected.length} 个非 TXT 文件`);
+      }
+
+      for (const file of newFiles) {
+        if (files.has(file.name)) continue;
+        files.set(file.name, { file, data: null, error: null });
+        parseFile(file);
+      }
+
+      updateUI();
+    }
+
+    function parseFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target.result;
+        const result = parseData(text, file.name);
+        const entry = files.get(file.name);
+        if (result.error) {
+          entry.error = result.error;
+        } else {
+          entry.data = result.data;
+        }
+        updateUI();
+      };
+      reader.onerror = () => {
+        files.get(file.name).error = '读取文件失败';
+        updateUI();
+      };
+      reader.readAsText(file);
+    }
+
+    function parseData(text, filename) {
+      const lines = text.split(/\r?\n/);
+      const data = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line || line.startsWith('#')) continue;
+
+        // Split by spaces or tabs
+        const parts = line.split(/\s+/).filter(p => p.length > 0);
+        if (parts.length < 2) {
+          return { error: `${filename} 第 ${i + 1} 行格式错误：需要至少两个数值` };
+        }
+
+        const nums = parts.map(p => parseFloat(p));
+        if (nums.some(isNaN)) {
+          return { error: `${filename} 第 ${i + 1} 行包含非数值内容` };
+        }
+
+        data.push(nums);
+      }
+
+      if (data.length === 0) {
+        return { error: `${filename} 不包含有效数据行` };
+      }
+
+      return { data };
+    }
+
+    // ===== UI Updates =====
+    function updateUI() {
+      // File list
+      const entries = Array.from(files.entries());
+      if (entries.length === 0) {
+        fileListSection.style.display = 'none';
+      } else {
+        fileListSection.style.display = 'block';
+        fileCount.textContent = `(${entries.length})`;
+        fileItems.innerHTML = entries.map(([name, entry]) => `
+          <div class="file-item">
+            <div class="file-icon">TXT</div>
+            <div class="file-info">
+              <div class="file-name">${escapeHtml(name)}</div>
+              <div class="file-meta">${formatSize(entry.file.size)}${entry.data ? ` · ${entry.data.length} 行数据` : ''}</div>
+            </div>
+            <span class="file-status ${entry.error ? 'error' : 'ok'}">${entry.error ? '解析失败' : '已解析'}</span>
+            <button class="file-remove" data-name="${escapeHtml(name)}" title="删除">×</button>
+          </div>
+        `).join('');
+
+        // Bind remove buttons
+        fileItems.querySelectorAll('.file-remove').forEach(btn => {
+          btn.addEventListener('click', () => removeFile(btn.dataset.name));
+        });
+      }
+
+      // Charts
+      const validEntries = entries.filter(([, e]) => e.data);
+      if (validEntries.length === 0) {
+        chartContainer.innerHTML = '';
+        chartContainer.appendChild(emptyState);
+        emptyState.style.display = 'block';
+      } else {
+        emptyState.style.display = 'none';
+        // Only create/update chart cards for valid entries
+        const existingCards = new Set();
+        for (const [name, entry] of validEntries) {
+          existingCards.add(name);
+          let card = document.getElementById(`chart-${name}`);
+          if (!card) {
+            card = createChartCard(name, entry.data);
+            chartContainer.appendChild(card);
+          }
+        }
+        // Remove cards for deleted/invalid files
+        Array.from(chartContainer.children).forEach(child => {
+          if (child.id && child.id.startsWith('chart-')) {
+            const name = child.id.slice(6);
+            if (!existingCards.has(name)) {
+              const chart = charts.get(name);
+              if (chart) chart.destroy();
+              charts.delete(name);
+              child.remove();
+            }
+          }
+        });
+      }
+    }
+
+    function createChartCard(name, data) {
+      const cardId = `chart-${name}`;
+      const canvasId = `canvas-${name}`;
+      const div = document.createElement('div');
+      div.className = 'chart-grid';
+      div.id = cardId;
+
+      // Each column after first becomes a separate chart
+      const colCount = data[0].length - 1;
+      for (let col = 1; col <= colCount; col++) {
+        const singleCanvasId = `${canvasId}-${col}`;
+        const title = colCount === 1 ? name.replace(/\.txt$/i, '') : `${name.replace(/\.txt$/i, '')} — 第 ${col} 列`;
+
+        div.innerHTML += `
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title">${escapeHtml(title)}</span>
+              <div class="chart-actions">
+                <button class="btn-icon" data-canvas="${singleCanvasId}" data-name="${escapeHtml(title)}">⬇ 下载 PNG</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap">
+              <canvas id="${singleCanvasId}"></canvas>
+            </div>
+          </div>
+        `;
+
+        // Defer chart creation to next tick so canvas is in DOM
+        setTimeout(() => {
+          const ctx = document.getElementById(singleCanvasId)?.getContext('2d');
+          if (!ctx) return;
+
+          const xLabels = data.map((_, i) => i + 1);
+          const yData = data.map(row => row[col]);
+
+          const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: xLabels,
+              datasets: [{
+                label: '数值',
+                data: yData,
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                pointBackgroundColor: '#3b82f6',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                tension: 0.3,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: {
+                mode: 'index',
+                intersect: false
+              },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: 'rgba(26, 26, 46, 0.9)',
+                  titleFont: { size: 12 },
+                  bodyFont: { size: 13 },
+                  padding: 10,
+                  cornerRadius: 8,
+                  displayColors: false,
+                  callbacks: {
+                    title: () => '',
+                    label: (ctx) => `数值: ${ctx.parsed.y}`
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: { display: false },
+                  ticks: {
+                    font: { size: 11 },
+                    color: '#9ca3af',
+                    maxTicksLimit: 8
+                  },
+                  border: { display: false }
+                },
+                y: {
+                  grid: {
+                    color: 'rgba(0, 0, 0, 0.04)',
+                    drawBorder: false
+                  },
+                  ticks: {
+                    font: { size: 11 },
+                    color: '#9ca3af'
+                  },
+                  border: { display: false }
+                }
+              }
+            }
+          });
+
+          charts.set(singleCanvasId, chart);
+        }, 0);
+      }
+
+      // Bind download buttons
+      setTimeout(() => {
+        div.querySelectorAll('.btn-icon').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const canvas = document.getElementById(btn.dataset.canvas);
+            if (canvas) downloadPNG(canvas, btn.dataset.name);
+          });
+        });
+      }, 50);
+
+      return div;
+    }
+
+    function removeFile(name) {
+      const entry = files.get(name);
+      if (entry?.data) {
+        // Find and destroy charts
+        for (const [key, chart] of charts.entries()) {
+          if (key.includes(name)) {
+            chart.destroy();
+            charts.delete(key);
+          }
+        }
+      }
+      files.delete(name);
+      updateUI();
+    }
+
+    function clearAll() {
+      for (const [, chart] of charts) chart.destroy();
+      charts.clear();
+      files.clear();
+      updateUI();
+    }
+
+    function downloadPNG(canvas, name) {
+      const link = document.createElement('a');
+      link.download = `${name}_chart.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function showError(msg) {
+      errorContainer.innerHTML = `<div class="error-banner">${escapeHtml(msg)}</div>`;
+      setTimeout(() => { errorContainer.innerHTML = ''; }, 5000);
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+  </script>
+</body>
+</html>
