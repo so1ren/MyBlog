@@ -1,0 +1,27 @@
+{{ define "main" }}
+<main class="main">
+  <nav class="breadcrumb">
+    <a href="/">首页</a>
+    <span>/</span>
+    <span>工具</span>
+  </nav>
+
+  <div class="tool-list-container">
+    <h1>工具箱</h1>
+    <p>一些随手做的小工具，纯前端运行，数据不上传服务器</p>
+
+    <div class="tool-list">
+      {{ range .Pages }}
+      <a href="{{ .Permalink }}" class="tool-card">
+        <div class="tool-icon">{{ .Params.icon }}</div>
+        <div class="tool-info">
+          <h3>{{ .Title }}</h3>
+          <p>{{ .Description }}</p>
+        </div>
+        <span class="tool-arrow">→</span>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+</main>
+{{ end }}
