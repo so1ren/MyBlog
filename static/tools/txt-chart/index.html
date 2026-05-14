@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TXT 数据可视化 — 快速作图</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
   <style>
     :root {
       --bg: #f8f9fb;
@@ -446,6 +445,121 @@
       user-select: none;
     }
 
+    .selection-box {
+      position: absolute;
+      border: 2px dashed var(--accent);
+      background: var(--accent-light);
+      pointer-events: none;
+      z-index: 100;
+      display: none;
+      border-radius: 4px;
+    }
+
+    .crop-toolbar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .crop-toolbar.visible {
+      display: flex;
+    }
+
+    .crop-toolbar .crop-info {
+      flex: 1;
+      color: var(--text-muted);
+    }
+
+    .crop-toolbar .crop-info strong {
+      color: var(--text);
+    }
+
+    .btn-crop {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-crop:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-cancel {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-cancel:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+    }
+
+    .crop-status {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      background: rgba(34, 197, 94, 0.06);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: #16a34a;
+    }
+
+    .crop-status.visible {
+      display: flex;
+    }
+
+    .btn-restore {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #16a34a;
+      background: rgba(22, 163, 74, 0.08);
+      border: 1px solid rgba(22, 163, 74, 0.2);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-restore:hover {
+      background: rgba(22, 163, 74, 0.15);
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      height: 300px;
+    }
+
     footer {
       text-align: center;
       padding: 40px 0 20px;
@@ -488,7 +602,6 @@
         <div class="chart-header">
           <span class="chart-title">📊 叠加对比图</span>
           <div class="chart-actions">
-            <button class="btn-icon" id="resetOverlay">⟲ 重置视图</button>
             <button class="btn-icon" id="downloadOverlay">⬇ 下载 PNG</button>
             <button class="btn-icon" id="clearOverlay">✕ 关闭</button>
           </div>
@@ -496,7 +609,7 @@
         <div class="chart-canvas-wrap" style="height:400px;">
           <canvas id="overlayCanvas"></canvas>
         </div>
-        <div class="chart-hint">滚轮缩放 · 拖拽平移 · Shift+框选放大</div>
+        <div class="chart-hint">叠加图暂不支持裁剪</div>
       </div>
     </div>
 
@@ -738,19 +851,30 @@
         const singleCanvasId = `${canvasId}-${col}`;
         const title = colCount === 1 ? name.replace(/\.txt$/i, '') : `${name.replace(/\.txt$/i, '')} — 第 ${col} 列`;
 
+        const cardId2 = 'card-' + singleCanvasId;
         div.innerHTML += `
-          <div class="chart-card">
+          <div class="chart-card" id="${cardId2}">
             <div class="chart-header">
               <span class="chart-title">${escapeHtml(title)}</span>
               <div class="chart-actions">
-                <button class="btn-icon reset-zoom" data-chart="${singleCanvasId}">⟲ 重置视图</button>
+                <button class="btn-icon restore-data" data-chart="${singleCanvasId}" style="display:none;">↩ 恢复原始数据</button>
                 <button class="btn-icon" data-canvas="${singleCanvasId}" data-name="${escapeHtml(title)}">⬇ 下载 PNG</button>
               </div>
             </div>
-            <div class="chart-canvas-wrap">
-              <canvas id="${singleCanvasId}"></canvas>
+            <div class="crop-toolbar" id="toolbar-${singleCanvasId}">
+              <span class="crop-info" id="info-${singleCanvasId}">已选择范围</span>
+              <button class="btn-crop" data-chart="${singleCanvasId}">✂️ 裁剪至此范围</button>
+              <button class="btn-cancel" data-chart="${singleCanvasId}">取消</button>
             </div>
-            <div class="chart-hint">滚轮缩放 · 拖拽平移 · Shift+框选放大</div>
+            <div class="crop-status" id="status-${singleCanvasId}">
+              <span id="status-text-${singleCanvasId}"></span>
+              <button class="btn-restore" data-chart="${singleCanvasId}">↩ 恢复</button>
+            </div>
+            <div class="chart-canvas-wrap" id="wrap-${singleCanvasId}">
+              <canvas id="${singleCanvasId}"></canvas>
+              <div class="selection-box" id="sel-${singleCanvasId}"></div>
+            </div>
+            <div class="chart-hint">Shift + 拖拽框选范围进行裁剪</div>
           </div>
         `;
 
@@ -824,19 +948,18 @@
                     title: () => '',
                     label: (ctx) => `数值: ${ctx.parsed.y}`
                   }
-                },
-                zoom: {
-                  pan: { enabled: true, mode: 'xy' },
-                  zoom: {
-                    wheel: { enabled: true },
-                    drag: { enabled: true, modifierKey: 'shift' },
-                    pinch: { enabled: true },
-                    mode: 'xy'
-                  }
                 }
               }
             }
           });
+
+          // Store original data for restore
+          chart._originalData = {
+            labels: [...xLabels],
+            data: [...yData],
+            fullLength: data.length
+          };
+          chart._chartId = singleCanvasId;
 
           charts.set(singleCanvasId, chart);
         }, 0);
@@ -850,11 +973,14 @@
             if (canvas) downloadPNG(canvas, btn.dataset.name);
           });
         });
-        div.querySelectorAll('.reset-zoom').forEach(btn => {
+        div.querySelectorAll('.restore-data').forEach(btn => {
           btn.addEventListener('click', () => {
-            const chart = charts.get(btn.dataset.chart);
-            if (chart && chart.resetZoom) chart.resetZoom();
+            restoreChartData(btn.dataset.chart);
           });
+        });
+        // Setup selection for each chart
+        div.querySelectorAll('.chart-canvas-wrap').forEach(wrap => {
+          setupSelection(wrap);
         });
       }, 50);
 
@@ -907,6 +1033,201 @@
       return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
+    // ===== Selection & Crop Functions =====
+    function setupSelection(wrap) {
+      const canvas = wrap.querySelector('canvas');
+      const selBox = wrap.querySelector('.selection-box');
+      if (!canvas || !selBox) return;
+
+      let isSelecting = false;
+      let startX = 0, startY = 0;
+      let selectionRange = null;
+
+      wrap.addEventListener('mousedown', (e) => {
+        if (!e.shiftKey) return;
+        e.preventDefault();
+        isSelecting = true;
+        const rect = wrap.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+        selBox.style.display = 'block';
+        selBox.style.left = startX + 'px';
+        selBox.style.top = startY + 'px';
+        selBox.style.width = '0px';
+        selBox.style.height = '0px';
+        selectionRange = null;
+        hideCropToolbar(canvas.id);
+      });
+
+      wrap.addEventListener('mousemove', (e) => {
+        if (!isSelecting) return;
+        const rect = wrap.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const left = Math.min(startX, x);
+        const top = Math.min(startY, y);
+        const width = Math.abs(x - startX);
+        const height = Math.abs(y - startY);
+        selBox.style.left = left + 'px';
+        selBox.style.top = top + 'px';
+        selBox.style.width = width + 'px';
+        selBox.style.height = height + 'px';
+      });
+
+      wrap.addEventListener('mouseup', (e) => {
+        if (!isSelecting) return;
+        isSelecting = false;
+        const rect = wrap.getBoundingClientRect();
+        const endX = e.clientX - rect.left;
+        const endY = e.clientY - rect.top;
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        if (width < 10 || height < 10) {
+          selBox.style.display = 'none';
+          return;
+        }
+
+        const chart = charts.get(canvas.id);
+        if (!chart) return;
+
+        // Convert pixel to data values
+        const xScale = chart.scales.x;
+        const xMin = xScale.getValueForPixel(Math.min(startX, endX));
+        const xMax = xScale.getValueForPixel(Math.max(startX, endX));
+
+        if (xMin === null || xMax === null) {
+          selBox.style.display = 'none';
+          return;
+        }
+
+        selectionRange = { xMin, xMax };
+
+        // Count points in range
+        const orig = chart._originalData;
+        const inRange = orig.labels.filter((v, i) => v >= xMin && v <= xMax).length;
+
+        showCropToolbar(canvas.id, xMin, xMax, inRange, orig.fullLength);
+      });
+
+      wrap.addEventListener('mouseleave', () => {
+        if (isSelecting) {
+          isSelecting = false;
+          selBox.style.display = 'none';
+        }
+      });
+    }
+
+    function showCropToolbar(chartId, xMin, xMax, inRange, total) {
+      const toolbar = document.getElementById('toolbar-' + chartId);
+      const info = document.getElementById('info-' + chartId);
+      if (!toolbar || !info) return;
+
+      info.innerHTML = `已选择 X: <strong>${xMin.toFixed(2)} ~ ${xMax.toFixed(2)}</strong> 范围内的 <strong>${inRange}</strong> 个点`;
+      toolbar.classList.add('visible');
+      toolbar.dataset.xMin = xMin;
+      toolbar.dataset.xMax = xMax;
+
+      // Bind crop button
+      const cropBtn = toolbar.querySelector('.btn-crop');
+      const cancelBtn = toolbar.querySelector('.btn-cancel');
+
+      const doCrop = () => {
+        const min = parseFloat(toolbar.dataset.xMin);
+        const max = parseFloat(toolbar.dataset.xMax);
+        cropChartData(chartId, min, max);
+        toolbar.classList.remove('visible');
+      };
+      const doCancel = () => {
+        toolbar.classList.remove('visible');
+        const wrap = document.getElementById('wrap-' + chartId);
+        if (wrap) wrap.querySelector('.selection-box').style.display = 'none';
+      };
+
+      cropBtn.replaceWith(cropBtn.cloneNode(true));
+      cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+      toolbar.querySelector('.btn-crop').addEventListener('click', doCrop);
+      toolbar.querySelector('.btn-cancel').addEventListener('click', doCancel);
+    }
+
+    function hideCropToolbar(chartId) {
+      const toolbar = document.getElementById('toolbar-' + chartId);
+      if (toolbar) toolbar.classList.remove('visible');
+    }
+
+    function cropChartData(chartId, xMin, xMax) {
+      const chart = charts.get(chartId);
+      if (!chart || !chart._originalData) return;
+
+      const orig = chart._originalData;
+      const indices = [];
+      const newLabels = [];
+      const newData = [];
+
+      for (let i = 0; i < orig.labels.length; i++) {
+        const v = orig.labels[i];
+        if (v >= xMin && v <= xMax) {
+          indices.push(i);
+          newLabels.push(v);
+          newData.push(orig.data[i]);
+        }
+      }
+
+      if (newLabels.length === 0) return;
+
+      chart.data.labels = newLabels;
+      chart.data.datasets[0].data = newData;
+      chart.data.datasets[0].pointRadius = getPointRadius(newLabels.length);
+      chart.data.datasets[0].pointHoverRadius = getPointHoverRadius(newLabels.length);
+      chart.data.datasets[0].tension = newLabels.length > 500 ? 0.1 : 0.3;
+      chart.update('none');
+
+      // Show crop status
+      const pct = ((newLabels.length / orig.fullLength) * 100).toFixed(1);
+      const status = document.getElementById('status-' + chartId);
+      const statusText = document.getElementById('status-text-' + chartId);
+      if (status && statusText) {
+        statusText.textContent = `已裁剪：显示 ${newLabels.length}/${orig.fullLength} 点 (${pct}%)`;
+        status.classList.add('visible');
+      }
+
+      // Hide selection box
+      const wrap = document.getElementById('wrap-' + chartId);
+      if (wrap) wrap.querySelector('.selection-box').style.display = 'none';
+
+      // Show restore button in header
+      const card = document.getElementById('card-' + chartId);
+      if (card) {
+        const restoreBtn = card.querySelector('.restore-data');
+        if (restoreBtn) restoreBtn.style.display = 'inline-flex';
+      }
+    }
+
+    function restoreChartData(chartId) {
+      const chart = charts.get(chartId);
+      if (!chart || !chart._originalData) return;
+
+      const orig = chart._originalData;
+      chart.data.labels = [...orig.labels];
+      chart.data.datasets[0].data = [...orig.data];
+      chart.data.datasets[0].pointRadius = getPointRadius(orig.fullLength);
+      chart.data.datasets[0].pointHoverRadius = getPointHoverRadius(orig.fullLength);
+      chart.data.datasets[0].tension = orig.fullLength > 500 ? 0.1 : 0.3;
+      chart.update('none');
+
+      // Hide status
+      const status = document.getElementById('status-' + chartId);
+      if (status) status.classList.remove('visible');
+
+      // Hide restore button in header
+      const card = document.getElementById('card-' + chartId);
+      if (card) {
+        const restoreBtn = card.querySelector('.restore-data');
+        if (restoreBtn) restoreBtn.style.display = 'none';
+      }
+    }
+
     // ===== Overlay Functions =====
     const overlayBtn = document.getElementById('overlayBtn');
     const overlaySection = document.getElementById('overlaySection');
@@ -919,9 +1240,7 @@
       if (canvas) downloadPNG(canvas, 'overlay_chart');
     });
     clearOverlayBtn.addEventListener('click', clearOverlay);
-    document.getElementById('resetOverlay').addEventListener('click', () => {
-      if (overlayChart && overlayChart.resetZoom) overlayChart.resetZoom();
-    });
+
 
     function updateOverlayButton() {
       const checked = Array.from(files.values()).filter(e => e.checked && e.data).length;
