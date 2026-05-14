@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工具箱 — Solren的网络自留地</title>
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
+      --border: #e5e7eb;
+      --border-hover: #d1d5db;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: rgba(59, 130, 246, 0.08);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115;
+        --surface: #1a1d23;
+        --text: #e8eaed;
+        --text-muted: #9aa0a6;
+        --text-faint: #5f6368;
+        --border: #2d3139;
+        --border-hover: #3c4047;
+        --accent: #60a5fa;
+        --accent-hover: #3b82f6;
+        --accent-light: rgba(96, 165, 250, 0.08);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .tool-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tool-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .tool-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .tool-icon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-light);
+      border-radius: var(--radius-md);
+      color: var(--accent);
+      font-size: 24px;
+    }
+
+    .tool-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tool-info h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .tool-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .tool-arrow {
+      flex-shrink: 0;
+      color: var(--text-faint);
+      font-size: 20px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .tool-arrow {
+      color: var(--accent);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 20px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    @media (max-width: 480px) {
+      .tool-card {
+        padding: 18px;
+      }
+      .tool-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧰 工具箱</h1>
+      <p>一些随手做的小工具，纯前端运行，数据不上传服务器</p>
+    </header>
+
+    <div class="tool-list">
+      <a class="tool-card" href="/tools/txt-chart/">
+        <div class="tool-icon">📈</div>
+        <div class="tool-info">
+          <h3>TXT 数据可视化</h3>
+          <p>拖拽上传 TXT 文件，自动解析空格分隔数据，生成折线图。支持批量上传、多文件叠加对比、数据范围裁剪，可下载 PNG。</p>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+
+      <a class="tool-card" href="/echem-analyzer/">
+        <div class="tool-icon">⚡</div>
+        <div class="tool-info">
+          <h3>电化学分析工具</h3>
+          <p>电化学数据分析与可视化工具。</p>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+    </div>
+
+    <footer>
+      <p>© Solren的网络自留地</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -147,7 +147,7 @@ menu:
       weight: 10
     - identifier: tools
       name: 工具
-      url: /tools/txt-chart/
+      url: /tools/
       weight: 20
     - identifier: search
       name: 搜索
