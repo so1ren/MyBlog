@@ -145,6 +145,10 @@ menu:
       name: 系列
       url: /series/
       weight: 10
+    - identifier: tools
+      name: 工具
+      url: /tools/txt-chart/
+      weight: 20
     - identifier: search
       name: 搜索
       url: /search/
