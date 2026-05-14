@@ -368,6 +368,36 @@
 }
 
 /* ============================================================
+   Profile 按钮
+   ============================================================ */
+.profile-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 10px 0 14px;
+}
+
+.profile-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm, 6px);
+    background: var(--surface);
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--primary-subtle);
+}
+
+/* ============================================================
    响应式
    ============================================================ */
 @media (max-width: 768px) {

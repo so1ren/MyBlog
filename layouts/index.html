@@ -30,6 +30,13 @@
             <h1 class="home-title">{{ site.Title }}</h1>
             {{- with site.Params.profileMode }}
             <p class="home-subtitle">{{ .subtitle | markdownify }}</p>
+            {{- if .buttons }}
+            <div class="profile-buttons">
+                {{- range .buttons }}
+                <a href="{{ .url | absURL }}" class="profile-button">{{ .name }}</a>
+                {{- end }}
+            </div>
+            {{- end }}
             {{- end }}
             {{- partial "social_icons.html" (dict "align" "left") -}}
         </div>
@@ -129,6 +136,16 @@
                 <div class="home-series-body">
                     <h3 class="home-series-name">EChem Analyzer</h3>
                     <p class="home-series-desc">电化学数据自动化处理 — 支持 CV / EIS 数据提取、循环分割与 Origin 格式输出</p>
+                </div>
+                <span class="home-series-arrow">→</span>
+            </a>
+            <a href="/tools/txt-chart/" class="home-series-item" target="_blank" rel="noopener">
+                <div class="home-series-count">
+                    <span class="home-series-n">📈</span>
+                </div>
+                <div class="home-series-body">
+                    <h3 class="home-series-name">TXT 数据可视化</h3>
+                    <p class="home-series-desc">拖拽上传 TXT 文件，自动生成折线图。支持批量上传、多文件叠加对比、数据范围裁剪。</p>
                 </div>
                 <span class="home-series-arrow">→</span>
             </a>
