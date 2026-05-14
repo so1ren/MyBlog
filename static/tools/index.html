@@ -19,18 +19,16 @@
       --t-fast:          0.15s cubic-bezier(0.25, 1, 0.5, 1);
       --t-smooth:        0.25s cubic-bezier(0.25, 1, 0.5, 1);
     }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg:            oklch(18% 0.015 250);
-        --surface:       oklch(22% 0.015 250);
-        --surface2:      oklch(30% 0.08  240);
-        --text:          oklch(90% 0.008 250);
-        --text2:         oklch(70% 0.010 250);
-        --accent:        oklch(65% 0.12  240);
-        --accent-hover:  oklch(72% 0.10  240);
-        --border:        oklch(30% 0.012 250);
-      }
+    html.dark {
+      --bg:            oklch(18% 0.015 250);
+      --surface:       oklch(22% 0.015 250);
+      --surface2:      oklch(30% 0.08  240);
+      --text:          oklch(90% 0.008 250);
+      --text2:         oklch(70% 0.010 250);
+      --accent:        oklch(65% 0.12  240);
+      --accent-hover:  oklch(72% 0.10  240);
+      --border:        oklch(30% 0.012 250);
+    }
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -131,15 +129,145 @@
       margin-top: 2.5rem;
     }
 
-    @keyframes fadeInUp {
+  
+  /* ---- 顶部导航栏 ---- */
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a {
+    font-size: 0.9rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover {
+    color: var(--accent);
+  }
+
+  /* Theme toggle */
+  .theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+  }
+  .theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 24px;
+    transition: background 0.3s;
+  }
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: var(--surface);
+    border-radius: 50%;
+    transition: transform 0.3s;
+  }
+  .theme-switch input:checked + .slider {
+    background: var(--accent);
+  }
+  .theme-switch input:checked + .slider::before {
+    transform: translateX(20px);
+  }
+
+  /* ---- 面包屑 ---- */
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-bottom: 1rem;
+  }
+  .breadcrumb a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  .breadcrumb span {
+    margin: 0 0.35rem;
+  }
+
+  @media (max-width: 768px) {
+    .nav-inner {
+      padding: 0 1rem;
+    }
+    .nav-links {
+      gap: 0.75rem;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+    }
+  }
+
+  @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
+<!-- 顶部导航栏 -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Solren的网络自留地</a>
+    <ul class="nav-links">
+      <li><a href="/posts/">文章</a></li>
+      <li><a href="/series/">系列</a></li>
+      <li><a href="/tools/">工具</a></li>
+      <li><a href="/search/">搜索</a></li>
+      <li><a href="/about/">关于</a></li>
+    </ul>
+    <label class="theme-switch" for="nav-theme-toggle">
+      <input type="checkbox" id="nav-theme-toggle">
+      <div class="slider"></div>
+    </label>
+  </div>
+</nav>
   <div class="container">
-    <a href="/" class="back-link">← 回到首页</a>
+    <div class="breadcrumb">
+      <a href="/">首页</a>
+      <span>/</span>
+      <span>工具</span>
+    </div>
     <header>
       <h1>工具箱</h1>
       <p>纯前端数据处理工具，数据不上传服务器</p>
@@ -165,5 +293,25 @@
       caiyu.life · 工具箱 · 本地处理，数据安全
     </footer>
   </div>
+
+<script>
+  (function(){
+    const key = 'pref-theme';
+    const isDark = localStorage.getItem(key) === 'dark' ||
+      (!localStorage.getItem(key) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if (isDark) document.documentElement.classList.add('dark');
+    const toggle = document.getElementById('nav-theme-toggle');
+    if (toggle) toggle.checked = isDark;
+    if (toggle) toggle.addEventListener('change', function() {
+      if (this.checked) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem(key, 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem(key, 'light');
+      }
+    });
+  })();
+</script>
 </body>
 </html>
