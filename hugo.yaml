@@ -97,6 +97,8 @@ params:
     buttons:
       - name: 文章
         url: "/posts/"
+      - name: 工具
+        url: "/tools/"
       - name: 关于
         url: "/about/"
 
