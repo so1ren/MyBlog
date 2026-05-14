@@ -656,7 +656,7 @@
           const ctx = document.getElementById(singleCanvasId)?.getContext('2d');
           if (!ctx) return;
 
-          const xLabels = data.map((_, i) => i + 1);
+          const xLabels = data.map(row => row[0]);
           const yData = data.map(row => row[col]);
 
           const chart = new Chart(ctx, {
