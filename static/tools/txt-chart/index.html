@@ -398,6 +398,45 @@
       line-height: 1.8;
     }
 
+    .file-check {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-overlay {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-overlay:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-overlay:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #overlaySection .chart-card {
+      border: 2px solid var(--accent);
+      box-shadow: var(--shadow-lg);
+    }
+
     footer {
       text-align: center;
       padding: 40px 0 20px;
@@ -427,9 +466,27 @@
     <div class="file-list" id="fileListSection" style="display:none;">
       <div class="file-list-header">
         <h3>已上传文件 <span class="count" id="fileCount"></span></h3>
-        <button class="clear-all" id="clearAll">🗑 清空全部</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-overlay" id="overlayBtn" disabled>📊 叠加绘图</button>
+          <button class="clear-all" id="clearAll">🗑 清空全部</button>
+        </div>
       </div>
       <div class="file-items" id="fileItems"></div>
+    </div>
+
+    <div id="overlaySection" style="display:none;margin-bottom:24px;">
+      <div class="chart-card" style="padding:24px;">
+        <div class="chart-header">
+          <span class="chart-title">📊 叠加对比图</span>
+          <div class="chart-actions">
+            <button class="btn-icon" id="downloadOverlay">⬇ 下载 PNG</button>
+            <button class="btn-icon" id="clearOverlay">✕ 关闭</button>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap" style="height:400px;">
+          <canvas id="overlayCanvas"></canvas>
+        </div>
+      </div>
     </div>
 
     <div id="chartContainer">
@@ -458,8 +515,32 @@
 
   <script>
     // ===== State =====
-    const files = new Map(); // name -> { file, data, error }
+    const files = new Map(); // name -> { file, data, error, checked }
     const charts = new Map(); // name -> Chart instance
+    let overlayChart = null;
+
+    const COLORS = [
+      '#3b82f6', '#ef4444', '#22c55e', '#f97316',
+      '#a855f7', '#06b6d4', '#ec4899', '#eab308',
+    ];
+
+    function getPointRadius(count) {
+      if (count <= 50) return 3;
+      if (count <= 200) return 2;
+      return 0;
+    }
+
+    function getPointHoverRadius(count) {
+      if (count <= 200) return 5;
+      return 4;
+    }
+
+    function getMaxTicksLimit(count) {
+      if (count <= 20) return count;
+      if (count <= 100) return 10;
+      if (count <= 500) return 8;
+      return 6;
+    }
 
     // ===== DOM =====
     const uploadZone = document.getElementById('uploadZone');
@@ -508,7 +589,7 @@
 
       for (const file of newFiles) {
         if (files.has(file.name)) continue;
-        files.set(file.name, { file, data: null, error: null });
+        files.set(file.name, { file, data: null, error: null, checked: false });
         parseFile(file);
       }
 
@@ -575,6 +656,7 @@
         fileCount.textContent = `(${entries.length})`;
         fileItems.innerHTML = entries.map(([name, entry]) => `
           <div class="file-item">
+            <input type="checkbox" class="file-check" data-name="${escapeHtml(name)}" ${entry.checked ? 'checked' : ''} ${entry.data ? '' : 'disabled'} title="选中以叠加绘图">
             <div class="file-icon">TXT</div>
             <div class="file-info">
               <div class="file-name">${escapeHtml(name)}</div>
@@ -588,6 +670,14 @@
         // Bind remove buttons
         fileItems.querySelectorAll('.file-remove').forEach(btn => {
           btn.addEventListener('click', () => removeFile(btn.dataset.name));
+        });
+        // Bind checkboxes
+        fileItems.querySelectorAll('.file-check').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const entry = files.get(cb.dataset.name);
+            if (entry) entry.checked = cb.checked;
+            updateOverlayButton();
+          });
         });
       }
 
@@ -659,6 +749,7 @@
           const xLabels = data.map(row => row[0]);
           const yData = data.map(row => row[col]);
 
+          const dlen = data.length;
           const chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -669,12 +760,12 @@
                 borderColor: '#3b82f6',
                 backgroundColor: 'rgba(59, 130, 246, 0.08)',
                 borderWidth: 2,
-                pointRadius: 3,
-                pointHoverRadius: 5,
+                pointRadius: getPointRadius(dlen),
+                pointHoverRadius: getPointHoverRadius(dlen),
                 pointBackgroundColor: '#3b82f6',
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2,
-                tension: 0.3,
+                tension: dlen > 500 ? 0.1 : 0.3,
                 fill: true
               }]
             },
@@ -706,7 +797,7 @@
                   ticks: {
                     font: { size: 11 },
                     color: '#9ca3af',
-                    maxTicksLimit: 8
+                    maxTicksLimit: getMaxTicksLimit(dlen)
                   },
                   border: { display: false }
                 },
@@ -786,6 +877,120 @@
       if (bytes < 1024) return `${bytes} B`;
       if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
       return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    // ===== Overlay Functions =====
+    const overlayBtn = document.getElementById('overlayBtn');
+    const overlaySection = document.getElementById('overlaySection');
+    const downloadOverlayBtn = document.getElementById('downloadOverlay');
+    const clearOverlayBtn = document.getElementById('clearOverlay');
+
+    overlayBtn.addEventListener('click', drawOverlay);
+    downloadOverlayBtn.addEventListener('click', () => {
+      const canvas = document.getElementById('overlayCanvas');
+      if (canvas) downloadPNG(canvas, 'overlay_chart');
+    });
+    clearOverlayBtn.addEventListener('click', clearOverlay);
+
+    function updateOverlayButton() {
+      const checked = Array.from(files.values()).filter(e => e.checked && e.data).length;
+      overlayBtn.disabled = checked < 2;
+      overlayBtn.textContent = checked >= 2 ? `📊 叠加绘图 (${checked})` : '📊 叠加绘图';
+    }
+
+    function drawOverlay() {
+      const selected = Array.from(files.entries())
+        .filter(([, e]) => e.checked && e.data)
+        .map(([name, e]) => ({ name: name.replace(/\.txt$/i, ''), data: e.data }));
+
+      if (selected.length < 2) return;
+
+      // Clear previous overlay
+      if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
+
+      // Build datasets
+      const datasets = selected.map((entry, idx) => {
+        const color = COLORS[idx % COLORS.length];
+        const dlen = entry.data.length;
+        return {
+          label: entry.name,
+          data: entry.data.map(row => row[1]),
+          borderColor: color,
+          backgroundColor: color + '14',
+          borderWidth: 2,
+          pointRadius: getPointRadius(dlen),
+          pointHoverRadius: getPointHoverRadius(dlen),
+          pointBackgroundColor: color,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          tension: dlen > 500 ? 0.1 : 0.3,
+          fill: false
+        };
+      });
+
+      // Use first file's X labels
+      const xLabels = selected[0].data.map(row => row[0]);
+
+      const ctx = document.getElementById('overlayCanvas').getContext('2d');
+      overlayChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: xLabels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'circle',
+                padding: 16,
+                font: { size: 12 }
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(26, 26, 46, 0.9)',
+              titleFont: { size: 12 },
+              bodyFont: { size: 12 },
+              padding: 10,
+              cornerRadius: 8,
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                font: { size: 11 },
+                color: '#9ca3af',
+                maxTicksLimit: getMaxTicksLimit(xLabels.length)
+              },
+              border: { display: false }
+            },
+            y: {
+              grid: { color: 'rgba(0, 0, 0, 0.04)', drawBorder: false },
+              ticks: { font: { size: 11 }, color: '#9ca3af' },
+              border: { display: false }
+            }
+          }
+        }
+      });
+
+      overlaySection.style.display = 'block';
+      overlaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function clearOverlay() {
+      if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
+      overlaySection.style.display = 'none';
+      // Uncheck all
+      for (const entry of files.values()) entry.checked = false;
+      updateOverlayButton();
+      updateUI();
     }
   </script>
 </body>
