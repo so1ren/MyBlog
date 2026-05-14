@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电化学数据处理器 | EChem Analyzer</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<style>
+  :root {
+    /* 适配 caiyu.life 设计系统 */
+    --bg:              oklch(98% 0.010 80);   /* 温暖纸白 */
+    --surface:         oklch(96% 0.010 80);   /* 次级背景 */
+    --surface2:        oklch(93% 0.02  240);  /* 墨蓝淡色 */
+    --text:            oklch(22% 0.015 50);   /* 深墨色 */
+    --text2:           oklch(52% 0.015 50);   /* 柔和灰 */
+    --accent:          oklch(48% 0.10  240);  /* 墨蓝 */
+    --accent-hover:    oklch(40% 0.12  240);  /* 悬停 */
+    --success:         oklch(55% 0.15  150);  /* 柔和绿 */
+    --warn:            oklch(65% 0.12  80);   /* 柔和黄 */
+    --danger:          oklch(55% 0.15  25);   /* 柔和红 */
+    --border:          oklch(88% 0.008 80);   /* 轻分割线 */
+    --border-subtle:   oklch(92% 0.005 80);   /* 细分隔线 */
+    --shadow-sm:       0 1px 3px oklch(0% 0 0 / 0.06);
+    --radius:          6px;
+    --t-fast:          0.15s cubic-bezier(0.25, 1, 0.5, 1);
+    --t-smooth:        0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* 暗色模式 */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:            oklch(18% 0.015 250);  /* 深蓝灰 */
+      --surface:       oklch(22% 0.015 250);  /* 次级背景 */
+      --surface2:      oklch(30% 0.08  240);  /* 墨蓝淡色 */
+      --text:          oklch(90% 0.008 250);  /* 柔和白 */
+      --text2:         oklch(70% 0.010 250);  /* 次级文本 */
+      --accent:        oklch(65% 0.12  240);  /* 亮墨蓝 */
+      --accent-hover:  oklch(72% 0.10  240);  /* 悬停 */
+      --border:        oklch(30% 0.012 250);  /* 边框 */
+      --border-subtle: oklch(38% 0.006 250);  /* 细分隔线 */
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: 'LXGW', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+  header {
+    text-align: center;
+    padding: 2.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  header h1 { font-size: 2rem; font-weight: 600; color: var(--accent); letter-spacing: -0.02em; }
+  header p { color: var(--text2); margin-top: 0.5rem; font-size: 0.95rem; }
+
+  .grid { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    animation: fadeInUp 0.4s var(--t-smooth) forwards;
+  }
+  .panel h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--t-fast);
+    background: var(--bg);
+  }
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--surface2);
+  }
+  .dropzone .icon { font-size: 2.5rem; margin-bottom: var(--space-xs); }
+  .dropzone p { color: var(--text2); font-size: var(--font-sm); }
+  .dropzone .formats { color: var(--text2); font-size: var(--font-xs); margin-top: var(--space-xs); }
+  input[type="file"] { display: none; }
+
+  .file-info {
+    margin-top: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--surface2);
+    border-radius: var(--radius);
+    font-size: var(--font-sm);
+  }
+  .file-info .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+  .tag-cv { background: rgba(52, 211, 153, 0.2); color: var(--success); }
+  .tag-eis { background: rgba(251, 191, 36, 0.2); color: var(--warn); }
+
+  .param-group { margin-bottom: 1.25rem; }
+  .param-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text2);
+    margin-bottom: 0.4rem;
+  }
+  .param-group input, .param-group select {
+    width: 100%;
+    padding: 0.65rem 0.875rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--t-fast);
+  }
+  .param-group input:focus, .param-group select:focus {
+    border-color: var(--accent);
+  }
+  .param-group .hint {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 0.35rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--t-fast);
+    width: 100%;
+    margin-top: 0.6rem;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--accent-hover); box-shadow: var(--shadow-sm); }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--border-subtle); }
+  .btn-success {
+    background: var(--surface2);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+  .btn-success:hover { background: var(--surface); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+    margin: 1.25rem 0;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 0.875rem;
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .stat .val { font-size: 1.15rem; font-weight: 600; color: var(--accent); }
+  .stat .lab { font-size: 0.8rem; color: var(--text2); }
+
+  .preview-box {
+    overflow-x: auto;
+    max-height: 400px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-xs);
+    font-variant-numeric: tabular-nums;
+  }
+  th, td {
+    padding: 0.6rem 0.875rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th {
+    background: var(--surface);
+    color: var(--accent);
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  td { color: var(--text); }
+  tr:hover td { background: var(--surface2); }
+
+  .output-area { margin-top: 1.25rem; }
+  textarea {
+    width: 100%;
+    min-height: 200px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Fira Code', 'Source Code Pro', monospace;
+    font-size: 0.82rem;
+    padding: 1rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color var(--t-fast);
+  }
+  textarea:focus { border-color: var(--accent); }
+
+  .msg {
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  .msg-info { background: var(--surface2); border-left: 3px solid var(--accent); }
+  .msg-success { background: var(--surface2); border-left: 3px solid var(--success); }
+  .msg-error { background: var(--surface2); border-left: 3px solid var(--danger); }
+
+  .hidden { display: none !important; }
+
+  .cycle-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .cycle-btn {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all var(--t-fast);
+  }
+  .cycle-btn:hover { border-color: var(--accent); }
+  .cycle-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--text2);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2.5rem;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>⚡ EChem Analyzer</h1>
+    <p>电化学测试数据自动化处理工具 — 支持 CV / EIS 数据提取与 Origin 格式输出</p>
+  </header>
+
+  <div id="message-area"></div>
+
+  <div class="grid">
+    <div class="left-col">
+      <div class="panel">
+        <h2>📁 文件上传</h2>
+        <div class="dropzone" id="dropzone">
+          <div class="icon">📤</div>
+          <p>拖拽文件到此处，或点击选择</p>
+          <div class="formats">支持 .xlsx / .csv / .cor / .txt / .z</div>
+        </div>
+        <input type="file" id="fileInput" accept=".xlsx,.csv,.cor,.txt,.z">
+        <div id="fileInfo" class="file-info hidden"></div>
+      </div>
+
+      <div class="panel" style="margin-top: 1.5rem;">
+        <h2>⚙️ 处理参数</h2>
+
+        <div class="param-group">
+          <label>数据类型</label>
+          <select id="dataType">
+            <option value="auto">🔍 自动识别</option>
+            <option value="cv">📉 循环伏安 (CV)</option>
+            <option value="eis">📊 交流阻抗 (EIS)</option>
+          </select>
+        </div>
+
+        <div class="param-group">
+          <label>样品质量 (g)</label>
+          <input type="number" id="sampleMass" placeholder="留空则不进行质量归一化" step="0.0001">
+          <div class="hint">用于电流 / 阻抗的质量归一化 (A·g⁻¹ 或 Ω·g)</div>
+        </div>
+
+        <div id="cvOptions" class="hidden">
+          <div class="param-group">
+            <label>CV 循环选择</label>
+            <div class="cycle-selector" id="cycleSelector"></div>
+            <div class="hint" id="cycleHint">自动选择最后一圈</div>
+          </div>
+        </div>
+
+        <div id="eisOptions" class="hidden">
+          <div class="param-group">
+            <label>虚部处理</label>
+            <select id="imagOption">
+              <option value="negate">取相反数 (-Z'')</option>
+              <option value="original">保持原始值 (Z'')</option>
+            </select>
+            <div class="hint">Origin 绘图通常使用 -Z'' 作为纵坐标</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="processBtn" disabled>🚀 处理数据</button>
+        <button class="btn btn-secondary" id="resetBtn" style="margin-top:0.5rem;">🔄 重置</button>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="panel">
+        <h2>📋 数据预览</h2>
+        <div id="statsArea" class="stats hidden"></div>
+        <div class="preview-box">
+          <table id="previewTable">
+            <thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top: 1.5rem;">
+        <h2>📤 输出结果 (Origin 格式)</h2>
+        <div class="output-area">
+          <textarea id="outputArea" placeholder="处理后的数据将显示在这里...
+可直接复制粘贴到 Origin
+格式：制表符分隔，第一行为列标题"></textarea>
+        </div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+          <button class="btn btn-success" id="copyBtn" style="flex:1;">📋 复制到剪贴板</button>
+          <button class="btn btn-secondary" id="downloadBtn" style="flex:1;">💾 下载 .txt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    EChem Analyzer · 本地处理，数据不上传服务器 · 专为电化学工作站数据设计
+  </footer>
+</div>
+
+<script>
+let rawData = [];
+let fileName = '';
+let detectedType = '';
+let processedData = [];
+let cycles = [];
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const dataType = document.getElementById('dataType');
+const sampleMass = document.getElementById('sampleMass');
+const cvOptions = document.getElementById('cvOptions');
+const eisOptions = document.getElementById('eisOptions');
+const cycleSelector = document.getElementById('cycleSelector');
+const processBtn = document.getElementById('processBtn');
+const resetBtn = document.getElementById('resetBtn');
+const previewTable = document.getElementById('previewTable');
+const statsArea = document.getElementById('statsArea');
+const outputArea = document.getElementById('outputArea');
+const copyBtn = document.getElementById('copyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const messageArea = document.getElementById('message-area');
+
+function showMsg(text, type='info') {
+  const el = document.createElement('div');
+  el.className = `msg msg-${type}`;
+  el.textContent = text;
+  messageArea.appendChild(el);
+  setTimeout(() => el.remove(), 6000);
+}
+
+function formatNum(v, digits=4) {
+  if (v === null || v === undefined || isNaN(v)) return '';
+  return parseFloat(v).toPrecision(digits);
+}
+
+// ===================== File handling =====================
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  if (files.length) handleFile(files[0]);
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+async function handleFile(file) {
+  fileName = file.name;
+  const ext = file.name.split('.').pop().toLowerCase();
+  let rows = [];
+
+  try {
+    if (ext === 'xlsx' || ext === 'xls') {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data, { type: 'array' });
+      const wsName = wb.SheetNames.find(n => n !== 'File List') || wb.SheetNames[0];
+      const ws = wb.Sheets[wsName];
+      rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
+    } else {
+      const text = await file.text();
+      rows = parseTextFile(text);
+    }
+  } catch (err) {
+    showMsg('读取文件失败: ' + err.message, 'error');
+    return;
+  }
+
+  rawData = rows;
+  detectType();
+  showFileInfo();
+  previewRaw();
+  processBtn.disabled = false;
+  showMsg('成功读取 ' + rows.length + ' 行数据', 'success');
+}
+
+function parseTextFile(text) {
+  const lines = text.split(/\r?\n/);
+  return lines.map(l => l.split(/[\t,;]/).map(c => {
+    const t = c.trim();
+    const n = parseFloat(t);
+    return isNaN(n) ? t : n;
+  }));
+}
+
+// ===================== Type detection =====================
+function detectType() {
+  const headerText = rawData.slice(0, 150).map(r => r.join(' ')).join(' ');
+  if (headerText.includes('MultiStat_DCData') || headerText.includes('Cyclic Voltammogram')) {
+    detectedType = 'cv';
+  } else if (headerText.includes('MultiStat_ACData') || headerText.includes('Impedance')) {
+    detectedType = 'eis';
+  } else {
+    const numRows = rawData.filter(r => r.length >= 2 && typeof r[0] === 'number' && typeof r[1] === 'number');
+    if (numRows.length > 10) {
+      const hasWideCurrent = numRows.slice(0, 20).some(r => Math.abs(r[2] || 0) > 1e-4);
+      detectedType = hasWideCurrent ? 'cv' : 'eis';
+    }
+  }
+  if (dataType.value === 'auto') {
+    updateUIForType();
+  }
+}
+
+function updateUIForType() {
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  cvOptions.classList.toggle('hidden', type !== 'cv');
+  eisOptions.classList.toggle('hidden', type !== 'eis');
+}
+
+dataType.addEventListener('change', updateUIForType);
+
+function showFileInfo() {
+  const type = detectedType === 'cv' ? 'CV' : (detectedType === 'eis' ? 'EIS' : '未知');
+  const tagClass = detectedType === 'cv' ? 'tag-cv' : 'tag-eis';
+  fileInfo.innerHTML = '<strong>📄 ' + fileName + '</strong><span class="tag ' + tagClass + '">' + type + '</span><br><span style="color:var(--text2);">总行数: ' + rawData.length + ' 行</span>';
+  fileInfo.classList.remove('hidden');
+}
+
+// ===================== Preview =====================
+function previewRaw() {
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  let previewRows = [];
+  let headers = [];
+
+  if (type === 'cv') {
+    headers = ['E(V)', 'I(A/cm²)'];
+    previewRows = extractCV().slice(0, 100);
+  } else if (type === 'eis') {
+    headers = ['Freq(Hz)', "Z'(Ω)", "Z''(Ω)"];
+    previewRows = extractEIS().slice(0, 100);
+  } else {
+    previewTable.innerHTML = '<thead><tr><th>请先选择数据类型</th></tr></thead><tbody></tbody>';
+    return;
+  }
+
+  let html = '<thead><tr>' + headers.map(h => '<th>' + h + '</th>').join('') + '</tr></thead><tbody>';
+  for (const row of previewRows) {
+    html += '<tr>';
+    if (type === 'cv') {
+      html += '<td>' + formatNum(row.e) + '</td><td>' + formatNum(row.i) + '</td>';
+    } else {
+      html += '<td>' + formatNum(row.freq) + '</td><td>' + formatNum(row.zRe) + '</td><td>' + formatNum(row.zIm) + '</td>';
+    }
+    html += '</tr>';
+  }
+  html += '</tbody>';
+  previewTable.innerHTML = html;
+
+  statsArea.innerHTML = '<div class="stat"><div class="val">' + previewRows.length + '+</div><div class="lab">数据点</div></div>' +
+    '<div class="stat"><div class="val">' + (type==='cv' ? (cycles.length || 1) + ' 圈' : 'Nyquist') + '</div><div class="lab">' + (type==='cv'?'循环':'类型') + '</div></div>';
+  statsArea.classList.remove('hidden');
+}
+
+// ===================== CV extraction =====================
+function extractCV() {
+  let dataStart = 0;
+  let tIdx = 0, eIdx = 1, iIdx = 2;
+  let hasHeader = false;
+
+  for (let i = 0; i < Math.min(rawData.length, 200); i++) {
+    const row = rawData[i];
+    const line = row.join(' ');
+    if (line.includes('T(Seconds)') && line.includes('E(V)') && line.includes('I(A')) {
+      for (let j = 0; j < row.length; j++) {
+        const h = String(row[j] || '').toLowerCase();
+        if (h.includes('t(') || h.includes('time')) tIdx = j;
+        if (h.includes('e(') || h.includes('potential') || h.includes('volt')) eIdx = j;
+        if (h.includes('i(') || h.includes('current') || h.includes('amp')) iIdx = j;
+      }
+      dataStart = i + 1;
+      hasHeader = true;
+      break;
+    }
+    if (line.includes('End Header')) {
+      dataStart = i + 1;
+    }
+  }
+
+  if (!hasHeader && dataStart === 0) {
+    for (let i = 0; i < rawData.length; i++) {
+      if (rawData[i].length >= 3 && typeof rawData[i][0] === 'number' && typeof rawData[i][1] === 'number') {
+        dataStart = i;
+        break;
+      }
+    }
+  }
+
+  const data = [];
+  for (let i = dataStart; i < rawData.length; i++) {
+    const row = rawData[i];
+    if (row.length < 3) continue;
+    const t = parseFloat(row[tIdx]);
+    const e = parseFloat(row[eIdx]);
+    const curr = parseFloat(row[iIdx]);
+    if (!isNaN(t) && !isNaN(e) && !isNaN(curr)) {
+      data.push({ t, e, i: curr });
+    }
+  }
+
+  cycles = detectCycles(data);
+  renderCycleSelector();
+  return data;
+}
+
+function detectCycles(data) {
+  if (data.length < 10) return [{ start: 0, end: data.length - 1, label: '全部数据' }];
+
+  // 1. Find direction changes (peaks and valleys)
+  const changes = [];
+  for (let i = 1; i < data.length - 1; i++) {
+    const d1 = data[i].e - data[i-1].e;
+    const d2 = data[i+1].e - data[i].e;
+    if (d1 * d2 < -1e-8) {
+      changes.push(i);
+    }
+  }
+
+  if (changes.length < 2) {
+    return [{ start: 0, end: data.length - 1, label: '全部数据' }];
+  }
+
+  // 2. Build scan direction segments
+  const segs = [];
+  let prev = 0;
+  for (const c of changes) {
+    segs.push({ start: prev, end: c });
+    prev = c;
+  }
+  segs.push({ start: prev, end: data.length - 1 });
+
+  // 3. Determine the direction of the last segment
+  const lastSegIsUp = data[segs[segs.length - 1].start].e < data[segs[segs.length - 1].end].e;
+
+  // Find segments with the same direction as the last segment
+  const sameDirSegIndices = [];
+  for (let i = 0; i < segs.length; i++) {
+    const isUp = data[segs[i].start].e < data[segs[i].end].e;
+    if (isUp === lastSegIsUp) {
+      sameDirSegIndices.push(i);
+    }
+  }
+
+  if (sameDirSegIndices.length < 2) {
+    return [{ start: 0, end: data.length - 1, label: '全部数据' }];
+  }
+
+  // 4. A cycle = partial same-dir + full opposite + partial same-dir (3 segments)
+  //    Pair consecutive same-direction segments from back to front
+  function findClosestE(targetE, segIdx) {
+    const s = segs[segIdx].start;
+    const e = segs[segIdx].end;
+    let bestIdx = s;
+    let bestDiff = Math.abs(data[s].e - targetE);
+    for (let i = s + 1; i <= e; i++) {
+      const diff = Math.abs(data[i].e - targetE);
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        bestIdx = i;
+      }
+    }
+    return bestIdx;
+  }
+
+  const rawCycles = [];
+  let currentEnd = data.length - 1;
+  let currentE = data[currentEnd].e;
+
+  for (let i = sameDirSegIndices.length - 1; i > 0; i--) {
+    const startSeg = sameDirSegIndices[i - 1];
+
+    // Find matching E in the previous same-direction segment
+    const matchIdx = findClosestE(currentE, startSeg);
+
+    rawCycles.push({
+      start: matchIdx,
+      end: currentEnd,
+      startE: data[matchIdx].e,
+      endE: data[currentEnd].e
+    });
+
+    currentEnd = matchIdx;
+    currentE = data[matchIdx].e;
+  }
+
+  // 5. Reverse to chronological order
+  const result = [];
+  for (let j = rawCycles.length - 1; j >= 0; j--) {
+    result.push({
+      start: rawCycles[j].start,
+      end: rawCycles[j].end,
+      label: '第 ' + (result.length + 1) + ' 圈'
+    });
+  }
+
+  return result.length ? result : [{ start: 0, end: data.length - 1, label: '全部数据' }];
+}
+
+function renderCycleSelector() {
+  cycleSelector.innerHTML = '';
+  if (cycles.length <= 1) {
+    cycleSelector.innerHTML = '<span style="color:var(--text2);font-size:0.8rem;">未检测到多圈循环</span>';
+    return;
+  }
+  cycles.forEach((c, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'cycle-btn' + (idx === cycles.length - 1 ? ' active' : '');
+    btn.textContent = c.label;
+    btn.dataset.index = idx;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cycle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+    cycleSelector.appendChild(btn);
+  });
+  document.getElementById('cycleHint').textContent = '共检测到 ' + cycles.length + ' 圈，默认选择最后一圈';
+}
+
+// ===================== EIS extraction =====================
+function extractEIS() {
+  let dataStart = 0;
+  let freqIdx = 0, zReIdx = 4, zImIdx = 5;
+  let hasHeader = false;
+
+  for (let i = 0; i < Math.min(rawData.length, 200); i++) {
+    const row = rawData[i];
+    const line = row.join(' ');
+    if (line.includes("Z'(a)") && line.includes("Z''(b)") && line.includes('Freq')) {
+      for (let j = 0; j < row.length; j++) {
+        const h = String(row[j] || '').toLowerCase();
+        if (h.includes('freq')) freqIdx = j;
+        if (h.includes("z'(a)") || h.includes('z.real') || h.includes('re(z)')) zReIdx = j;
+        if (h.includes("z''(b)") || h.includes('z.imag') || h.includes('im(z)')) zImIdx = j;
+      }
+      dataStart = i + 1;
+      hasHeader = true;
+      break;
+    }
+    if (line.includes('End Header')) {
+      dataStart = i + 1;
+    }
+  }
+
+  if (!hasHeader && dataStart === 0) {
+    for (let i = 0; i < rawData.length; i++) {
+      if (rawData[i].length >= 5 && typeof rawData[i][0] === 'number' && typeof rawData[i][4] === 'number') {
+        dataStart = i;
+        break;
+      }
+    }
+  }
+
+  const data = [];
+  for (let i = dataStart; i < rawData.length; i++) {
+    const row = rawData[i];
+    if (row.length < 6) continue;
+    const freq = parseFloat(row[freqIdx]);
+    const zRe = parseFloat(row[zReIdx]);
+    const zIm = parseFloat(row[zImIdx]);
+    if (!isNaN(freq) && !isNaN(zRe) && !isNaN(zIm)) {
+      data.push({ freq, zRe, zIm });
+    }
+  }
+  return data;
+}
+
+// ===================== Processing =====================
+processBtn.addEventListener('click', () => {
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  const mass = parseFloat(sampleMass.value);
+  const massNorm = !isNaN(mass) && mass > 0;
+
+  if (type === 'cv') {
+    const allData = extractCV();
+    if (!allData.length) { showMsg('未提取到 CV 数据', 'error'); return; }
+
+    let activeBtn = document.querySelector('.cycle-btn.active');
+    let cycleIdx = activeBtn ? parseInt(activeBtn.dataset.index) : cycles.length - 1;
+    if (cycleIdx < 0 || cycleIdx >= cycles.length) cycleIdx = cycles.length - 1;
+    const c = cycles[cycleIdx];
+    const cycleData = allData.slice(c.start, c.end + 1);
+
+    // Build output
+    const lines = ['E(V)\tI(A/cm²)' + (massNorm ? '\tI/g(A·g⁻¹)' : '')];
+    for (const pt of cycleData) {
+      let line = pt.e.toExponential(6) + '\t' + pt.i.toExponential(6);
+      if (massNorm) line += '\t' + (pt.i / mass).toExponential(6);
+      lines.push(line);
+    }
+
+    processedData = cycleData;
+    outputArea.value = lines.join('\n');
+    showMsg('CV 处理完成 — 已提取 ' + cycleData.length + ' 点 (' + c.label + ')', 'success');
+
+  } else if (type === 'eis') {
+    const data = extractEIS();
+    if (!data.length) { showMsg('未提取到 EIS 数据', 'error'); return; }
+
+    const negate = document.getElementById('imagOption').value === 'negate';
+    const lines = ['Freq(Hz)\tZ\'(Ω)\t-Z\'\'(Ω)' + (massNorm ? '\tZ\'/g\t-Z\'\'/g' : '')];
+    for (const pt of data) {
+      const zImOut = negate ? -pt.zIm : pt.zIm;
+      let line = pt.freq.toExponential(4) + '\t' + pt.zRe.toExponential(6) + '\t' + zImOut.toExponential(6);
+      if (massNorm) {
+        line += '\t' + (pt.zRe / mass).toExponential(6) + '\t' + (zImOut / mass).toExponential(6);
+      }
+      lines.push(line);
+    }
+
+    processedData = data;
+    outputArea.value = lines.join('\n');
+    showMsg('EIS 处理完成 — ' + data.length + ' 个频率点', 'success');
+  }
+});
+
+// ===================== Output actions =====================
+copyBtn.addEventListener('click', () => {
+  if (!outputArea.value) { showMsg('没有可复制的内容', 'warn'); return; }
+  navigator.clipboard.writeText(outputArea.value).then(() => {
+    showMsg('已复制到剪贴板', 'success');
+  }).catch(() => {
+    showMsg('复制失败，请手动复制', 'error');
+  });
+});
+
+downloadBtn.addEventListener('click', () => {
+  if (!outputArea.value) { showMsg('没有可下载的内容', 'warn'); return; }
+  const blob = new Blob([outputArea.value], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const base = fileName.replace(/\.[^.]+$/, '');
+  const type = dataType.value === 'auto' ? detectedType : dataType.value;
+  a.download = base + '_' + (type==='cv'?'CV':'EIS') + '_processed.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showMsg('文件已下载', 'success');
+});
+
+// ===================== Reset =====================
+resetBtn.addEventListener('click', () => {
+  rawData = [];
+  fileName = '';
+  detectedType = '';
+  processedData = [];
+  cycles = [];
+  fileInput.value = '';
+  fileInfo.classList.add('hidden');
+  fileInfo.innerHTML = '';
+  previewTable.innerHTML = '<thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead><tbody></tbody>';
+  statsArea.classList.add('hidden');
+  statsArea.innerHTML = '';
+  outputArea.value = '';
+  cycleSelector.innerHTML = '';
+  cvOptions.classList.add('hidden');
+  eisOptions.classList.add('hidden');
+  processBtn.disabled = true;
+  dataType.value = 'auto';
+  sampleMass.value = '';
+  showMsg('已重置', 'info');
+});
+
+// ===================== Keyboard shortcut =====================
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'Enter' && !processBtn.disabled) {
+    processBtn.click();
+  }
+});
+</script>
+</body>
+</html>
