@@ -441,12 +441,11 @@
 
     .minimap-wrap {
       position: relative;
-      height: 50px;
+      height: 36px;
       margin-top: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
+      background: transparent;
+      border-bottom: 1px solid var(--border);
+      overflow: visible;
       cursor: crosshair;
     }
     .minimap-wrap canvas {
@@ -455,66 +454,53 @@
       width: 100%;
       height: 100%;
     }
-    .minimap-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-    }
-    .minimap-mask {
-      background: oklch(0% 0 0 / 0.06);
-      pointer-events: none;
-    }
-    html.dark .minimap-mask {
-      background: oklch(0% 0 0 / 0.15);
-    }
     .minimap-range {
-      position: relative;
-      border-top: 2px solid var(--accent);
-      border-bottom: 2px solid var(--accent);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background: oklch(48% 0.10 240 / 0.06);
       cursor: grab;
+      transition: left 0.1s ease, width 0.1s ease;
+    }
+    html.dark .minimap-range {
+      background: oklch(65% 0.12 240 / 0.10);
     }
     .minimap-range:active {
       cursor: grabbing;
+      transition: none;
     }
     .minimap-handle {
       position: absolute;
       top: 50%;
-      width: 10px;
-      height: 10px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--accent);
-      border: 2px solid #fff;
-      box-shadow: var(--shadow-sm);
       transform: translate(-50%, -50%);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
       cursor: ew-resize;
       z-index: 10;
     }
     .minimap-handle:hover {
-      transform: translate(-50%, -50%) scale(1.4);
-      box-shadow: var(--shadow);
+      transform: translate(-50%, -50%) scale(1.5);
     }
     .minimap-handle.left { left: 0; }
     .minimap-handle.right { right: 0; transform: translate(50%, -50%); }
     .minimap-handle.right:hover {
-      transform: translate(50%, -50%) scale(1.4);
+      transform: translate(50%, -50%) scale(1.5);
     }
-    .minimap-label {
+    .minimap-label-left,
+    .minimap-label-right {
       position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px;
-      color: var(--text-muted);
+      bottom: -16px;
+      font-size: 10px;
+      color: var(--text-faint);
       white-space: nowrap;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s ease;
+      font-variant-numeric: tabular-nums;
     }
-    .minimap-wrap:hover .minimap-label,
-    .minimap-wrap.dragging .minimap-label {
-      opacity: 1;
-    }
+    .minimap-label-left { left: 0; }
+    .minimap-label-right { right: 0; }
 </style>
 
 <div class="container">

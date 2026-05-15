@@ -226,14 +226,11 @@
             </div>
             <div class="minimap-wrap" id="minimap-${singleCanvasId}" data-chart="${singleCanvasId}">
               <canvas id="minimap-canvas-${singleCanvasId}"></canvas>
-              <div class="minimap-overlay" id="minimap-overlay-${singleCanvasId}">
-                <div class="minimap-mask" id="minimap-mask-left-${singleCanvasId}" style="width:0%"></div>
-                <div class="minimap-range" id="minimap-range-${singleCanvasId}" style="flex:1;position:relative;">
-                  <div class="minimap-handle left" id="minimap-handle-left-${singleCanvasId}"></div>
-                  <div class="minimap-handle right" id="minimap-handle-right-${singleCanvasId}"></div>
-                  <div class="minimap-label" id="minimap-label-${singleCanvasId}"></div>
-                </div>
-                <div class="minimap-mask" id="minimap-mask-right-${singleCanvasId}" style="width:0%"></div>
+              <div class="minimap-range" id="minimap-range-${singleCanvasId}" style="left:0%;width:100%;">
+                <div class="minimap-handle left" id="minimap-handle-left-${singleCanvasId}"></div>
+                <div class="minimap-handle right" id="minimap-handle-right-${singleCanvasId}"></div>
+                <div class="minimap-label-left" id="minimap-label-left-${singleCanvasId}"></div>
+                <div class="minimap-label-right" id="minimap-label-right-${singleCanvasId}"></div>
               </div>
             </div>
             <div class="chart-hint">拖动两端选择数据范围 · 自动裁剪</div>
@@ -405,9 +402,9 @@
       const orig = chart._originalData;
       const canvas = document.getElementById('minimap-canvas-' + chartId);
       const ctx = canvas.getContext('2d');
-      const maskLeft = document.getElementById('minimap-mask-left-' + chartId);
-      const maskRight = document.getElementById('minimap-mask-right-' + chartId);
-      const label = document.getElementById('minimap-label-' + chartId);
+      const range = document.getElementById('minimap-range-' + chartId);
+      const labelLeft = document.getElementById('minimap-label-left-' + chartId);
+      const labelRight = document.getElementById('minimap-label-right-' + chartId);
 
       function resizeCanvas() {
         const rect = mmWrap.getBoundingClientRect();
@@ -442,8 +439,31 @@
         const minY = Math.min(...data);
         const maxY = Math.max(...data);
         const rangeY = maxY - minY || 1;
+        
+        // Draw full data in faint color
         ctx.beginPath();
-        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3b82f6';
+        ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < data.length; i++) {
+          const x = (i / (data.length - 1 || 1)) * w;
+          const y = h - ((data[i] - minY) / rangeY) * (h - 4) - 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Get selection range
+        const leftPct = parseFloat(range.style.left) / 100;
+        const rightPct = leftPct + parseFloat(range.style.width) / 100;
+        
+        // Clip and draw selected region in accent color
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(leftPct * w, 0, (rightPct - leftPct) * w, h);
+        ctx.clip();
+        ctx.beginPath();
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3b82f6';
+        ctx.strokeStyle = accent;
         ctx.lineWidth = 1.5;
         for (let i = 0; i < data.length; i++) {
           const x = (i / (data.length - 1 || 1)) * w;
@@ -452,6 +472,7 @@
           else ctx.lineTo(x, y);
         }
         ctx.stroke();
+        ctx.restore();
       }
       drawMinimap();
 
@@ -469,14 +490,14 @@
         }
         leftPct = Math.max(0, Math.min(1, leftPct));
         rightPct = Math.max(0, Math.min(1, rightPct));
-        maskLeft.style.width = (leftPct * 100) + '%';
-        maskRight.style.width = ((1 - rightPct) * 100) + '%';
+        range.style.left = (leftPct * 100) + '%';
+        range.style.width = ((rightPct - leftPct) * 100) + '%';
         const minIdx = Math.floor(leftPct * (orig.labels.length - 1));
         const maxIdx = Math.floor(rightPct * (orig.labels.length - 1));
         const xMin = orig.labels[minIdx];
         const xMax = orig.labels[maxIdx];
-        const count = maxIdx - minIdx + 1;
-        label.textContent = 'X: ' + xMin.toFixed(2) + ' ~ ' + xMax.toFixed(2) + ' · ' + count + '/' + orig.fullLength + ' 点';
+        labelLeft.textContent = xMin.toFixed(2);
+        labelRight.textContent = xMax.toFixed(2);
         return { leftPct, rightPct, xMin, xMax, minIdx, maxIdx };
       }
 
@@ -490,8 +511,8 @@
         const rect = mmWrap.getBoundingClientRect();
         const x = clientX - rect.left;
         const w = rect.width;
-        const leftPct = parseFloat(maskLeft.style.width) / 100;
-        const rightPct = 1 - parseFloat(maskRight.style.width) / 100;
+        const leftPct = parseFloat(range.style.left) / 100;
+        const rightPct = leftPct + parseFloat(range.style.width) / 100;
         const leftPx = leftPct * w;
         const rightPx = rightPct * w;
         const handleW = 16;
@@ -511,8 +532,8 @@
         if (!mode) return;
         const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         const pct = Math.max(0, Math.min(1, (clientX - mmWrap.getBoundingClientRect().left) / mmWrap.getBoundingClientRect().width));
-        let leftPct = parseFloat(maskLeft.style.width) / 100;
-        let rightPct = 1 - parseFloat(maskRight.style.width) / 100;
+        let leftPct = parseFloat(range.style.left) / 100;
+        let rightPct = leftPct + parseFloat(range.style.width) / 100;
         if (mode === 'left') ({ leftPct, rightPct } = updateFromPct(pct, rightPct));
         else if (mode === 'right') ({ leftPct, rightPct } = updateFromPct(leftPct, pct));
         else if (mode === 'move') {
@@ -526,14 +547,15 @@
           chart.scales.x.max = orig.labels[maxIdx];
           chart.update('none');
         }
+        drawMinimap();
       }
 
       function onEnd() {
         if (!mode) return;
         mode = null;
         mmWrap.classList.remove('dragging');
-        const leftPct = parseFloat(maskLeft.style.width) / 100;
-        const rightPct = 1 - parseFloat(maskRight.style.width) / 100;
+        const leftPct = parseFloat(range.style.left) / 100;
+        const rightPct = leftPct + parseFloat(range.style.width) / 100;
         const minIdx = Math.floor(leftPct * (orig.labels.length - 1));
         const maxIdx = Math.floor(rightPct * (orig.labels.length - 1));
         if (rightPct - leftPct < 0.03 || maxIdx - minIdx < 5) {
