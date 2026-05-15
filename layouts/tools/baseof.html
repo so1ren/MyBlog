@@ -1,0 +1,117 @@
+{{- if lt hugo.Version "0.146.0" }}
+{{- errorf "=> hugo v0.146.0 or greater is required for hugo-PaperMod to build " }}
+{{- end -}}
+
+<!DOCTYPE html>
+<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
+
+<head>
+    {{- partial "head.html" . }}
+    <style>
+    .tool-simple-header {
+        padding: 0.75rem 2rem;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+    }
+    .tool-simple-header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .tool-home-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s ease;
+    }
+    .tool-home-link:hover {
+        color: var(--primary-color);
+    }
+    .tool-theme-toggle {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        cursor: pointer;
+    }
+    .tool-theme-toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .tool-theme-toggle .slider {
+        position: absolute;
+        inset: 0;
+        background: var(--border);
+        border-radius: 24px;
+        transition: background 0.3s;
+    }
+    .tool-theme-toggle .slider::before {
+        content: "";
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background: var(--surface);
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+    .tool-theme-toggle input:checked + .slider {
+        background: var(--primary-color);
+    }
+    .tool-theme-toggle input:checked + .slider::before {
+        transform: translateX(20px);
+    }
+    </style>
+</head>
+
+<body class="
+{{- if (or (ne .Kind `page` ) (eq .Layout `archives`) (eq .Layout `search`)) -}}
+{{- print "list" -}}
+{{- end -}}
+{{- if eq site.Params.defaultTheme `dark` -}}
+{{- print " dark" }}
+{{- end -}}
+" id="top">
+
+    <!-- 极简 header：回到首页 + 暗色切换 -->
+    <header class="tool-simple-header">
+        <div class="tool-simple-header-inner">
+            <a href="/" class="tool-home-link">← 回到首页</a>
+            <label class="tool-theme-toggle" for="tool-theme-checkbox">
+                <input type="checkbox" id="tool-theme-checkbox">
+                <div class="slider"></div>
+            </label>
+        </div>
+    </header>
+    <script>
+    (function(){
+        const key = 'pref-theme';
+        const dark = localStorage.getItem(key)
+                     ? localStorage.getItem(key) === 'dark'
+                     : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (dark) document.documentElement.classList.add('dark');
+        document.getElementById('tool-theme-checkbox').checked = dark;
+        document.getElementById('tool-theme-checkbox').addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem(key, 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem(key, 'light');
+            }
+        });
+    })();
+    </script>
+
+    <main class="main">
+        {{- block "main" . }}{{ end }}
+    </main>
+
+    {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}
+</body>
+
+</html>

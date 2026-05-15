@@ -1,21 +1,11 @@
 {{ define "main" }}
 {{ $tool := .Params.tool }}
 
-<main class="main">
-  <nav class="breadcrumb">
-    <a href="/">首页</a>
-    <span>/</span>
-    <a href="/tools/">工具</a>
-    <span>/</span>
-    <span>{{ .Title }}</span>
-  </nav>
-
-  <div class="tool-container">
-    {{ if eq $tool "txt-chart" }}
-      {{ partial "tools/txt-chart.html" . }}
-    {{ else if eq $tool "echem-analyzer" }}
-      {{ partial "tools/echem-analyzer.html" . }}
-    {{ end }}
-  </div>
-</main>
+<div class="tool-container">
+  {{ if eq $tool "txt-chart" }}
+    {{ partial "tools/txt-chart.html" . }}
+  {{ else if eq $tool "echem-analyzer" }}
+    {{ partial "tools/echem-analyzer.html" . }}
+  {{ end }}
+</div>
 {{ end }}
