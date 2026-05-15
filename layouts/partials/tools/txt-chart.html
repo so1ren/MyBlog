@@ -501,6 +501,29 @@
     }
     .minimap-label-left { left: 0; }
     .minimap-label-right { right: 0; }
+    .minimap-ticks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .minimap-tick {
+      position: absolute;
+      bottom: 0;
+      width: 1px;
+      height: 4px;
+      background: var(--border);
+      transform: translateX(-50%);
+    }
+    .minimap-tick-label {
+      position: absolute;
+      bottom: -14px;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: var(--text-faint);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
 </style>
 
 <div class="container">

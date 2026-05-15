@@ -226,6 +226,7 @@
             </div>
             <div class="minimap-wrap" id="minimap-${singleCanvasId}" data-chart="${singleCanvasId}">
               <canvas id="minimap-canvas-${singleCanvasId}"></canvas>
+              <div class="minimap-ticks" id="minimap-ticks-${singleCanvasId}"></div>
               <div class="minimap-range" id="minimap-range-${singleCanvasId}" style="left:0%;width:100%;">
                 <div class="minimap-handle left" id="minimap-handle-left-${singleCanvasId}"></div>
                 <div class="minimap-handle right" id="minimap-handle-right-${singleCanvasId}"></div>
@@ -393,6 +394,52 @@
       return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
+    // ===== Nice Ticks Generator (D3-style) =====
+    function generateNiceTicks(min, max, pixelWidth) {
+      const span = max - min;
+      if (!span || !pixelWidth) return [];
+      // Target tick count based on pixel width (min 60px per tick label)
+      const targetCount = Math.max(3, Math.min(8, Math.floor(pixelWidth / 70)));
+      const rawStep = span / targetCount;
+      // Round step to nice number (1, 2, 5 * 10^n)
+      const pow10 = Math.pow(10, Math.floor(Math.log10(rawStep)));
+      const mult = rawStep / pow10;
+      let step;
+      if (mult <= 1) step = pow10;
+      else if (mult <= 2) step = 2 * pow10;
+      else if (mult <= 5) step = 5 * pow10;
+      else step = 10 * pow10;
+      // Determine start and end
+      const start = Math.ceil(min / step) * step;
+      const end = Math.floor(max / step) * step;
+      const ticks = [];
+      for (let v = start; v <= end + 1e-9; v += step) {
+        // Format: remove trailing zeros
+        const label = parseFloat(v.toPrecision(12)).toString();
+        ticks.push({ value: v, label });
+      }
+      return ticks;
+    }
+
+    function renderTicks(ticksContainer, ticks, minVal, maxVal) {
+      ticksContainer.innerHTML = '';
+      const span = maxVal - minVal;
+      if (!span) return;
+      for (const tick of ticks) {
+        const pct = ((tick.value - minVal) / span) * 100;
+        if (pct < 0 || pct > 100) continue;
+        const tickEl = document.createElement('div');
+        tickEl.className = 'minimap-tick';
+        tickEl.style.left = pct + '%';
+        ticksContainer.appendChild(tickEl);
+        const labelEl = document.createElement('div');
+        labelEl.className = 'minimap-tick-label';
+        labelEl.style.left = pct + '%';
+        labelEl.textContent = tick.label;
+        ticksContainer.appendChild(labelEl);
+      }
+    }
+
     // ===== Selection & Crop Functions =====
     function setupMinimap(mmWrap) {
       const chartId = mmWrap.dataset.chart;
@@ -405,6 +452,7 @@
       const range = document.getElementById('minimap-range-' + chartId);
       const labelLeft = document.getElementById('minimap-label-left-' + chartId);
       const labelRight = document.getElementById('minimap-label-right-' + chartId);
+      const ticksContainer = document.getElementById('minimap-ticks-' + chartId);
 
       function resizeCanvas() {
         const rect = mmWrap.getBoundingClientRect();
@@ -414,6 +462,11 @@
         canvas.style.width = rect.width + 'px';
         canvas.style.height = rect.height + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        // Regenerate ticks on resize
+        const allMin = Math.min(...orig.labels);
+        const allMax = Math.max(...orig.labels);
+        const ticks = generateNiceTicks(allMin, allMax, rect.width);
+        renderTicks(ticksContainer, ticks, allMin, allMax);
       }
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
