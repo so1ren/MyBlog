@@ -341,10 +341,12 @@
         });
         // Setup selection for each chart
         div.querySelectorAll('.chart-canvas-wrap').forEach(wrap => {
+          // Bind chart zoom events if needed
+        });
         div.querySelectorAll('.minimap-wrap').forEach(mm => {
           setupMinimap(mm);
         });
-
+      }, 0);
       return div;
     }
 
