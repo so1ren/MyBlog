@@ -89,20 +89,39 @@
 
   .dropzone {
     border: 2px dashed var(--border);
-    border-radius: 14px;
-    padding: 2.5rem;
+    border-radius: var(--radius-sm);
+    padding: 48px 32px;
     text-align: center;
     cursor: pointer;
-    transition: all var(--t-fast);
-    background: var(--bg);
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    background: var(--surface);
+    margin-bottom: 1.5rem;
   }
   .dropzone:hover, .dropzone.dragover {
     border-color: var(--accent);
-    background: var(--surface2);
+    background: var(--accent-light);
+    box-shadow: var(--shadow);
   }
-  .dropzone .icon { font-size: 2.5rem; margin-bottom: var(--space-xs); }
-  .dropzone p { color: var(--text2); font-size: var(--font-sm); }
-  .dropzone .formats { color: var(--text2); font-size: var(--font-xs); margin-top: var(--space-xs); }
+  .dropzone .icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-sm);
+    color: var(--text2);
+    transition: color 0.2s ease;
+  }
+  .dropzone:hover .icon, .dropzone.dragover .icon {
+    color: var(--accent);
+  }
+  .dropzone p {
+    color: var(--text2);
+    font-size: var(--font-sm);
+    font-weight: 500;
+  }
+  .dropzone .formats {
+    color: var(--text2);
+    font-size: var(--font-xs);
+    margin-top: var(--space-xs);
+    opacity: 0.7;
+  }
   input[type="file"] { display: none; }
 
   .file-info {
@@ -154,11 +173,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    gap: 6px;
+    padding: 6px 16px;
     border: none;
     border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -166,24 +185,21 @@
   .btn-block {
     width: 100%;
     margin-top: 1rem;
+    padding: 10px 16px;
+    font-size: 14px;
   }
   .btn-primary {
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-  }
-  .btn-primary:hover:not(:disabled) {
     background: var(--accent);
     color: #fff;
-    border-color: var(--accent-hover);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent-hover);
     transform: translateY(-1px);
     box-shadow: var(--shadow);
   }
   .btn-primary:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
-    border-color: var(--border);
-    color: var(--text2);
   }
   .btn-secondary {
     background: var(--surface2);
