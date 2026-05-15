@@ -30,13 +30,6 @@
             <h1 class="home-title">{{ site.Title }}</h1>
             {{- with site.Params.profileMode }}
             <p class="home-subtitle">{{ .subtitle | markdownify }}</p>
-            {{- if .buttons }}
-            <div class="profile-buttons">
-                {{- range .buttons }}
-                <a href="{{ .url | absURL }}" class="profile-button">{{ .name }}</a>
-                {{- end }}
-            </div>
-            {{- end }}
             {{- end }}
             {{- partial "social_icons.html" (dict "align" "left") -}}
         </div>
