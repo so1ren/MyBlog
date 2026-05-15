@@ -13,18 +13,17 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  .container { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; }
+  .container { max-width: 1300px; margin: 0 auto; padding: 2rem 3rem; }
   header {
-    margin-bottom: 2rem !important;
     text-align: center;
-    padding: 1.5rem 0 1.5rem;
+    padding: 1rem 0 1.5rem;
     border-bottom: 1px solid var(--border);
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
   }
   header h1 { font-size: 2.25rem; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
   header p { color: var(--text2); margin-top: 1rem; font-size: 0.95rem; }
 
-  .grid { display: grid; grid-template-columns: 320px 1fr; gap: 3.5rem; }
+  .grid { display: grid; grid-template-columns: 340px 1fr; gap: 4rem; }
   @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
 
   .panel {
@@ -35,11 +34,12 @@
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
     animation: fadeInUp 0.4s var(--t-smooth) forwards;
+    margin-bottom: 2rem;
   }
   .panel h2 {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     color: var(--accent);
     display: flex;
     align-items: center;
@@ -49,7 +49,7 @@
   .dropzone {
     border: 2px dashed var(--border);
     border-radius: 14px;
-    padding: 3.5rem;
+    padding: 2.5rem;
     text-align: center;
     cursor: pointer;
     transition: all var(--t-fast);
@@ -82,7 +82,7 @@
   .tag-cv { background: rgba(52, 211, 153, 0.2); color: var(--success); }
   .tag-eis { background: rgba(251, 191, 36, 0.2); color: var(--warn); }
 
-  .param-group { margin-bottom: 2rem; }
+  .param-group { margin-bottom: 1.5rem; }
   .param-group label {
     display: block;
     font-size: 0.9rem;
@@ -145,12 +145,12 @@
   .stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-    margin: 2rem 0;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
   }
   .stat {
     background: var(--surface2);
-    padding: 1.25rem;
+    padding: 1.5rem;
     border-radius: 14px;
     text-align: center;
   }
@@ -187,7 +187,7 @@
   td { color: var(--text); }
   tr:hover td { background: var(--surface2); }
 
-  .output-area { margin-top: 2rem; }
+  .output-area { margin-top: 2.5rem; }
   textarea {
     width: 100%;
     min-height: 300px;
@@ -197,7 +197,7 @@
     color: var(--text);
     font-family: 'Fira Code', 'Source Code Pro', monospace;
     font-size: 0.82rem;
-    padding: 1.5rem;
+    padding: 2rem;
     resize: vertical;
     outline: none;
     transition: border-color var(--t-fast);
