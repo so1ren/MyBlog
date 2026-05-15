@@ -14,6 +14,7 @@ defaultContentLanguage: zh
 minify:
   disableXML: true
   minifyOutput: true
+  disableHTML: true
 
 languages:
   zh:

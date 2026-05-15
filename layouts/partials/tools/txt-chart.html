@@ -1,5 +1,5 @@
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
 
 <style>
   :root {
@@ -439,126 +439,81 @@
       user-select: none;
     }
 
-    .selection-box {
-      position: absolute;
-      border: 2px dashed var(--accent);
-      background: var(--accent-light);
-      pointer-events: none;
-      z-index: 100;
-      display: none;
-      border-radius: 4px;
-    }
-
-    .crop-toolbar {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      background: var(--accent-light);
-      border: 1px solid var(--accent);
-      border-radius: var(--radius-md);
-      margin-bottom: 10px;
-      font-size: 13px;
-    }
-
-    .crop-toolbar.visible {
-      display: flex;
-    }
-
-    .crop-toolbar .crop-info {
-      flex: 1;
-      color: var(--text-muted);
-    }
-
-    .crop-toolbar .crop-info strong {
-      color: var(--text);
-    }
-
-    .btn-crop {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #fff;
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-crop:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-cancel {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 12px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-muted);
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-cancel:hover {
-      color: var(--text);
-      border-color: var(--border-hover);
-    }
-
-    .crop-status {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 12px;
-      background: oklch(70% 0.10 150 / 0.08);
-      border: 1px solid oklch(60% 0.10 150 / 0.25);
-      border-radius: var(--radius-sm);
-      margin-bottom: 10px;
-      font-size: 12px;
-      color: oklch(55% 0.15 150);
-    }
-
-    .crop-status.visible {
-      display: flex;
-    }
-
-    .btn-restore {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      font-size: 11px;
-      font-weight: 500;
-      color: oklch(55% 0.15 150);
-      background: oklch(60% 0.10 150 / 0.10);
-      border: 1px solid oklch(60% 0.10 150 / 0.25);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-restore:hover {
-      background: oklch(60% 0.10 150 / 0.15);
-    }
-  
-    .chart-canvas-wrap {
+    .minimap-wrap {
       position: relative;
-      height: 300px;
+      height: 50px;
+      margin-top: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: crosshair;
     }
-
-    footer {
-      text-align: center;
-      padding: 40px 0 20px;
-      font-size: 12px;
-      color: var(--text-faint);
+    .minimap-wrap canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .minimap-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+    }
+    .minimap-mask {
+      background: oklch(0% 0 0 / 0.06);
+      pointer-events: none;
+    }
+    html.dark .minimap-mask {
+      background: oklch(0% 0 0 / 0.15);
+    }
+    .minimap-range {
+      position: relative;
+      border-top: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      cursor: grab;
+    }
+    .minimap-range:active {
+      cursor: grabbing;
+    }
+    .minimap-handle {
+      position: absolute;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #fff;
+      box-shadow: var(--shadow-sm);
+      transform: translate(-50%, -50%);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: ew-resize;
+      z-index: 10;
+    }
+    .minimap-handle:hover {
+      transform: translate(-50%, -50%) scale(1.4);
+      box-shadow: var(--shadow);
+    }
+    .minimap-handle.left { left: 0; }
+    .minimap-handle.right { right: 0; transform: translate(50%, -50%); }
+    .minimap-handle.right:hover {
+      transform: translate(50%, -50%) scale(1.4);
+    }
+    .minimap-label {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .minimap-wrap:hover .minimap-label,
+    .minimap-wrap.dragging .minimap-label {
+      opacity: 1;
     }
 </style>
 
@@ -630,720 +585,6 @@
     </footer>
   </div>
 
-  <script>
-    // ===== State =====
-    const files = new Map(); // name -> { file, data, error, checked }
-    const charts = new Map(); // name -> Chart instance
-    let overlayChart = null;
-
-    const COLORS = [
-      '#3b82f6', '#ef4444', '#22c55e', '#f97316',
-      '#a855f7', '#06b6d4', '#ec4899', '#eab308',
-    ];
-
-    function getPointRadius(count) {
-      if (count <= 50) return 3;
-      if (count <= 200) return 2;
-      return 0;
-    }
-
-    function getPointHoverRadius(count) {
-      if (count <= 200) return 5;
-      return 4;
-    }
-
-    function getMaxTicksLimit(count) {
-      if (count <= 20) return count;
-      if (count <= 100) return 10;
-      if (count <= 500) return 8;
-      return 6;
-    }
-
-    // ===== DOM =====
-    const uploadZone = document.getElementById('uploadZone');
-    const fileInput = document.getElementById('fileInput');
-    const fileListSection = document.getElementById('fileListSection');
-    const fileItems = document.getElementById('fileItems');
-    const fileCount = document.getElementById('fileCount');
-    const clearAllBtn = document.getElementById('clearAll');
-    const errorContainer = document.getElementById('errorContainer');
-    const chartContainer = document.getElementById('chartContainer');
-    const emptyState = document.getElementById('emptyState');
-
-    // ===== Upload Events =====
-    uploadZone.addEventListener('click', () => fileInput.click());
-
-    uploadZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadZone.classList.add('drag-over');
-    });
-
-    uploadZone.addEventListener('dragleave', () => {
-      uploadZone.classList.remove('drag-over');
-    });
-
-    uploadZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadZone.classList.remove('drag-over');
-      handleFiles(e.dataTransfer.files);
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      handleFiles(e.target.files);
-      fileInput.value = '';
-    });
-
-    clearAllBtn.addEventListener('click', clearAll);
-
-    // ===== File Handling =====
-    function handleFiles(fileList) {
-      const newFiles = Array.from(fileList).filter(f => f.name.endsWith('.txt'));
-      const rejected = Array.from(fileList).filter(f => !f.name.endsWith('.txt'));
-
-      if (rejected.length > 0) {
-        showError(`已跳过 ${rejected.length} 个非 TXT 文件`);
-      }
-
-      for (const file of newFiles) {
-        if (files.has(file.name)) continue;
-        files.set(file.name, { file, data: null, error: null, checked: false });
-        parseFile(file);
-      }
-
-      updateUI();
-    }
-
-    function parseFile(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target.result;
-        const result = parseData(text, file.name);
-        const entry = files.get(file.name);
-        if (result.error) {
-          entry.error = result.error;
-        } else {
-          entry.data = result.data;
-        }
-        updateUI();
-      };
-      reader.onerror = () => {
-        files.get(file.name).error = '读取文件失败';
-        updateUI();
-      };
-      reader.readAsText(file);
-    }
-
-    function parseData(text, filename) {
-      const lines = text.split(/\r?\n/);
-      const data = [];
-
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line || line.startsWith('#')) continue;
-
-        // Split by spaces or tabs
-        const parts = line.split(/\s+/).filter(p => p.length > 0);
-        if (parts.length < 2) {
-          return { error: `${filename} 第 ${i + 1} 行格式错误：需要至少两个数值` };
-        }
-
-        const nums = parts.map(p => parseFloat(p));
-        if (nums.some(isNaN)) {
-          return { error: `${filename} 第 ${i + 1} 行包含非数值内容` };
-        }
-
-        data.push(nums);
-      }
-
-      if (data.length === 0) {
-        return { error: `${filename} 不包含有效数据行` };
-      }
-
-      return { data };
-    }
-
-    // ===== UI Updates =====
-    function updateUI() {
-      // File list
-      const entries = Array.from(files.entries());
-      if (entries.length === 0) {
-        fileListSection.style.display = 'none';
-      } else {
-        fileListSection.style.display = 'block';
-        fileCount.textContent = `(${entries.length})`;
-        fileItems.innerHTML = entries.map(([name, entry]) => `
-          <div class="file-item">
-            <input type="checkbox" class="file-check" data-name="${escapeHtml(name)}" ${entry.checked ? 'checked' : ''} ${entry.data ? '' : 'disabled'} title="选中以叠加绘图">
-            <div class="file-icon">TXT</div>
-            <div class="file-info">
-              <div class="file-name">${escapeHtml(name)}</div>
-              <div class="file-meta">${formatSize(entry.file.size)}${entry.data ? ` · ${entry.data.length} 行数据` : ''}</div>
-            </div>
-            <span class="file-status ${entry.error ? 'error' : 'ok'}">${entry.error ? '解析失败' : '已解析'}</span>
-            <button class="file-remove" data-name="${escapeHtml(name)}" title="删除">×</button>
-          </div>
-        `).join('');
-
-        // Bind remove buttons
-        fileItems.querySelectorAll('.file-remove').forEach(btn => {
-          btn.addEventListener('click', () => removeFile(btn.dataset.name));
-        });
-        // Bind checkboxes
-        fileItems.querySelectorAll('.file-check').forEach(cb => {
-          cb.addEventListener('change', () => {
-            const entry = files.get(cb.dataset.name);
-            if (entry) entry.checked = cb.checked;
-            updateOverlayButton();
-          });
-        });
-      }
-
-      // Charts
-      const validEntries = entries.filter(([, e]) => e.data);
-      if (validEntries.length === 0) {
-        chartContainer.innerHTML = '';
-        chartContainer.appendChild(emptyState);
-        emptyState.style.display = 'block';
-      } else {
-        emptyState.style.display = 'none';
-        // Only create/update chart cards for valid entries
-        const existingCards = new Set();
-        for (const [name, entry] of validEntries) {
-          existingCards.add(name);
-          let card = document.getElementById(`chart-${name}`);
-          if (!card) {
-            card = createChartCard(name, entry.data);
-            chartContainer.appendChild(card);
-          }
-        }
-        // Remove cards for deleted/invalid files
-        Array.from(chartContainer.children).forEach(child => {
-          if (child.id && child.id.startsWith('chart-')) {
-            const name = child.id.slice(6);
-            if (!existingCards.has(name)) {
-              const chart = charts.get(name);
-              if (chart) chart.destroy();
-              charts.delete(name);
-              child.remove();
-            }
-          }
-        });
-      }
-    }
-
-    function createChartCard(name, data) {
-      const cardId = `chart-${name}`;
-      const canvasId = `canvas-${name}`;
-      const div = document.createElement('div');
-      div.className = 'chart-grid';
-      div.id = cardId;
-
-      // Each column after first becomes a separate chart
-      const colCount = data[0].length - 1;
-      for (let col = 1; col <= colCount; col++) {
-        const singleCanvasId = `${canvasId}-${col}`;
-        const title = colCount === 1 ? name.replace(/\.txt$/i, '') : `${name.replace(/\.txt$/i, '')} — 第 ${col} 列`;
-
-        const cardId2 = 'card-' + singleCanvasId;
-        div.innerHTML += `
-          <div class="chart-card" id="${cardId2}">
-            <div class="chart-header">
-              <span class="chart-title">${escapeHtml(title)}</span>
-              <div class="chart-actions">
-                <button class="btn-icon restore-data" data-chart="${singleCanvasId}" style="display:none;">↩ 恢复原始数据</button>
-                <button class="btn-icon" data-canvas="${singleCanvasId}" data-name="${escapeHtml(title)}">⬇ 下载 PNG</button>
-              </div>
-            </div>
-            <div class="crop-toolbar" id="toolbar-${singleCanvasId}">
-              <span class="crop-info" id="info-${singleCanvasId}">已选择范围</span>
-              <button class="btn-crop" data-chart="${singleCanvasId}">✂️ 裁剪至此范围</button>
-              <button class="btn-cancel" data-chart="${singleCanvasId}">取消</button>
-            </div>
-            <div class="crop-status" id="status-${singleCanvasId}">
-              <span id="status-text-${singleCanvasId}"></span>
-              <button class="btn-restore" data-chart="${singleCanvasId}">↩ 恢复</button>
-            </div>
-            <div class="chart-canvas-wrap" id="wrap-${singleCanvasId}">
-              <canvas id="${singleCanvasId}"></canvas>
-              <div class="selection-box" id="sel-${singleCanvasId}"></div>
-            </div>
-            <div class="chart-hint">Shift + 拖拽框选范围进行裁剪</div>
-          </div>
-        `;
-
-        // Defer chart creation to next tick so canvas is in DOM
-        setTimeout(() => {
-          const ctx = document.getElementById(singleCanvasId)?.getContext('2d');
-          if (!ctx) return;
-
-          const xLabels = data.map(row => row[0]);
-          const yData = data.map(row => row[col]);
-
-          const dlen = data.length;
-          const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: xLabels,
-              datasets: [{
-                label: '数值',
-                data: yData,
-                borderColor: 'var(--accent)',
-                backgroundColor: 'oklch(70% 0.05 240 / 0.15)',
-                borderWidth: 2,
-                pointRadius: getPointRadius(dlen),
-                pointHoverRadius: getPointHoverRadius(dlen),
-                pointBackgroundColor: 'var(--accent)',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                tension: dlen > 500 ? 0.1 : 0.3,
-                fill: true
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              interaction: {
-                mode: 'index',
-                intersect: false
-              },
-              scales: {
-                x: {
-                  grid: { display: false },
-                  ticks: {
-                    font: { size: 11 },
-                    color: 'var(--text-faint)',
-                    maxTicksLimit: getMaxTicksLimit(dlen)
-                  },
-                  border: { display: false }
-                },
-                y: {
-                  grid: {
-                    color: 'oklch(0% 0 0 / 0.04)',
-                    drawBorder: false
-                  },
-                  ticks: {
-                    font: { size: 11 },
-                    color: '#9ca3af'
-                  },
-                  border: { display: false }
-                }
-              },
-              plugins: {
-                legend: { display: false },
-                tooltip: {
-                  backgroundColor: 'oklch(20% 0.02 250 / 0.9)',
-                  titleFont: { size: 12 },
-                  bodyFont: { size: 13 },
-                  padding: 10,
-                  cornerRadius: 8,
-                  displayColors: false,
-                  callbacks: {
-                    title: () => '',
-                    label: (ctx) => `数值: ${ctx.parsed.y}`
-                  }
-                }
-              }
-            }
-          });
-
-          // Store original data for restore
-          chart._originalData = {
-            labels: [...xLabels],
-            data: [...yData],
-            fullLength: data.length
-          };
-          chart._chartId = singleCanvasId;
-
-          charts.set(singleCanvasId, chart);
-        }, 0);
-      }
-
-      // Bind download buttons
-      setTimeout(() => {
-        div.querySelectorAll('.btn-icon[data-canvas]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const canvas = document.getElementById(btn.dataset.canvas);
-            if (canvas) downloadPNG(canvas, btn.dataset.name);
-          });
-        });
-        div.querySelectorAll('.restore-data').forEach(btn => {
-          btn.addEventListener('click', () => {
-            restoreChartData(btn.dataset.chart);
-          });
-        });
-        // Setup selection for each chart
-        div.querySelectorAll('.chart-canvas-wrap').forEach(wrap => {
-          setupSelection(wrap);
-        });
-      }, 50);
-
-      return div;
-    }
-
-    function removeFile(name) {
-      const entry = files.get(name);
-      if (entry?.data) {
-        // Find and destroy charts
-        for (const [key, chart] of charts.entries()) {
-          if (key.includes(name)) {
-            chart.destroy();
-            charts.delete(key);
-          }
-        }
-      }
-      files.delete(name);
-      updateUI();
-    }
-
-    function clearAll() {
-      for (const [, chart] of charts) chart.destroy();
-      charts.clear();
-      files.clear();
-      updateUI();
-    }
-
-    function downloadPNG(canvas, name) {
-      const link = document.createElement('a');
-      link.download = `${name}_chart.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    }
-
-    function showError(msg) {
-      errorContainer.innerHTML = `<div class="error-banner">${escapeHtml(msg)}</div>`;
-      setTimeout(() => { errorContainer.innerHTML = ''; }, 5000);
-    }
-
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    function formatSize(bytes) {
-      if (bytes < 1024) return `${bytes} B`;
-      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-    }
-
-    // ===== Selection & Crop Functions =====
-    function setupSelection(wrap) {
-      const canvas = wrap.querySelector('canvas');
-      const selBox = wrap.querySelector('.selection-box');
-      if (!canvas || !selBox) return;
-
-      let isSelecting = false;
-      let startX = 0, startY = 0;
-      let selectionRange = null;
-
-      wrap.addEventListener('mousedown', (e) => {
-        if (!e.shiftKey) return;
-        e.preventDefault();
-        isSelecting = true;
-        const rect = wrap.getBoundingClientRect();
-        startX = e.clientX - rect.left;
-        startY = e.clientY - rect.top;
-        selBox.style.display = 'block';
-        selBox.style.left = startX + 'px';
-        selBox.style.top = startY + 'px';
-        selBox.style.width = '0px';
-        selBox.style.height = '0px';
-        selectionRange = null;
-        hideCropToolbar(canvas.id);
-      });
-
-      wrap.addEventListener('mousemove', (e) => {
-        if (!isSelecting) return;
-        const rect = wrap.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const left = Math.min(startX, x);
-        const top = Math.min(startY, y);
-        const width = Math.abs(x - startX);
-        const height = Math.abs(y - startY);
-        selBox.style.left = left + 'px';
-        selBox.style.top = top + 'px';
-        selBox.style.width = width + 'px';
-        selBox.style.height = height + 'px';
-      });
-
-      wrap.addEventListener('mouseup', (e) => {
-        if (!isSelecting) return;
-        isSelecting = false;
-        const rect = wrap.getBoundingClientRect();
-        const endX = e.clientX - rect.left;
-        const endY = e.clientY - rect.top;
-        const width = Math.abs(endX - startX);
-        const height = Math.abs(endY - startY);
-
-        if (width < 10 || height < 10) {
-          selBox.style.display = 'none';
-          return;
-        }
-
-        const chart = charts.get(canvas.id);
-        if (!chart) return;
-
-        // Convert pixel to data values
-        const xScale = chart.scales.x;
-        const xMin = xScale.getValueForPixel(Math.min(startX, endX));
-        const xMax = xScale.getValueForPixel(Math.max(startX, endX));
-
-        if (xMin === null || xMax === null) {
-          selBox.style.display = 'none';
-          return;
-        }
-
-        selectionRange = { xMin, xMax };
-
-        // Count points in range
-        const orig = chart._originalData;
-        const inRange = orig.labels.filter((v, i) => v >= xMin && v <= xMax).length;
-
-        showCropToolbar(canvas.id, xMin, xMax, inRange, orig.fullLength);
-      });
-
-      wrap.addEventListener('mouseleave', () => {
-        if (isSelecting) {
-          isSelecting = false;
-          selBox.style.display = 'none';
-        }
-      });
-    }
-
-    function showCropToolbar(chartId, xMin, xMax, inRange, total) {
-      const toolbar = document.getElementById('toolbar-' + chartId);
-      const info = document.getElementById('info-' + chartId);
-      if (!toolbar || !info) return;
-
-      info.innerHTML = `已选择 X: <strong>${xMin.toFixed(2)} ~ ${xMax.toFixed(2)}</strong> 范围内的 <strong>${inRange}</strong> 个点`;
-      toolbar.classList.add('visible');
-      toolbar.dataset.xMin = xMin;
-      toolbar.dataset.xMax = xMax;
-
-      // Bind crop button
-      const cropBtn = toolbar.querySelector('.btn-crop');
-      const cancelBtn = toolbar.querySelector('.btn-cancel');
-
-      const doCrop = () => {
-        const min = parseFloat(toolbar.dataset.xMin);
-        const max = parseFloat(toolbar.dataset.xMax);
-        cropChartData(chartId, min, max);
-        toolbar.classList.remove('visible');
-      };
-      const doCancel = () => {
-        toolbar.classList.remove('visible');
-        const wrap = document.getElementById('wrap-' + chartId);
-        if (wrap) wrap.querySelector('.selection-box').style.display = 'none';
-      };
-
-      cropBtn.replaceWith(cropBtn.cloneNode(true));
-      cancelBtn.replaceWith(cancelBtn.cloneNode(true));
-
-      toolbar.querySelector('.btn-crop').addEventListener('click', doCrop);
-      toolbar.querySelector('.btn-cancel').addEventListener('click', doCancel);
-    }
-
-    function hideCropToolbar(chartId) {
-      const toolbar = document.getElementById('toolbar-' + chartId);
-      if (toolbar) toolbar.classList.remove('visible');
-    }
-
-    function cropChartData(chartId, xMin, xMax) {
-      const chart = charts.get(chartId);
-      if (!chart || !chart._originalData) return;
-
-      const orig = chart._originalData;
-      const indices = [];
-      const newLabels = [];
-      const newData = [];
-
-      for (let i = 0; i < orig.labels.length; i++) {
-        const v = orig.labels[i];
-        if (v >= xMin && v <= xMax) {
-          indices.push(i);
-          newLabels.push(v);
-          newData.push(orig.data[i]);
-        }
-      }
-
-      if (newLabels.length === 0) return;
-
-      chart.data.labels = newLabels;
-      chart.data.datasets[0].data = newData;
-      chart.data.datasets[0].pointRadius = getPointRadius(newLabels.length);
-      chart.data.datasets[0].pointHoverRadius = getPointHoverRadius(newLabels.length);
-      chart.data.datasets[0].tension = newLabels.length > 500 ? 0.1 : 0.3;
-      chart.update('none');
-
-      // Show crop status
-      const pct = ((newLabels.length / orig.fullLength) * 100).toFixed(1);
-      const status = document.getElementById('status-' + chartId);
-      const statusText = document.getElementById('status-text-' + chartId);
-      if (status && statusText) {
-        statusText.textContent = `已裁剪：显示 ${newLabels.length}/${orig.fullLength} 点 (${pct}%)`;
-        status.classList.add('visible');
-      }
-
-      // Hide selection box
-      const wrap = document.getElementById('wrap-' + chartId);
-      if (wrap) wrap.querySelector('.selection-box').style.display = 'none';
-
-      // Show restore button in header
-      const card = document.getElementById('card-' + chartId);
-      if (card) {
-        const restoreBtn = card.querySelector('.restore-data');
-        if (restoreBtn) restoreBtn.style.display = 'inline-flex';
-      }
-    }
-
-    function restoreChartData(chartId) {
-      const chart = charts.get(chartId);
-      if (!chart || !chart._originalData) return;
-
-      const orig = chart._originalData;
-      chart.data.labels = [...orig.labels];
-      chart.data.datasets[0].data = [...orig.data];
-      chart.data.datasets[0].pointRadius = getPointRadius(orig.fullLength);
-      chart.data.datasets[0].pointHoverRadius = getPointHoverRadius(orig.fullLength);
-      chart.data.datasets[0].tension = orig.fullLength > 500 ? 0.1 : 0.3;
-      chart.update('none');
-
-      // Hide status
-      const status = document.getElementById('status-' + chartId);
-      if (status) status.classList.remove('visible');
-
-      // Hide restore button in header
-      const card = document.getElementById('card-' + chartId);
-      if (card) {
-        const restoreBtn = card.querySelector('.restore-data');
-        if (restoreBtn) restoreBtn.style.display = 'none';
-      }
-    }
-
-    // ===== Overlay Functions =====
-    const overlayBtn = document.getElementById('overlayBtn');
-    const overlaySection = document.getElementById('overlaySection');
-    const downloadOverlayBtn = document.getElementById('downloadOverlay');
-    const clearOverlayBtn = document.getElementById('clearOverlay');
-
-    overlayBtn.addEventListener('click', drawOverlay);
-    downloadOverlayBtn.addEventListener('click', () => {
-      const canvas = document.getElementById('overlayCanvas');
-      if (canvas) downloadPNG(canvas, 'overlay_chart');
-    });
-    clearOverlayBtn.addEventListener('click', clearOverlay);
-
-
-    function updateOverlayButton() {
-      const checked = Array.from(files.values()).filter(e => e.checked && e.data).length;
-      overlayBtn.disabled = checked < 2;
-      overlayBtn.textContent = checked >= 2 ? `📊 叠加绘图 (${checked})` : '📊 叠加绘图';
-    }
-
-    function drawOverlay() {
-      const selected = Array.from(files.entries())
-        .filter(([, e]) => e.checked && e.data)
-        .map(([name, e]) => ({ name: name.replace(/\.txt$/i, ''), data: e.data }));
-
-      if (selected.length < 2) return;
-
-      // Clear previous overlay
-      if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
-
-      // Build datasets
-      const datasets = selected.map((entry, idx) => {
-        const color = COLORS[idx % COLORS.length];
-        const dlen = entry.data.length;
-        return {
-          label: entry.name,
-          data: entry.data.map(row => row[1]),
-          borderColor: color,
-          backgroundColor: color + '14',
-          borderWidth: 2,
-          pointRadius: getPointRadius(dlen),
-          pointHoverRadius: getPointHoverRadius(dlen),
-          pointBackgroundColor: color,
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          tension: dlen > 500 ? 0.1 : 0.3,
-          fill: false
-        };
-      });
-
-      // Use first file's X labels
-      const xLabels = selected[0].data.map(row => row[0]);
-
-      const ctx = document.getElementById('overlayCanvas').getContext('2d');
-      overlayChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels: xLabels, datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          scales: {
-            x: {
-              grid: { display: false },
-              ticks: {
-                font: { size: 11 },
-                color: 'var(--text-faint)',
-                maxTicksLimit: getMaxTicksLimit(xLabels.length)
-              },
-              border: { display: false }
-            },
-            y: {
-              grid: { color: 'oklch(0% 0 0 / 0.04)', drawBorder: false },
-              ticks: { font: { size: 11 }, color: '#9ca3af' },
-              border: { display: false }
-            }
-          },
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top',
-              labels: {
-                usePointStyle: true,
-                pointStyle: 'circle',
-                padding: 16,
-                font: { size: 12 }
-              }
-            },
-            tooltip: {
-              backgroundColor: 'oklch(20% 0.02 250 / 0.9)',
-              titleFont: { size: 12 },
-              bodyFont: { size: 12 },
-              padding: 10,
-              cornerRadius: 8,
-              callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
-              }
-            },
-            zoom: {
-              pan: { enabled: true, mode: 'xy' },
-              zoom: {
-                wheel: { enabled: true },
-                drag: { enabled: true, modifierKey: 'shift' },
-                pinch: { enabled: true },
-                mode: 'xy'
-              }
-            }
-          }
-        }
-      });
-
-      overlaySection.style.display = 'block';
-      overlaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function clearOverlay() {
-      if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
-      overlaySection.style.display = 'none';
-      // Uncheck all
-      for (const entry of files.values()) entry.checked = false;
-      updateOverlayButton();
-      updateUI();
-    }
-  </script>
+  <script src="/js/txt-chart.js"></script>
 
 
