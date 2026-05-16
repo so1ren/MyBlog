@@ -479,6 +479,7 @@
 
       function drawMinimap() {
         if (!canvas || !ctx) return;
+        console.log('[drawMinimap] datasetsMeta exists:', !!orig.datasetsMeta, 'length:', orig.datasetsMeta ? orig.datasetsMeta.length : 0);
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
         ctx.clearRect(0, 0, w, h);
