@@ -787,6 +787,67 @@
 
       overlaySection.style.display = 'block';
       overlaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Draw overlay minimap (display only, no crop)
+      drawOverlayMinimap(xLabels, selected);
+    }
+
+    function drawOverlayMinimap(xLabels, selectedFiles) {
+      const mmWrap = document.getElementById('overlay-minimap');
+      const canvas = document.getElementById('overlay-minimap-canvas');
+      const ticksContainer = document.getElementById('overlay-minimap-ticks');
+      if (!mmWrap || !canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      const rect = mmWrap.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const w = rect.width;
+      const h = rect.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw all files' data as faint lines
+      selectedFiles.forEach((entry, idx) => {
+        const data = entry.data.map(row => row[1]);
+        let drawData = data;
+        if (data.length > 500) {
+          const step = Math.ceil(data.length / w);
+          const s = [];
+          for (let i = 0; i < data.length; i += step) {
+            let maxVal = -Infinity, minVal = Infinity;
+            for (let j = i; j < Math.min(i + step, data.length); j++) {
+              maxVal = Math.max(maxVal, data[j]);
+              minVal = Math.min(minVal, data[j]);
+            }
+            s.push((maxVal + minVal) / 2);
+          }
+          drawData = s;
+        }
+        const minY = Math.min(...drawData);
+        const maxY = Math.max(...drawData);
+        const rangeY = maxY - minY || 1;
+        ctx.beginPath();
+        ctx.strokeStyle = COLORS[idx % COLORS.length] + '30';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < drawData.length; i++) {
+          const x = (i / (drawData.length - 1 || 1)) * w;
+          const y = h - ((drawData[i] - minY) / rangeY) * (h - 4) - 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+
+      // Generate ticks
+      const allMin = Math.min(...xLabels);
+      const allMax = Math.max(...xLabels);
+      const ticks = generateNiceTicks(allMin, allMax, w);
+      renderTicks(ticksContainer, ticks, allMin, allMax);
     }
 
     function clearOverlay() {
