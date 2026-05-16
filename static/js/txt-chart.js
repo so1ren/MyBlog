@@ -444,7 +444,11 @@
     function setupMinimap(mmWrap, cropFn) {
       const chartId = mmWrap.dataset.chart;
       const chart = charts.get(chartId);
-      if (!chart || !chart._originalData) return;
+      console.log('[setupMinimap] chart found:', !!chart, 'origData:', !!(chart && chart._originalData));
+      if (!chart || !chart._originalData) {
+        console.warn('[setupMinimap] abort - chart invalid');
+        return;
+      }
 
       const orig = chart._originalData;
       const canvas = mmWrap.querySelector('canvas');
@@ -563,6 +567,7 @@
       }
 
       function onStart(e) {
+        console.log('[onStart] mousedown on minimap');
         const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         const rect = mmWrap.getBoundingClientRect();
         const x = clientX - rect.left;
@@ -613,6 +618,7 @@
 
       function onEnd() {
         if (!mode) return;
+        console.log('[onEnd] mouseup, mode:', mode);
         if (!chart || !chart.scales || !chart.scales.x) { console.warn('onEnd: chart invalid'); return; }
         mode = null;
         mmWrap.classList.remove('dragging');
@@ -651,7 +657,11 @@
 
     function cropChartData(chartId, xMin, xMax) {
       const chart = charts.get(chartId);
-      if (!chart || !chart._originalData) return;
+      console.log('[setupMinimap] chart found:', !!chart, 'origData:', !!(chart && chart._originalData));
+      if (!chart || !chart._originalData) {
+        console.warn('[setupMinimap] abort - chart invalid');
+        return;
+      }
       const orig = chart._originalData;
       const newLabels = [];
       const newData = [];
@@ -678,7 +688,11 @@
 
     function restoreChartData(chartId) {
       const chart = charts.get(chartId);
-      if (!chart || !chart._originalData) return;
+      console.log('[setupMinimap] chart found:', !!chart, 'origData:', !!(chart && chart._originalData));
+      if (!chart || !chart._originalData) {
+        console.warn('[setupMinimap] abort - chart invalid');
+        return;
+      }
       const orig = chart._originalData;
       chart.data.labels = [...orig.labels];
       chart.data.datasets[0].data = [...orig.data];
