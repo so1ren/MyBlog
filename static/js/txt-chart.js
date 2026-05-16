@@ -441,37 +441,40 @@
     }
 
     // ===== Selection & Crop Functions =====
-    function setupMinimap(mmWrap) {
+    function setupMinimap(mmWrap, cropFn) {
       const chartId = mmWrap.dataset.chart;
       const chart = charts.get(chartId);
       if (!chart || !chart._originalData) return;
 
       const orig = chart._originalData;
-      const canvas = document.getElementById('minimap-canvas-' + chartId);
-      const ctx = canvas.getContext('2d');
-      const range = document.getElementById('minimap-range-' + chartId);
-      const labelLeft = document.getElementById('minimap-label-left-' + chartId);
-      const labelRight = document.getElementById('minimap-label-right-' + chartId);
-      const ticksContainer = document.getElementById('minimap-ticks-' + chartId);
+      const canvas = mmWrap.querySelector('canvas');
+      const ctx = canvas ? canvas.getContext('2d') : null;
+      const range = mmWrap.querySelector('.minimap-range');
+      const labelLeft = mmWrap.querySelector('.minimap-label-left');
+      const labelRight = mmWrap.querySelector('.minimap-label-right');
+      const ticksContainer = mmWrap.querySelector('.minimap-ticks');
 
       function resizeCanvas() {
         const rect = mmWrap.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = rect.height + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        if (canvas && ctx) {
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+          canvas.style.width = rect.width + 'px';
+          canvas.style.height = rect.height + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
         // Regenerate ticks on resize
         const allMin = Math.min(...orig.labels);
         const allMax = Math.max(...orig.labels);
         const ticks = generateNiceTicks(allMin, allMax, rect.width);
-        renderTicks(ticksContainer, ticks, allMin, allMax);
+        if (ticksContainer) renderTicks(ticksContainer, ticks, allMin, allMax);
       }
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
 
       function drawMinimap() {
+        if (!canvas || !ctx) return;
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
         ctx.clearRect(0, 0, w, h);
@@ -549,8 +552,8 @@
         const maxIdx = Math.floor(rightPct * (orig.labels.length - 1));
         const xMin = orig.labels[minIdx];
         const xMax = orig.labels[maxIdx];
-        labelLeft.textContent = xMin.toFixed(2);
-        labelRight.textContent = xMax.toFixed(2);
+        if (labelLeft) labelLeft.textContent = xMin.toFixed(2);
+        if (labelRight) labelRight.textContent = xMax.toFixed(2);
         return { leftPct, rightPct, xMin, xMax, minIdx, maxIdx };
       }
 
@@ -619,7 +622,11 @@
           }
           return;
         }
-        cropChartData(chartId, orig.labels[minIdx], orig.labels[maxIdx]);
+        if (typeof cropFn === 'function') {
+          cropFn(orig.labels[minIdx], orig.labels[maxIdx]);
+        } else {
+          cropChartData(chartId, orig.labels[minIdx], orig.labels[maxIdx]);
+        }
       }
 
       mmWrap.addEventListener('mousedown', onStart);
@@ -686,6 +693,8 @@
       if (canvas) downloadPNG(canvas, 'overlay_chart');
     });
     clearOverlayBtn.addEventListener('click', clearOverlay);
+    const restoreOverlayBtn = document.getElementById('restoreOverlay');
+    if (restoreOverlayBtn) restoreOverlayBtn.addEventListener('click', restoreOverlayData);
 
 
     function updateOverlayButton() {
@@ -703,6 +712,7 @@
 
       // Clear previous overlay
       if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
+      charts.delete('overlay');
 
       // Build datasets
       const datasets = selected.map((entry, idx) => {
@@ -785,73 +795,67 @@
         }
       });
 
+      // Store original data for crop/restore
+      overlayChart._originalData = {
+        labels: [...xLabels],
+        data: [...datasets[0].data], // for minimap drawing (first dataset)
+        fullLength: xLabels.length,
+        datasets: selected.map(e => e.data.map(row => [...row])) // deep copy all rows
+      };
+      charts.set('overlay', overlayChart);
+
       overlaySection.style.display = 'block';
       overlaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      // Draw overlay minimap (display only, no crop)
-      drawOverlayMinimap(xLabels, selected);
+      // Setup interactive minimap for overlay
+      const overlayMm = document.getElementById('overlay-minimap');
+      if (overlayMm) setupMinimap(overlayMm, cropOverlayData);
     }
 
-    function drawOverlayMinimap(xLabels, selectedFiles) {
-      const mmWrap = document.getElementById('overlay-minimap');
-      const canvas = document.getElementById('overlay-minimap-canvas');
-      const ticksContainer = document.getElementById('overlay-minimap-ticks');
-      if (!mmWrap || !canvas) return;
-
-      const ctx = canvas.getContext('2d');
-      const rect = mmWrap.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      canvas.style.width = rect.width + 'px';
-      canvas.style.height = rect.height + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      const w = rect.width;
-      const h = rect.height;
-      ctx.clearRect(0, 0, w, h);
-
-      // Draw all files' data as faint lines
-      selectedFiles.forEach((entry, idx) => {
-        const data = entry.data.map(row => row[1]);
-        let drawData = data;
-        if (data.length > 500) {
-          const step = Math.ceil(data.length / w);
-          const s = [];
-          for (let i = 0; i < data.length; i += step) {
-            let maxVal = -Infinity, minVal = Infinity;
-            for (let j = i; j < Math.min(i + step, data.length); j++) {
-              maxVal = Math.max(maxVal, data[j]);
-              minVal = Math.min(minVal, data[j]);
-            }
-            s.push((maxVal + minVal) / 2);
-          }
-          drawData = s;
-        }
-        const minY = Math.min(...drawData);
-        const maxY = Math.max(...drawData);
-        const rangeY = maxY - minY || 1;
-        ctx.beginPath();
-        ctx.strokeStyle = COLORS[idx % COLORS.length] + '30';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < drawData.length; i++) {
-          const x = (i / (drawData.length - 1 || 1)) * w;
-          const y = h - ((drawData[i] - minY) / rangeY) * (h - 4) - 2;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
+    function cropOverlayData(xMin, xMax) {
+      const chart = overlayChart;
+      if (!chart || !chart._originalData) return;
+      const orig = chart._originalData;
+      const indices = [];
+      for (let i = 0; i < orig.labels.length; i++) {
+        if (orig.labels[i] >= xMin && orig.labels[i] <= xMax) indices.push(i);
+      }
+      if (indices.length === 0) return;
+      const newLabels = indices.map(i => orig.labels[i]);
+      // Update each dataset: filter data points to same X range
+      chart.data.labels = newLabels;
+      chart.data.datasets.forEach((ds, dsIdx) => {
+        const fullData = orig.datasets[dsIdx];
+        const newData = indices.map(i => fullData[i][1]);
+        ds.data = newData;
+        ds.pointRadius = getPointRadius(newLabels.length);
+        ds.pointHoverRadius = getPointHoverRadius(newLabels.length);
+        ds.tension = newLabels.length > 500 ? 0.1 : 0.3;
       });
+      chart.update('none');
+      const restoreBtn = document.getElementById('restoreOverlay');
+      if (restoreBtn) restoreBtn.style.display = 'inline-flex';
+    }
 
-      // Generate ticks
-      const allMin = Math.min(...xLabels);
-      const allMax = Math.max(...xLabels);
-      const ticks = generateNiceTicks(allMin, allMax, w);
-      renderTicks(ticksContainer, ticks, allMin, allMax);
+    function restoreOverlayData() {
+      const chart = overlayChart;
+      if (!chart || !chart._originalData) return;
+      const orig = chart._originalData;
+      chart.data.labels = [...orig.labels];
+      chart.data.datasets.forEach((ds, dsIdx) => {
+        ds.data = orig.datasets[dsIdx].map(row => row[1]);
+        ds.pointRadius = getPointRadius(orig.fullLength);
+        ds.pointHoverRadius = getPointHoverRadius(orig.fullLength);
+        ds.tension = orig.fullLength > 500 ? 0.1 : 0.3;
+      });
+      chart.update('none');
+      const restoreBtn = document.getElementById('restoreOverlay');
+      if (restoreBtn) restoreBtn.style.display = 'none';
     }
 
     function clearOverlay() {
       if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
+      charts.delete('overlay');
       overlaySection.style.display = 'none';
       // Uncheck all
       for (const entry of files.values()) entry.checked = false;

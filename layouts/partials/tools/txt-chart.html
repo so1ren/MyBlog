@@ -567,6 +567,7 @@
         <div class="chart-header">
           <span class="chart-title">📊 叠加对比图</span>
           <div class="chart-actions">
+            <button class="btn-icon restore-data" id="restoreOverlay" style="display:none;">↩ 恢复原始数据</button>
             <button class="btn-icon" id="downloadOverlay">⬇ 下载 PNG</button>
             <button class="btn-icon" id="clearOverlay">✕ 关闭</button>
           </div>
@@ -574,11 +575,17 @@
         <div class="chart-canvas-wrap" style="height:400px;">
           <canvas id="overlayCanvas"></canvas>
         </div>
-        <div class="minimap-wrap" id="overlay-minimap" style="margin-top:8px;cursor:default;">
-          <canvas id="overlay-minimap-canvas"></canvas>
-          <div class="minimap-ticks" id="overlay-minimap-ticks"></div>
+        <div class="minimap-wrap" id="overlay-minimap" data-chart="overlay" style="margin-top:8px;">
+          <canvas id="minimap-canvas-overlay"></canvas>
+          <div class="minimap-ticks" id="minimap-ticks-overlay"></div>
+          <div class="minimap-range" id="minimap-range-overlay" style="left:0%;width:100%;">
+            <div class="minimap-handle left" id="minimap-handle-left-overlay"></div>
+            <div class="minimap-handle right" id="minimap-handle-right-overlay"></div>
+            <div class="minimap-label-left" id="minimap-label-left-overlay"></div>
+            <div class="minimap-label-right" id="minimap-label-right-overlay"></div>
+          </div>
         </div>
-        <div class="chart-hint">叠加图暂不支持裁剪</div>
+        <div class="chart-hint">叠加图支持 X 轴裁剪 — 拖动下方数轴两端手柄</div>
       </div>
     </div>
 
