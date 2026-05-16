@@ -586,7 +586,7 @@
 
       function onMove(e) {
         if (!mode) return;
-        if (!chart || !chart.scales || !chart.scales.x) return;
+        if (!chart || !chart.scales || !chart.scales.x) { console.warn('onMove: chart invalid'); return; }
         const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         const pct = Math.max(0, Math.min(1, (clientX - mmWrap.getBoundingClientRect().left) / mmWrap.getBoundingClientRect().width));
         let leftPct = parseFloat(range.style.left) / 100;
@@ -602,14 +602,18 @@
           const maxIdx = Math.floor(rightPct * (orig.labels.length - 1));
           chart.scales.x.min = orig.labels[minIdx];
           chart.scales.x.max = orig.labels[maxIdx];
-          chart.update('none');
+          // Throttle update: only real-time for single-file charts (lightweight)
+          // Overlay charts with many datasets skip real-time to avoid jank
+          if (chart.data.datasets.length <= 1) {
+            chart.update('none');
+          }
         }
         drawMinimap();
       }
 
       function onEnd() {
         if (!mode) return;
-        if (!chart || !chart.scales || !chart.scales.x) return;
+        if (!chart || !chart.scales || !chart.scales.x) { console.warn('onEnd: chart invalid'); return; }
         mode = null;
         mmWrap.classList.remove('dragging');
         const leftPct = parseFloat(range.style.left) / 100;
