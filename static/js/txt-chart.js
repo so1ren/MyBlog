@@ -586,6 +586,7 @@
 
       function onMove(e) {
         if (!mode) return;
+        if (!chart || !chart.scales || !chart.scales.x) return;
         const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         const pct = Math.max(0, Math.min(1, (clientX - mmWrap.getBoundingClientRect().left) / mmWrap.getBoundingClientRect().width));
         let leftPct = parseFloat(range.style.left) / 100;
@@ -608,6 +609,7 @@
 
       function onEnd() {
         if (!mode) return;
+        if (!chart || !chart.scales || !chart.scales.x) return;
         mode = null;
         mmWrap.classList.remove('dragging');
         const leftPct = parseFloat(range.style.left) / 100;
@@ -635,6 +637,12 @@
       mmWrap.addEventListener('touchstart', onStart, { passive: false });
       document.addEventListener('touchmove', onMove, { passive: false });
       document.addEventListener('touchend', onEnd);
+      mmWrap._minimapCleanup = () => {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onEnd);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onEnd);
+      };
     }
 
     function cropChartData(chartId, xMin, xMax) {
@@ -854,6 +862,11 @@
     }
 
     function clearOverlay() {
+      const mmWrap = document.getElementById('overlay-minimap');
+      if (mmWrap && mmWrap._minimapCleanup) {
+        mmWrap._minimapCleanup();
+        mmWrap._minimapCleanup = null;
+      }
       if (overlayChart) { overlayChart.destroy(); overlayChart = null; }
       charts.delete('overlay');
       overlaySection.style.display = 'none';
