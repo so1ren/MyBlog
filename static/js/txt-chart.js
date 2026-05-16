@@ -482,56 +482,82 @@
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
         ctx.clearRect(0, 0, w, h);
-        let data = orig.data;
-        if (orig.labels.length > 500) {
-          const step = Math.ceil(orig.labels.length / w);
-          const s = [];
-          for (let i = 0; i < orig.labels.length; i += step) {
-            let maxVal = -Infinity, minVal = Infinity;
-            for (let j = i; j < Math.min(i + step, orig.labels.length); j++) {
-              maxVal = Math.max(maxVal, data[j]);
-              minVal = Math.min(minVal, data[j]);
-            }
-            s.push((maxVal + minVal) / 2);
-          }
-          data = s;
-        }
-        const minY = Math.min(...data);
-        const maxY = Math.max(...data);
-        const rangeY = maxY - minY || 1;
         
-        // Draw full data in faint color
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(0,0,0,0.06)';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < data.length; i++) {
-          const x = (i / (data.length - 1 || 1)) * w;
-          const y = h - ((data[i] - minY) / rangeY) * (h - 4) - 2;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
+        // Support both single-file (orig.data) and overlay (orig.datasetsMeta)
+        const datasetsMeta = orig.datasetsMeta || [{ data: orig.data, color: null }];
+        
+        datasetsMeta.forEach((ds) => {
+          let data = ds.data;
+          if (orig.labels.length > 500) {
+            const step = Math.ceil(orig.labels.length / w);
+            const s = [];
+            for (let i = 0; i < orig.labels.length; i += step) {
+              let maxVal = -Infinity, minVal = Infinity;
+              for (let j = i; j < Math.min(i + step, orig.labels.length); j++) {
+                maxVal = Math.max(maxVal, data[j]);
+                minVal = Math.min(minVal, data[j]);
+              }
+              s.push((maxVal + minVal) / 2);
+            }
+            data = s;
+          }
+          const minY = Math.min(...data);
+          const maxY = Math.max(...data);
+          const rangeY = maxY - minY || 1;
+          
+          ctx.beginPath();
+          ctx.strokeStyle = ds.color ? ds.color + '30' : 'rgba(0,0,0,0.06)';
+          ctx.lineWidth = 1;
+          for (let i = 0; i < data.length; i++) {
+            const x = (i / (data.length - 1 || 1)) * w;
+            const y = h - ((data[i] - minY) / rangeY) * (h - 4) - 2;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        });
 
         // Get selection range
         const leftPct = parseFloat(range.style.left) / 100;
         const rightPct = leftPct + parseFloat(range.style.width) / 100;
         
-        // Clip and draw selected region in accent color
+        // Clip and draw selected region for each dataset in its color
         ctx.save();
         ctx.beginPath();
         ctx.rect(leftPct * w, 0, (rightPct - leftPct) * w, h);
         ctx.clip();
-        ctx.beginPath();
-        const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3b82f6';
-        ctx.strokeStyle = accent;
-        ctx.lineWidth = 1.5;
-        for (let i = 0; i < data.length; i++) {
-          const x = (i / (data.length - 1 || 1)) * w;
-          const y = h - ((data[i] - minY) / rangeY) * (h - 4) - 2;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
+        
+        datasetsMeta.forEach((ds) => {
+          let data = ds.data;
+          if (orig.labels.length > 500) {
+            const step = Math.ceil(orig.labels.length / w);
+            const s = [];
+            for (let i = 0; i < orig.labels.length; i += step) {
+              let maxVal = -Infinity, minVal = Infinity;
+              for (let j = i; j < Math.min(i + step, orig.labels.length); j++) {
+                maxVal = Math.max(maxVal, data[j]);
+                minVal = Math.min(minVal, data[j]);
+              }
+              s.push((maxVal + minVal) / 2);
+            }
+            data = s;
+          }
+          const minY = Math.min(...data);
+          const maxY = Math.max(...data);
+          const rangeY = maxY - minY || 1;
+          
+          ctx.beginPath();
+          const accent = ds.color || getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3b82f6';
+          ctx.strokeStyle = accent;
+          ctx.lineWidth = 1.5;
+          for (let i = 0; i < data.length; i++) {
+            const x = (i / (data.length - 1 || 1)) * w;
+            const y = h - ((data[i] - minY) / rangeY) * (h - 4) - 2;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        });
         ctx.restore();
       }
       drawMinimap();
@@ -824,9 +850,13 @@
       // Store original data for crop/restore
       overlayChart._originalData = {
         labels: [...xLabels],
-        data: [...datasets[0].data], // for minimap drawing (first dataset)
+        data: [...datasets[0].data], // backward compat for single-file minimap
         fullLength: xLabels.length,
-        datasets: selected.map(e => e.data.map(row => [...row])) // deep copy all rows
+        datasets: selected.map(e => e.data.map(row => [...row])), // for crop/restore
+        datasetsMeta: selected.map((e, idx) => ({
+          data: e.data.map(row => row[1]),
+          color: COLORS[idx % COLORS.length]
+        }))
       };
       charts.set('overlay', overlayChart);
 
