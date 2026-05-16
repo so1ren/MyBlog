@@ -479,7 +479,6 @@
 
       function drawMinimap() {
         if (!canvas || !ctx) return;
-        console.log('[drawMinimap] datasetsMeta exists:', !!orig.datasetsMeta, 'length:', orig.datasetsMeta ? orig.datasetsMeta.length : 0);
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
         ctx.clearRect(0, 0, w, h);
@@ -594,7 +593,6 @@
       }
 
       function onStart(e) {
-        console.log('[onStart] mousedown on minimap');
         const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         const rect = mmWrap.getBoundingClientRect();
         const x = clientX - rect.left;
@@ -645,7 +643,6 @@
 
       function onEnd() {
         if (!mode) return;
-        console.log('[onEnd] mouseup, mode:', mode);
         if (!chart || !chart.scales || !chart.scales.x) { console.warn('onEnd: chart invalid'); return; }
         mode = null;
         mmWrap.classList.remove('dragging');
