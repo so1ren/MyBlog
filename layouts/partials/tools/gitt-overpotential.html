@@ -814,21 +814,30 @@ function renderChart(data) {
       top: "15%",
       containLabel: true
     },
-    xAxis: {
-      type: "category",
-      data: stepIndices,
-      name: "Step Index",
-      nameLocation: "middle",
-      nameGap: 30,
-      axisLine: { lineStyle: { color: gridColor } },
-      axisLabel: { 
-        color: textColor,
-        formatter: function(value, index) {
-          return value + '\n' + vOCVs[index] + 'V';
-        }
+    xAxis: [
+      {
+        type: "category",
+        data: stepIndices,
+        name: "Step Index",
+        nameLocation: "middle",
+        nameGap: 30,
+        axisLine: { lineStyle: { color: gridColor } },
+        axisLabel: { color: textColor },
+        nameTextStyle: { color: textColor }
       },
-      nameTextStyle: { color: textColor }
-    },
+      {
+        type: "category",
+        data: vOCVs,
+        name: "V_OCV (V)",
+        nameLocation: "middle",
+        nameGap: 30,
+        position: "bottom",
+        offset: 40,
+        axisLine: { lineStyle: { color: gridColor } },
+        axisLabel: { color: textColor, fontSize: 10 },
+        nameTextStyle: { color: textColor }
+      }
+    ],
     yAxis: {
       type: "value",
       name: "Overpotential (mV)",
