@@ -1,0 +1,964 @@
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
+<style>
+  :root {
+    --space-xs: 0.75rem; --space-sm: 1rem; --space-md: 1.5rem;
+    --space-lg: 2rem; --space-xl: 3rem;
+    --font-xs: 0.85rem; --font-sm: 0.95rem; --font-md: 1rem;
+    --accent: oklch(48% 0.10 240);
+    --accent-hover: oklch(40% 0.12 240);
+    --accent-light: oklch(93% 0.02 240 / 0.15);
+    --surface: oklch(96% 0.010 80);
+    --surface2: oklch(90% 0.012 80);
+    --text: oklch(22% 0.015 50);
+    --text2: oklch(52% 0.015 50);
+    --border: oklch(88% 0.008 80);
+    --border-hover: oklch(82% 0.006 80);
+    --shadow-sm: 0 1px 3px oklch(0% 0 0 / 0.06);
+    --shadow: 0 4px 12px oklch(0% 0 0 / 0.08);
+    --success: oklch(55% 0.12 150);
+    --warn: oklch(65% 0.10 80);
+    --danger: oklch(55% 0.12 25);
+    --ir-color: #3b82f6;
+    --ir-color-dark: #2563eb;
+    --mt-color: #f59e0b;
+    --mt-color-dark: #d97706;
+  }
+  html.dark body {
+    --bg: oklch(18% 0.015 250);
+    --surface: oklch(22% 0.015 250);
+    --surface2: oklch(30% 0.08 240);
+    --text: oklch(90% 0.008 250);
+    --text2: oklch(70% 0.010 250);
+    --accent: oklch(65% 0.12 240);
+    --accent-hover: oklch(72% 0.10 240);
+    --accent-light: oklch(70% 0.05 240 / 0.15);
+    --border: oklch(30% 0.012 250);
+    --border-hover: oklch(38% 0.006 250);
+    --shadow-sm: 0 1px 3px oklch(0% 0 0 / 0.2);
+    --shadow: 0 4px 12px oklch(0% 0 0 / 0.25);
+    --success: oklch(65% 0.12 150);
+    --warn: oklch(75% 0.10 80);
+    --danger: oklch(65% 0.12 25);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'LXGW', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 2rem 3rem; }
+  header {
+    text-align: center;
+    padding: 1rem 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  header h1 { font-size: 2.25rem; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
+  header p { color: var(--text2); margin-top: 1rem; font-size: 0.95rem; }
+
+  .grid { display: grid; grid-template-columns: 360px 1fr; gap: 2.5rem; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .panel h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg);
+  }
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    box-shadow: var(--shadow);
+  }
+  .dropzone .icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text2); }
+  .dropzone:hover .icon { color: var(--accent); }
+  .dropzone p { color: var(--text2); font-size: var(--font-sm); font-weight: 500; }
+  .dropzone .formats { color: var(--text2); font-size: var(--font-xs); margin-top: var(--space-xs); opacity: 0.7; }
+  input[type="file"] { display: none; }
+
+  .file-info {
+    margin-top: 1rem;
+    padding: 0.875rem;
+    background: var(--surface2);
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+  .file-info .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    background: rgba(52, 211, 153, 0.2);
+    color: var(--success);
+  }
+
+  .sample-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .sample-tab {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  .sample-tab:hover { border-color: var(--accent); }
+  .sample-tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .param-group { margin-bottom: 1.5rem; }
+  .param-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text2);
+    margin-bottom: 0.75rem;
+  }
+  .param-group input, .param-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .param-group input:focus, .param-group select:focus { border-color: var(--accent); }
+  .param-group .hint {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .formula-box {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+  .formula-box strong { color: var(--accent); }
+  .formula-box code {
+    background: var(--bg);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', 'Source Code Pro', monospace;
+    font-size: 0.8rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-block { width: 100%; margin-top: 0.75rem; padding: 0.75rem 1rem; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .btn-success {
+    background: var(--surface2);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+  .btn-success:hover {
+    background: var(--success);
+    color: #fff;
+  }
+
+  .cycle-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .cycle-btn {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  .cycle-btn:hover { border-color: var(--accent); }
+  .cycle-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .chart-container {
+    position: relative;
+    height: 520px;
+    margin: 1rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .stat .val { font-size: 1.15rem; font-weight: 600; color: var(--accent); }
+  .stat .lab { font-size: 0.8rem; color: var(--text2); }
+
+  .preview-box {
+    overflow-x: auto;
+    max-height: 400px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th {
+    background: var(--surface);
+    color: var(--accent);
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  td { color: var(--text); }
+  tr:hover td { background: var(--surface2); }
+
+  .msg {
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .msg-info { background: var(--surface2); border-left: 3px solid var(--accent); }
+  .msg-success { background: var(--surface2); border-left: 3px solid var(--success); }
+  .msg-error { background: var(--surface2); border-left: 3px solid var(--danger); }
+
+  .hidden { display: none !important; }
+
+  footer {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--text2);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .panel { animation: fadeInUp 0.4s ease forwards; }
+</style>
+
+<div class="container">
+  <header>
+    <h1>🔋 GITT 过电位拆解</h1>
+    <p>上传蓝电 GITT 测试数据，自动识别循环、拆解 IR Drop 与 Mass-Transfer Overpotential</p>
+  </header>
+
+  <div id="message-area"></div>
+
+  <div class="grid">
+    <div class="left-col">
+      <div class="panel">
+        <h2>📁 文件上传</h2>
+        <div class="dropzone" id="dropzone">
+          <div class="icon">📤</div>
+          <p>拖拽文件到此处，或点击选择</p>
+          <div class="formats">支持 .xlsx / .csv / .txt（可多选）</div>
+        </div>
+        <input type="file" id="fileInput" accept=".xlsx,.csv,.txt" multiple>
+        <div id="fileInfo" class="file-info hidden"></div>
+      </div>
+
+      <div class="panel">
+        <h2>🔬 样品数据</h2>
+        <div id="sampleTabs" class="sample-tabs"></div>
+        <div id="noSamples" style="color: var(--text2); font-size: 0.9rem;">请先上传数据文件</div>
+      </div>
+
+      <div class="panel">
+        <h2>⚙️ 分析参数</h2>
+        <div class="formula-box">
+          <strong>计算公式：</strong><br>
+          <code>η<sub>total</sub></code> = V<sub>end</sub> − V<sub>OCV</sub><br>
+          <code>ΔV<sub>IR</sub></code> = V<sub>start</sub> − V<sub>OCV</sub><br>
+          <code>ΔV<sub>mt</sub></code> = V<sub>end</sub> − V<sub>start</sub>
+        </div>
+        <div class="param-group">
+          <label>弛豫段取点数（平衡电压 V<sub>OCV</sub>）</label>
+          <input type="number" id="relaxPoints" value="10" min="3" max="100">
+          <div class="hint">弛豫段最后 N 个点的平均值作为平衡电位</div>
+        </div>
+        <div class="param-group">
+          <label>脉冲初取点数（IR Drop 后电压）</label>
+          <input type="number" id="pulsePoints" value="3" min="1" max="20">
+          <div class="hint">电流施加后前 N 个点的平均值（扩散尚未开始）</div>
+        </div>
+        <div class="param-group">
+          <label>电流阈值 (mA)</label>
+          <input type="number" id="currentThreshold" value="0.001" step="0.001" min="0">
+          <div class="hint">区分脉冲/弛豫的电流绝对值阈值</div>
+        </div>
+        <div class="param-group">
+          <label>目标循环</label>
+          <div class="cycle-selector" id="cycleSelector"></div>
+          <div class="hint" id="cycleHint">自动识别所有循环，点击选择</div>
+        </div>
+        <button class="btn btn-primary btn-block" id="processBtn" disabled>🚀 开始分析</button>
+        <button class="btn btn-secondary btn-block" id="resetBtn">🔄 重置所有</button>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="panel">
+        <h2>📊 过电位拆解图</h2>
+        <div id="statsArea" class="stats hidden"></div>
+        <div class="chart-container" id="chartContainer"></div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+          <button class="btn btn-success" id="downloadChartBtn" style="flex:1;" disabled>📥 下载图表</button>
+          <button class="btn btn-secondary" id="downloadDataBtn" style="flex:1;" disabled>📄 导出数据</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>📋 详细数据</h2>
+        <div class="preview-box">
+          <table id="dataTable">
+            <thead><tr><th style="text-align:center;color:var(--text2);">请先上传并分析数据</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>🔍 原始数据预览</h2>
+        <div class="preview-box">
+          <table id="previewTable">
+            <thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    GITT Overpotential Analyzer · 本地处理，数据不上传服务器 · 专为蓝电测试数据设计
+  </footer>
+</div>
+
+<script>
+let samples = {};
+let activeSample = null;
+let chart = null;
+
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("fileInput");
+const fileInfo = document.getElementById("fileInfo");
+const sampleTabs = document.getElementById("sampleTabs");
+const noSamples = document.getElementById("noSamples");
+const cycleSelector = document.getElementById("cycleSelector");
+const cycleHint = document.getElementById("cycleHint");
+const processBtn = document.getElementById("processBtn");
+const resetBtn = document.getElementById("resetBtn");
+const chartContainer = document.getElementById("chartContainer");
+const statsArea = document.getElementById("statsArea");
+const dataTable = document.getElementById("dataTable");
+const previewTable = document.getElementById("previewTable");
+const downloadChartBtn = document.getElementById("downloadChartBtn");
+const downloadDataBtn = document.getElementById("downloadDataBtn");
+
+// ===================== Event Listeners =====================
+dropzone.addEventListener("click", () => fileInput.click());
+dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+
+function showMsg(text, type) {
+  const area = document.getElementById("message-area");
+  const div = document.createElement("div");
+  div.className = "msg msg-" + type;
+  div.textContent = text;
+  area.appendChild(div);
+  setTimeout(() => div.remove(), 6000);
+}
+
+// ===================== File Handling =====================
+function handleFiles(files) {
+  for (const file of files) {
+    const ext = file.name.split(".").pop().toLowerCase();
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        let rawData;
+        if (ext === "csv" || ext === "txt") {
+          rawData = parseCSV(e.target.result);
+        } else {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: "array" });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+          if (jsonData.length < 3) throw new Error("Excel 文件数据不足（需要标题行+表头+数据）");
+          // Skip title row and header row
+          const headers = jsonData[1].map(h => String(h).trim());
+          rawData = jsonData.slice(2).map(row => {
+            const obj = {};
+            headers.forEach((h, i) => obj[h] = row[i]);
+            return obj;
+          });
+        }
+        const sampleName = file.name.replace(/\.[^.]+$/, "");
+        samples[sampleName] = {
+          rawData,
+          fileName: file.name,
+          cycles: [],
+          analyzedData: [],
+          chartData: null
+        };
+        showMsg("已加载: " + file.name + " (" + rawData.length + " 行)", "success");
+        updateSampleTabs();
+        if (!activeSample) switchSample(sampleName);
+      } catch (err) {
+        showMsg("解析失败: " + file.name + " — " + err.message, "error");
+      }
+    };
+    if (ext === "csv" || ext === "txt") reader.readAsText(file);
+    else reader.readAsArrayBuffer(file);
+  }
+  updateFileInfo();
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) throw new Error("CSV 数据不足");
+  const headers = lines[0].split(/[,	]/).map(h => h.trim());
+  return lines.slice(1).map(line => {
+    const vals = line.split(/[,	]/);
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = vals[i]?.trim());
+    return obj;
+  });
+}
+
+function updateFileInfo() {
+  if (Object.keys(samples).length === 0) {
+    fileInfo.classList.add("hidden");
+    return;
+  }
+  fileInfo.classList.remove("hidden");
+  fileInfo.innerHTML = Object.values(samples).map(s =>
+    `<div><span class="tag">GITT</span> ${s.fileName} (${s.rawData.length} 行)</div>`
+  ).join("");
+}
+
+// ===================== Sample Tabs =====================
+function updateSampleTabs() {
+  const names = Object.keys(samples);
+  if (names.length === 0) {
+    sampleTabs.innerHTML = "";
+    noSamples.classList.remove("hidden");
+    return;
+  }
+  noSamples.classList.add("hidden");
+  sampleTabs.innerHTML = names.map(name =>
+    `<button class="sample-tab ${name === activeSample ? "active" : ""}" data-name="${name}">${name}</button>`
+  ).join("");
+  sampleTabs.querySelectorAll(".sample-tab").forEach(btn => {
+    btn.addEventListener("click", () => switchSample(btn.dataset.name));
+  });
+}
+
+function switchSample(name) {
+  activeSample = name;
+  updateSampleTabs();
+  const sample = samples[name];
+  if (!sample) return;
+  renderPreview(sample.rawData);
+  detectCycles(sample);
+  updateCycleSelector(sample);
+  processBtn.disabled = false;
+  // If already analyzed, show results
+  if (sample.analyzedData.length > 0) {
+    displayResults(sample);
+  } else {
+    clearResults();
+  }
+}
+
+function clearResults() {
+  statsArea.classList.add("hidden");
+  statsArea.innerHTML = "";
+  if (chart) { chart.dispose(); chart = null; }
+  chartContainer.innerHTML = "";
+  dataTable.innerHTML = `<thead><tr><th style="text-align:center;color:var(--text2);">请先上传并分析数据</th></tr></thead><tbody></tbody>`;
+  downloadChartBtn.disabled = true;
+  downloadDataBtn.disabled = true;
+}
+
+// ===================== Cycle Detection =====================
+function detectCycles(sample) {
+  const data = sample.rawData;
+  const cycles = [...new Set(data.map(d =>
+    d["循环序号"] || d["CycleNo"] || d["循环"] || d["Cycle"]
+  ))].filter(Boolean).map(Number).sort((a, b) => a - b);
+  sample.cycles = cycles;
+}
+
+function updateCycleSelector(sample) {
+  cycleSelector.innerHTML = "";
+  if (!sample.cycles.length) {
+    cycleHint.textContent = "未检测到循环数据";
+    return;
+  }
+  sample.cycles.forEach(cycle => {
+    const btn = document.createElement("button");
+    btn.className = "cycle-btn";
+    btn.textContent = "循环 " + cycle;
+    btn.dataset.cycle = cycle;
+    btn.addEventListener("click", () => {
+      cycleSelector.querySelectorAll(".cycle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+    cycleSelector.appendChild(btn);
+  });
+  cycleHint.textContent = `检测到 ${sample.cycles.length} 个循环，点击选择（默认全选）`;
+}
+
+// ===================== Preview =====================
+function renderPreview(data) {
+  if (!data.length) {
+    previewTable.innerHTML = `<thead><tr><th style="text-align:center;color:var(--text2);">无数据</th></tr></thead><tbody></tbody>`;
+    return;
+  }
+  const headers = Object.keys(data[0]);
+  const preview = data.slice(0, 20);
+  previewTable.innerHTML = `
+    <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
+    <tbody>${preview.map(row => `<tr>${headers.map(h => `<td>${row[h] !== undefined ? row[h] : ""}</td>`).join("")}</tr>`).join("")}</tbody>
+  `;
+}
+
+// ===================== Analysis =====================
+processBtn.addEventListener("click", analyzeData);
+
+function analyzeData() {
+  if (!activeSample || !samples[activeSample]) {
+    showMsg("请先选择样品", "error");
+    return;
+  }
+  const sample = samples[activeSample];
+  const relaxPoints = parseInt(document.getElementById("relaxPoints").value);
+  const pulsePoints = parseInt(document.getElementById("pulsePoints").value);
+  const threshold = parseFloat(document.getElementById("currentThreshold").value);
+
+  // Get selected cycles
+  const activeCycleBtns = cycleSelector.querySelectorAll(".cycle-btn.active");
+  const targetCycles = activeCycleBtns.length > 0
+    ? [...activeCycleBtns].map(b => parseInt(b.dataset.cycle))
+    : sample.cycles;
+
+  // Filter data by cycles
+  let data = sample.rawData;
+  if (targetCycles.length > 0 && targetCycles.length < sample.cycles.length) {
+    data = sample.rawData.filter(d => {
+      const c = parseFloat(d["循环序号"] || d["CycleNo"] || d["循环"] || d["Cycle"]);
+      return targetCycles.includes(c);
+    });
+  }
+
+  // Parse and group by step
+  const steps = [];
+  let currentStep = null;
+  let stepData = [];
+
+  data.forEach(row => {
+    const stepNo = row["工步序号"] || row["StepNo"] || row["工步号"] || row["Step"];
+    const current = parseFloat(row["电流/mA"] || row["电流"] || row["Current"] || 0);
+    const voltage = parseFloat(row["电压/V"] || row["电压"] || row["Voltage"] || 0);
+    const status = row["工步状态"] || row["Status"] || "";
+
+    if (!currentStep || currentStep !== stepNo) {
+      if (stepData.length > 0) {
+        steps.push({
+          stepNo: currentStep,
+          data: stepData,
+          isPulse: stepData.some(d => Math.abs(d.current) > threshold),
+          isRelax: stepData.every(d => Math.abs(d.current) <= threshold),
+          status: stepData[0].status
+        });
+      }
+      currentStep = stepNo;
+      stepData = [];
+    }
+    stepData.push({ current, voltage, status, raw: row });
+  });
+
+  // Push last step
+  if (stepData.length > 0) {
+    steps.push({
+      stepNo: currentStep,
+      data: stepData,
+      isPulse: stepData.some(d => Math.abs(d.current) > threshold),
+      isRelax: stepData.every(d => Math.abs(d.current) <= threshold),
+      status: stepData[0].status
+    });
+  }
+
+  // Pair pulse-relax steps
+  const analyzedData = [];
+  for (let i = 0; i < steps.length - 1; i++) {
+    const pulseStep = steps[i];
+    const relaxStep = steps[i + 1];
+
+    if (pulseStep.isPulse && relaxStep.isRelax) {
+      const pulseData = pulseStep.data;
+      const relaxData = relaxStep.data;
+
+      // V_OCV: last N points of relax
+      const relaxSlice = relaxData.slice(-Math.min(relaxPoints, relaxData.length));
+      const vOCV = relaxSlice.reduce((a, b) => a + b.voltage, 0) / relaxSlice.length;
+
+      // V_start: first N points of pulse
+      const pulseSlice = pulseData.slice(0, Math.min(pulsePoints, pulseData.length));
+      const vPulseStart = pulseSlice.reduce((a, b) => a + b.voltage, 0) / pulseSlice.length;
+
+      // V_end: last point of pulse
+      const vPulseEnd = pulseData[pulseData.length - 1].voltage;
+
+      const irDrop = (vPulseStart - vOCV) * 1000;
+      const massTransfer = (vPulseEnd - vPulseStart) * 1000;
+      const total = (vPulseEnd - vOCV) * 1000;
+
+      analyzedData.push({
+        stepIndex: analyzedData.length + 1,
+        stepNo: pulseStep.stepNo,
+        type: pulseStep.status.includes("C") || pulseStep.status.includes("RateC") ? "充电" : "放电",
+        vOCV: vOCV.toFixed(6),
+        vPulseStart: vPulseStart.toFixed(6),
+        vPulseEnd: vPulseEnd.toFixed(6),
+        irDrop: irDrop.toFixed(3),
+        massTransfer: massTransfer.toFixed(3),
+        total: total.toFixed(3)
+      });
+    }
+  }
+
+  sample.analyzedData = analyzedData;
+
+  if (analyzedData.length === 0) {
+    showMsg("未识别到有效的脉冲-弛豫对，请检查数据格式或电流阈值", "error");
+    return;
+  }
+
+  showMsg(`分析完成: ${analyzedData.length} 个 GITT 台阶`, "success");
+  displayResults(sample);
+}
+
+// ===================== Display Results =====================
+function displayResults(sample) {
+  const data = sample.analyzedData;
+
+  // Stats
+  statsArea.classList.remove("hidden");
+  const avgIR = (data.reduce((a, b) => a + Math.abs(parseFloat(b.irDrop)), 0) / data.length).toFixed(2);
+  const avgMT = (data.reduce((a, b) => a + Math.abs(parseFloat(b.massTransfer)), 0) / data.length).toFixed(2);
+  const avgTotal = (data.reduce((a, b) => a + Math.abs(parseFloat(b.total)), 0) / data.length).toFixed(2);
+
+  statsArea.innerHTML = `
+    <div class="stat"><div class="val">${data.length}</div><div class="lab">GITT 台阶数</div></div>
+    <div class="stat"><div class="val">${avgIR}</div><div class="lab">平均 |IR Drop| (mV)</div></div>
+    <div class="stat"><div class="val">${avgMT}</div><div class="lab">平均 |Mass-Transfer| (mV)</div></div>
+    <div class="stat"><div class="val">${avgTotal}</div><div class="lab">平均 |Total| (mV)</div></div>
+  `;
+
+  renderChart(data);
+  renderTable(data);
+  downloadChartBtn.disabled = false;
+  downloadDataBtn.disabled = false;
+}
+
+// ===================== ECharts Chart with Dual X-Axis =====================
+function renderChart(data) {
+  if (chart) { chart.dispose(); }
+  chart = echarts.init(chartContainer);
+
+  const stepIndices = data.map(d => d.stepIndex);
+  const irData = data.map(d => parseFloat(d.irDrop));
+  const mtData = data.map(d => parseFloat(d.massTransfer));
+  const vOCVs = data.map(d => parseFloat(d.vOCV).toFixed(3));
+
+  const isDark = document.documentElement.classList.contains("dark");
+  const textColor = isDark ? "#e2e8f0" : "#1e293b";
+  const gridColor = isDark ? "#334155" : "#e2e8f0";
+  const bgColor = isDark ? "#0f172a" : "#ffffff";
+
+  const option = {
+    backgroundColor: bgColor,
+    tooltip: {
+      trigger: "axis",
+      axisPointer: { type: "shadow" },
+      formatter: function(params) {
+        let result = `<strong>Step ${params[0].axisValue}</strong><br/>`;
+        result += `V_OCV: ${vOCVs[params[0].dataIndex]} V<br/>`;
+        params.forEach(p => {
+          result += `${p.marker} ${p.seriesName}: <strong>${p.value} mV</strong><br/>`;
+        });
+        const total = parseFloat(data[params[0].dataIndex].irDrop) + parseFloat(data[params[0].dataIndex].massTransfer);
+        result += `总计: <strong>${total.toFixed(2)} mV</strong>`;
+        return result;
+      }
+    },
+    legend: {
+      data: ["IR Drop", "Mass-Transfer"],
+      textStyle: { color: textColor },
+      top: 10
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "15%",
+      top: "15%",
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: "category",
+        data: stepIndices,
+        name: "Step Index",
+        nameLocation: "middle",
+        nameGap: 30,
+        axisLine: { lineStyle: { color: gridColor } },
+        axisLabel: { color: textColor },
+        nameTextStyle: { color: textColor }
+      },
+      {
+        type: "category",
+        data: vOCVs,
+        name: "V_OCV (V)",
+        nameLocation: "middle",
+        nameGap: 30,
+        position: "bottom",
+        offset: 40,
+        axisLine: { lineStyle: { color: gridColor } },
+        axisLabel: { color: textColor, fontSize: 10 },
+        nameTextStyle: { color: textColor }
+      }
+    ],
+    yAxis: {
+      type: "value",
+      name: "Overpotential (mV)",
+      nameTextStyle: { color: textColor },
+      axisLine: { lineStyle: { color: gridColor } },
+      axisLabel: { color: textColor },
+      splitLine: { lineStyle: { color: gridColor, opacity: 0.3 } }
+    },
+    series: [
+      {
+        name: "IR Drop",
+        type: "bar",
+        stack: "total",
+        data: irData,
+        itemStyle: { color: "#3b82f6" },
+        emphasis: { itemStyle: { color: "#2563eb" } }
+      },
+      {
+        name: "Mass-Transfer",
+        type: "bar",
+        stack: "total",
+        data: mtData,
+        itemStyle: { color: "#f59e0b" },
+        emphasis: { itemStyle: { color: "#d97706" } }
+      }
+    ],
+    animationDuration: 500,
+    animationEasing: "cubicOut"
+  };
+
+  chart.setOption(option);
+
+  window.addEventListener("resize", () => chart.resize());
+}
+
+// ===================== Data Table =====================
+function renderTable(data) {
+  dataTable.innerHTML = `
+    <thead>
+      <tr>
+        <th>台阶</th>
+        <th>类型</th>
+        <th>V_OCV (V)</th>
+        <th>V_start (V)</th>
+        <th>V_end (V)</th>
+        <th>IR Drop (mV)</th>
+        <th>Mass-Transfer (mV)</th>
+        <th>Total (mV)</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${data.map(d => `
+        <tr>
+          <td>${d.stepIndex}</td>
+          <td><span style="color:${d.type === "充电" ? "#2563eb" : "#ea580c"}">${d.type}</span></td>
+          <td>${d.vOCV}</td>
+          <td>${d.vPulseStart}</td>
+          <td>${d.vPulseEnd}</td>
+          <td>${d.irDrop}</td>
+          <td>${d.massTransfer}</td>
+          <td><strong>${d.total}</strong></td>
+        </tr>
+      `).join("")}
+    </tbody>
+  `;
+}
+
+// ===================== Export =====================
+downloadChartBtn.addEventListener("click", () => {
+  if (!chart) return;
+  const url = chart.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `GITT_Overpotential_${activeSample}.png`;
+  a.click();
+});
+
+downloadDataBtn.addEventListener("click", () => {
+  if (!activeSample || !samples[activeSample].analyzedData.length) return;
+  const data = samples[activeSample].analyzedData;
+  const headers = ["Step", "Type", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
+  const csv = [headers.join(","), ...data.map(d =>
+    [d.stepIndex, d.type, d.vOCV, d.vPulseStart, d.vPulseEnd, d.irDrop, d.massTransfer, d.total].join(",")
+  )].join("\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `GITT_Data_${activeSample}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+// ===================== Reset =====================
+resetBtn.addEventListener("click", () => {
+  samples = {};
+  activeSample = null;
+  if (chart) { chart.dispose(); chart = null; }
+  chartContainer.innerHTML = "";
+  fileInput.value = "";
+  fileInfo.classList.add("hidden");
+  fileInfo.innerHTML = "";
+  sampleTabs.innerHTML = "";
+  noSamples.classList.remove("hidden");
+  cycleSelector.innerHTML = "";
+  cycleHint.textContent = "自动识别所有循环，点击选择";
+  statsArea.classList.add("hidden");
+  statsArea.innerHTML = "";
+  dataTable.innerHTML = `<thead><tr><th style="text-align:center;color:var(--text2);">请先上传并分析数据</th></tr></thead><tbody></tbody>`;
+  previewTable.innerHTML = `<thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead><tbody></tbody>`;
+  processBtn.disabled = true;
+  downloadChartBtn.disabled = true;
+  downloadDataBtn.disabled = true;
+  showMsg("已重置", "info");
+});
+
+// ===================== Keyboard shortcut =====================
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.key === "Enter" && !processBtn.disabled) {
+    processBtn.click();
+  }
+});
+</script>
