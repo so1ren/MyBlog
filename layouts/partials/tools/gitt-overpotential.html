@@ -791,12 +791,13 @@ function renderChart(data) {
       trigger: "axis",
       axisPointer: { type: "shadow" },
       formatter: function(params) {
-        let result = `<strong>Step ${params[0].axisValue}</strong><br/>`;
-        result += `V_OCV: ${vOCVs[params[0].dataIndex]} V<br/>`;
+        const idx = params[0].dataIndex;
+        let result = `<strong>Step ${stepIndices[idx]}</strong><br/>`;
+        result += `V_OCV: ${vOCVs[idx]} V<br/>`;
         params.forEach(p => {
           result += `${p.marker} ${p.seriesName}: <strong>${p.value} mV</strong><br/>`;
         });
-        const total = parseFloat(data[params[0].dataIndex].irDrop) + parseFloat(data[params[0].dataIndex].massTransfer);
+        const total = parseFloat(data[idx].irDrop) + parseFloat(data[idx].massTransfer);
         result += `总计: <strong>${total.toFixed(2)} mV</strong>`;
         return result;
       }
@@ -809,34 +810,23 @@ function renderChart(data) {
     grid: {
       left: "3%",
       right: "4%",
-      bottom: "15%",
+      bottom: "12%",
       top: "15%",
       containLabel: true
     },
-    xAxis: [
-      {
-        type: "category",
-        data: stepIndices,
-        name: "Step Index",
-        nameLocation: "middle",
-        nameGap: 30,
-        axisLine: { lineStyle: { color: gridColor } },
-        axisLabel: { color: textColor },
-        nameTextStyle: { color: textColor }
-      },
-      {
-        type: "category",
-        data: vOCVs,
-        name: "V_OCV (V)",
-        nameLocation: "middle",
-        nameGap: 30,
-        position: "bottom",
-        offset: 40,
-        axisLine: { lineStyle: { color: gridColor } },
-        axisLabel: { color: textColor, fontSize: 10 },
-        nameTextStyle: { color: textColor }
-      }
-    ],
+    xAxis: {
+      type: "value",
+      name: "V_OCV (V)",
+      nameLocation: "middle",
+      nameGap: 30,
+      min: 2.5,
+      max: 3.9,
+      interval: 0.2,
+      axisLine: { lineStyle: { color: gridColor } },
+      axisLabel: { color: textColor, formatter: '{value}' },
+      nameTextStyle: { color: textColor },
+      splitLine: { lineStyle: { color: gridColor, opacity: 0.3 } }
+    },
     yAxis: {
       type: "value",
       name: "Overpotential (mV)",
@@ -850,7 +840,7 @@ function renderChart(data) {
         name: "IR Drop",
         type: "bar",
         stack: "total",
-        data: irData,
+        data: data.map((d, i) => [parseFloat(d.vOCV), parseFloat(d.irDrop)]),
         itemStyle: { color: "#3b82f6" },
         emphasis: { itemStyle: { color: "#2563eb" } }
       },
@@ -858,7 +848,7 @@ function renderChart(data) {
         name: "Mass-Transfer",
         type: "bar",
         stack: "total",
-        data: mtData,
+        data: data.map((d, i) => [parseFloat(d.vOCV), parseFloat(d.massTransfer)]),
         itemStyle: { color: "#f59e0b" },
         emphasis: { itemStyle: { color: "#d97706" } }
       }
