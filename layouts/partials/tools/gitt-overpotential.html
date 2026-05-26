@@ -775,78 +775,29 @@ function renderChart(data) {
   if (chart) { chart.dispose(); }
   chart = echarts.init(chartContainer);
 
-  // Split data by type
-  const chargeData = data.filter(d => d.type === "充电");
-  const dischargeData = data.filter(d => d.type === "放电");
+  const stepIndices = data.map(d => d.stepIndex);
+  const irData = data.map(d => parseFloat(d.irDrop));
+  const mtData = data.map(d => parseFloat(d.massTransfer));
+  const vOCVs = data.map(d => parseFloat(d.vOCV).toFixed(3));
 
   const isDark = document.documentElement.classList.contains("dark");
   const textColor = isDark ? "#e2e8f0" : "#1e293b";
   const gridColor = isDark ? "#334155" : "#e2e8f0";
   const bgColor = isDark ? "#0f172a" : "#ffffff";
 
-  const commonGrid = {
-    left: "8%",
-    right: "5%",
-    bottom: "15%",
-    top: "10%",
-    containLabel: true
-  };
-
-  const commonXAxis = {
-    type: "value",
-    name: "V_OCV (V)",
-    nameLocation: "middle",
-    nameGap: 25,
-    min: 2.5,
-    max: 3.9,
-    interval: 0.2,
-    axisLine: { lineStyle: { color: gridColor } },
-    axisLabel: { color: textColor },
-    nameTextStyle: { color: textColor },
-    splitLine: { lineStyle: { color: gridColor, opacity: 0.3 } }
-  };
-
-  const commonYAxis = {
-    type: "value",
-    name: "过电位 (mV)",
-    nameTextStyle: { color: textColor },
-    axisLine: { lineStyle: { color: gridColor } },
-    axisLabel: { color: textColor },
-    splitLine: { lineStyle: { color: gridColor, opacity: 0.3 } }
-  };
-
-  const makeSeries = (dataset) => [
-    {
-      name: "IR Drop",
-      type: "bar",
-      stack: "total",
-      data: dataset.map(d => [parseFloat(d.vOCV), parseFloat(d.irDrop)]),
-      itemStyle: { color: "#3b82f6" },
-      emphasis: { itemStyle: { color: "#2563eb" } }
-    },
-    {
-      name: "Mass-Transfer",
-      type: "bar",
-      stack: "total",
-      data: dataset.map(d => [parseFloat(d.vOCV), parseFloat(d.massTransfer)]),
-      itemStyle: { color: "#f59e0b" },
-      emphasis: { itemStyle: { color: "#d97706" } }
-    }
-  ];
-
   const option = {
     backgroundColor: bgColor,
     tooltip: {
-      trigger: "item",
+      trigger: "axis",
+      axisPointer: { type: "shadow" },
       formatter: function(params) {
-        const idx = params.dataIndex;
-        const seriesName = params.seriesName;
-        const dataset = params.seriesIndex < 2 ? chargeData : dischargeData;
-        const item = dataset[idx];
-        let result = `<strong>${item.type} — Step ${item.stepIndex}</strong><br/>`;
-        result += `V_OCV: ${item.vOCV} V<br/>`;
-        result += `${params.marker} ${seriesName}: <strong>${params.data[1]} mV</strong><br/>`;
-        const total = parseFloat(item.irDrop) + parseFloat(item.massTransfer);
+        const idx = params[0].dataIndex;
+        let result = `<strong>Step ${stepIndices[idx]}</strong><br/>`;
+        result += `V_OCV: ${vOCVs[idx]} V<br/>`;
+        params.forEach(p => {
+          result += `${p.marker} ${p.seriesName}: <strong>${p.value} mV</strong><br/>`;
+        });
+        const total = parseFloat(data[idx].irDrop) + parseFloat(data[idx].massTransfer);
         result += `总计: <strong>${total.toFixed(2)} mV</strong>`;
         return result;
       }
@@ -854,27 +805,50 @@ function renderChart(data) {
     legend: {
       data: ["IR Drop", "Mass-Transfer"],
       textStyle: { color: textColor },
-      top: 5
+      top: 10
     },
-    grid: [
-      { ...commonGrid, top: "12%", height: "35%" },
-      { ...commonGrid, top: "62%", height: "35%" }
-    ],
-    xAxis: [
-      { ...commonXAxis, gridIndex: 0 },
-      { ...commonXAxis, gridIndex: 1 }
-    ],
-    yAxis: [
-      { ...commonYAxis, gridIndex: 0 },
-      { ...commonYAxis, gridIndex: 1 }
-    ],
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "15%",
+      top: "15%",
+      containLabel: true
+    },
+    xAxis: {
+      type: "category",
+      data: stepIndices,
+      name: "Step Index",
+      nameLocation: "middle",
+      nameGap: 30,
+      axisLine: { lineStyle: { color: gridColor } },
+      axisLabel: { color: textColor },
+      nameTextStyle: { color: textColor }
+    },
+    yAxis: {
+      type: "value",
+      name: "Overpotential (mV)",
+      nameTextStyle: { color: textColor },
+      axisLine: { lineStyle: { color: gridColor } },
+      axisLabel: { color: textColor },
+      splitLine: { lineStyle: { color: gridColor, opacity: 0.3 } }
+    },
     series: [
-      ...makeSeries(chargeData).map(s => ({ ...s, xAxisIndex: 0, yAxisIndex: 0 })),
-      ...makeSeries(dischargeData).map(s => ({ ...s, xAxisIndex: 1, yAxisIndex: 1 }))
-    ],
-    title: [
-      { text: "充电 (Charge)", left: "center", top: "2%", textStyle: { color: textColor, fontSize: 14 } },
-      { text: "放电 (Discharge)", left: "center", top: "52%", textStyle: { color: textColor, fontSize: 14 } }
+      {
+        name: "IR Drop",
+        type: "bar",
+        stack: "total",
+        data: irData,
+        itemStyle: { color: "#3b82f6" },
+        emphasis: { itemStyle: { color: "#2563eb" } }
+      },
+      {
+        name: "Mass-Transfer",
+        type: "bar",
+        stack: "total",
+        data: mtData,
+        itemStyle: { color: "#f59e0b" },
+        emphasis: { itemStyle: { color: "#d97706" } }
+      }
     ],
     animationDuration: 500,
     animationEasing: "cubicOut"
