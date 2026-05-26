@@ -427,6 +427,46 @@
           </table>
         </div>
       </div>
+
+      <div class="panel">
+        <h2>📖 原理与处理过程</h2>
+        <div class="formula-box">
+          <strong>一、核心概念</strong><br>
+          <strong>过电位（Overpotential）</strong>：电池实际工作电压偏离热力学平衡电压的程度。<br>
+          在 GITT 中，每个台阶的弛豫结束电压被近似视为该 SOC 下的平衡电位 <code>E_eq</code>。<br><br>
+
+          <strong>二、三个特征电压</strong><br>
+          <table style="width:100%;margin:0.5rem 0;font-size:0.8rem;">
+            <tr><th>电压符号</th><th>读取位置</th><th>物理意义</th></tr>
+            <tr><td><code>V_OCV, before</code></td><td>弛豫段最后 N 个点平均</td><td>脉冲前的热力学平衡电位</td></tr>
+            <tr><td><code>V(t → 0⁺)</code></td><td>电流施加后前 N 个点平均</td><td>IR Drop 完成后的电压（扩散尚未开始）</td></tr>
+            <tr><td><code>V(t = τ⁻)</code></td><td>恒流脉冲最后一点</td><td>脉冲结束时，已累积全部极化</td></tr>
+          </table><br>
+
+          <strong>三、计算公式</strong><br>
+          <code>η_total = V(t = τ⁻) − V_OCV, before</code><br>
+          <code>ΔV_IR = V(t → 0⁺) − V_OCV, before</code> （时间尺度：毫秒~秒级）<br>
+          <code>ΔV_mt = V(t = τ⁻) − V(t → 0⁺)</code> （时间尺度：分钟~小时级）<br>
+          <strong>验证式：η_total = ΔV_IR + ΔV_mt</strong><br><br>
+
+          <strong>四、数据处理流程</strong><br>
+          1. <strong>文件解析</strong>：读取 .xlsx/.csv/.txt，识别列名（工步序号、电流、电压、循环号、工步状态）<br>
+          2. <strong>循环筛选</strong>：按目标循环号过滤数据<br>
+          3. <strong>步骤分组</strong>：按工步序号分组，判断脉冲/弛豫（电流阈值 <code>0.001 mA</code>）<br>
+          4. <strong>脉冲-弛豫配对</strong>：找到相邻的脉冲→弛豫对<br>
+          5. <strong>计算过电位</strong>：提取三个特征电压，计算 IR Drop 和 Mass-Transfer<br>
+          6. <strong>绘图</strong>：堆叠柱状图，蓝色=IR Drop，橙色=Mass-Transfer<br><br>
+
+          <strong>五、时间尺度分离原理</strong><br>
+          <table style="width:100%;margin:0.5rem 0;font-size:0.8rem;">
+            <tr><th>过程</th><th>特征时间</th><th>能否分离</th></tr>
+            <tr><td>欧姆压降</td><td>毫秒 ~ 1 s</td><td>电流切换瞬间即完成</td></tr>
+            <tr><td>双电层充电</td><td>1 ~ 10 s</td><td>较快结束</td></tr>
+            <tr><td>浓差极化/扩散</td><td>分钟 ~ 小时</td><td>缓慢累积</td></tr>
+          </table>
+          关键：电流接通时，电压先"瞬间跳变"（IR drop），再"缓慢漂移"（Mass-transfer）。两者在时间上天然分离。
+        </div>
+      </div>
     </div>
   </div>
 
