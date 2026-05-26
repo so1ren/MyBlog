@@ -1104,9 +1104,9 @@ function analyzeData() {
       // V_end: last point of pulse
       const vPulseEnd = pulseData[pulseData.length - 1].voltage;
 
-      const irDrop = (vPulseStart - vOCV) * 1000;
-      const massTransfer = (vPulseEnd - vPulseStart) * 1000;
-      const total = (vPulseEnd - vOCV) * 1000;
+      const irDrop = Math.abs(vPulseStart - vOCV) * 1000;
+      const massTransfer = Math.abs(vPulseEnd - vPulseStart) * 1000;
+      const total = Math.abs(vPulseEnd - vOCV) * 1000;
 
       analyzedData.push({
         stepIndex: analyzedData.length + 1,
@@ -1139,9 +1139,9 @@ function displayResults(sample) {
 
   // Stats
   statsArea.classList.remove("hidden");
-  const avgIR = (data.reduce((a, b) => a + Math.abs(parseFloat(b.irDrop)), 0) / data.length).toFixed(2);
-  const avgMT = (data.reduce((a, b) => a + Math.abs(parseFloat(b.massTransfer)), 0) / data.length).toFixed(2);
-  const avgTotal = (data.reduce((a, b) => a + Math.abs(parseFloat(b.total)), 0) / data.length).toFixed(2);
+  const avgIR = (data.reduce((a, b) => a + parseFloat(b.irDrop), 0) / data.length).toFixed(2);
+  const avgMT = (data.reduce((a, b) => a + parseFloat(b.massTransfer), 0) / data.length).toFixed(2);
+  const avgTotal = (data.reduce((a, b) => a + parseFloat(b.total), 0) / data.length).toFixed(2);
 
   statsArea.innerHTML = `
     <div class="stat"><div class="val">${data.length}</div><div class="lab">GITT 台阶数</div></div>
