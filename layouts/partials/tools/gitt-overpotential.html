@@ -279,6 +279,63 @@
     margin-top: 1rem;
   }
 
+  .required-columns {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    background: var(--surface2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .required-header {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .required-icon {
+    font-size: 1.1rem;
+  }
+  .required-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .required-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg);
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+  .required-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: 'Fira Code', 'Source Code Pro', monospace;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .required-desc {
+    color: var(--text2);
+    font-size: 0.8rem;
+  }
+  .required-tip {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -448,18 +505,31 @@
         <input type="file" id="fileInput" accept=".xlsx,.csv,.txt" multiple>
         <div id="fileInfo" class="file-info hidden"></div>
 
-        <div class="required-columns" style="margin-top: 1rem; padding: 0.75rem; background: var(--surface2); border-radius: 8px; font-size: 0.85rem;">
-          <strong style="color: var(--accent); display: block; margin-bottom: 0.5rem;">📋 必需数据列</strong>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem;">
-            <span><code>电流/mA</code> — 判断脉冲/弛豫</span>
-            <span><code>电压/V</code> — 计算过电位</span>
-            <span><code>工步序号</code> — 步骤分组配对</span>
-            <span><code>循环序号</code> — 循环筛选</span>
-            <span><code>工步状态</code> — 充电/放电标识</span>
+        <div class="required-columns">
+          <div class="required-header"><span class="required-icon">📋</span> 必需数据列</div>
+          <div class="required-list">
+            <div class="required-item">
+              <span class="required-tag">电流/mA</span>
+              <span class="required-desc">判断脉冲/弛豫</span>
+            </div>
+            <div class="required-item">
+              <span class="required-tag">电压/V</span>
+              <span class="required-desc">计算过电位</span>
+            </div>
+            <div class="required-item">
+              <span class="required-tag">工步序号</span>
+              <span class="required-desc">步骤分组配对</span>
+            </div>
+            <div class="required-item">
+              <span class="required-tag">循环序号</span>
+              <span class="required-desc">循环筛选</span>
+            </div>
+            <div class="required-item">
+              <span class="required-tag">工步状态</span>
+              <span class="required-desc">充电/放电标识</span>
+            </div>
           </div>
-          <div style="margin-top: 0.5rem; color: var(--text2); font-size: 0.8rem;">
-            提示：多余列（如记录序号、时间等）可省略，不影响分析
-          </div>
+          <div class="required-tip">💡 多余列（如记录序号、时间等）可省略，不影响分析</div>
         </div>
       </div>
 
