@@ -821,7 +821,12 @@ function renderChart(data) {
       nameLocation: "middle",
       nameGap: 30,
       axisLine: { lineStyle: { color: gridColor } },
-      axisLabel: { color: textColor },
+      axisLabel: { 
+        color: textColor,
+        formatter: function(value, index) {
+          return value + '\n' + vOCVs[index] + 'V';
+        }
+      },
       nameTextStyle: { color: textColor }
     },
     yAxis: {
