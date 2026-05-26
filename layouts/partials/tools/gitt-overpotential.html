@@ -279,6 +279,92 @@
     margin-top: 1rem;
   }
 
+  .insight-box {
+    margin-top: 1rem;
+    background: var(--accent-light);
+    border-radius: 12px;
+    border: 1px solid var(--accent);
+    overflow: hidden;
+  }
+  .insight-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--accent);
+    color: #fff;
+  }
+  .insight-icon {
+    font-size: 1.1rem;
+  }
+  .insight-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .insight-content {
+    padding: 1rem;
+  }
+  .insight-content p {
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .insight-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+  .insight-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg);
+    border-radius: 8px;
+  }
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .step-text strong {
+    color: var(--accent);
+    font-size: 0.85rem;
+  }
+  .step-detail {
+    color: var(--text2);
+    font-size: 0.8rem;
+  }
+  .insight-arrow {
+    text-align: center;
+    color: var(--accent);
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .insight-conclusion {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  .insight-conclusion strong {
+    color: var(--accent);
+  }
+
   .required-columns {
     margin-top: 1.25rem;
     padding: 1rem;
@@ -698,7 +784,33 @@
               <span>缓慢累积，主导传质过程</span>
             </div>
           </div>
-          <p class="highlight"><strong>关键洞察：</strong> 电流接通时，电压先"瞬间跳变"（IR drop，秒级），再"缓慢漂移"（Mass-transfer，分钟级）。两者在时间上天然分离，因此可用 GITT 拆解。</p>
+          <div class="insight-box">
+            <div class="insight-header">
+              <span class="insight-icon">💡</span>
+              <span class="insight-title">关键洞察</span>
+            </div>
+            <div class="insight-content">
+              <p>电流接通时，电压变化分为两个阶段：</p>
+              <div class="insight-steps">
+                <div class="insight-step">
+                  <span class="step-num">1</span>
+                  <div class="step-text">
+                    <strong>瞬间跳变</strong>
+                    <span class="step-detail">IR drop，秒级完成</span>
+                  </div>
+                </div>
+                <div class="insight-arrow">↓</div>
+                <div class="insight-step">
+                  <span class="step-num">2</span>
+                  <div class="step-text">
+                    <strong>缓慢漂移</strong>
+                    <span class="step-detail">Mass-transfer，分钟级累积</span>
+                  </div>
+                </div>
+              </div>
+              <p class="insight-conclusion">两者在时间上<strong>天然分离</strong>，因此可用 GITT 拆解。</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
