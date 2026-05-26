@@ -447,6 +447,20 @@
         </div>
         <input type="file" id="fileInput" accept=".xlsx,.csv,.txt" multiple>
         <div id="fileInfo" class="file-info hidden"></div>
+
+        <div class="required-columns" style="margin-top: 1rem; padding: 0.75rem; background: var(--surface2); border-radius: 8px; font-size: 0.85rem;">
+          <strong style="color: var(--accent); display: block; margin-bottom: 0.5rem;">📋 必需数据列</strong>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem;">
+            <span><code>电流/mA</code> — 判断脉冲/弛豫</span>
+            <span><code>电压/V</code> — 计算过电位</span>
+            <span><code>工步序号</code> — 步骤分组配对</span>
+            <span><code>循环序号</code> — 循环筛选</span>
+            <span><code>工步状态</code> — 充电/放电标识</span>
+          </div>
+          <div style="margin-top: 0.5rem; color: var(--text2); font-size: 0.8rem;">
+            提示：多余列（如记录序号、时间等）可省略，不影响分析
+          </div>
+        </div>
       </div>
 
       <div class="panel">
@@ -580,7 +594,7 @@
         <div class="section">
           <h3>⚙️ 数据处理流程</h3>
           <ol class="process-list">
-            <li><strong>文件解析</strong> — 读取 .xlsx / .csv / .txt，自动识别列名（工步序号、电流/mA、电压/V、循环序号、工步状态）</li>
+            <li><strong>文件解析</strong> — 读取 .xlsx / .csv / .txt，自动识别必需列：<code>电流/mA</code>、<code>电压/V</code>、<code>工步序号</code>、<code>循环序号</code>、<code>工步状态</code>。多余列可省略。</li>
             <li><strong>循环筛选</strong> — 按目标循环号过滤数据（默认全选）</li>
             <li><strong>步骤分组</strong> — 按工步序号分组，判断脉冲/弛豫（电流阈值 <code>0.001 mA</code>）</li>
             <li><strong>脉冲-弛豫配对</strong> — 找到相邻的脉冲→弛豫对，提取有效 GITT 台阶</li>
