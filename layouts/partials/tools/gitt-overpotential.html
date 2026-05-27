@@ -1000,8 +1000,8 @@ function clearResults() {
 function detectCycles(sample) {
   const data = sample.rawData;
   const cycles = [...new Set(data.map(d =>
-    d["循环序号"] || d["CycleNo"] || d["循环"] || d["Cycle"]
-  ))].filter(Boolean).map(Number).sort((a, b) => a - b);
+    parseInt(d["循环序号"] || d["CycleNo"] || d["循环"] || d["Cycle"] || 0)
+  ))].filter(c => !isNaN(c) && c >= 0).sort((a, b) => a - b);
   sample.cycles = cycles;
 }
 
