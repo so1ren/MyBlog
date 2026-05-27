@@ -1021,28 +1021,9 @@ function renderPreview(data) {
 processBtn.addEventListener("click", analyzeData);
 
 function getStepDuration(stepData) {
-  // 尝试从原始数据中提取时间信息
-  const first = stepData[0].raw;
-  const last = stepData[stepData.length - 1].raw;
-  
-  // 尝试获取步骤时间列
-  const timeKeys = ["步骤时间", "StepTime", "步骤时间(s)", "时间", "Time", "记录时间", "RecordTime"];
-  let startTime = null, endTime = null;
-  
-  for (const key of timeKeys) {
-    if (first[key] !== undefined) {
-      startTime = parseFloat(first[key]);
-      endTime = parseFloat(last[key]);
-      break;
-    }
-  }
-  
-  if (startTime !== null && !isNaN(startTime) && !isNaN(endTime)) {
-    return (endTime - startTime).toFixed(1);
-  }
-  
-  // 如果没有时间列，返回数据点数作为参考
-  return stepData.length.toString();
+  // 固定时长：脉冲 10 min = 0.167 h，弛豫 30 min = 0.5 h
+  const isPulse = stepData.some(d => Math.abs(d.current) > 0.001);
+  return isPulse ? "0.167" : "0.500";
 }
 
 function analyzeData() {
@@ -1162,10 +1143,10 @@ function analyzeData() {
 
   sample.analyzedData = analyzedData;
 
-  // 计算累计时间
+  // 计算累计时间（单位：小时）
   let cumulative = 0;
   analyzedData.forEach(d => {
-    d.cumulativeTime = cumulative.toFixed(1);
+    d.cumulativeTime = cumulative.toFixed(3);
     cumulative += parseFloat(d.duration);
   });
 
