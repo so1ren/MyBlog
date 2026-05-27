@@ -877,10 +877,27 @@ function handleFiles(files) {
           const workbook = XLSX.read(data, { type: "array" });
           const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-          if (jsonData.length < 3) throw new Error("Excel 文件数据不足（需要标题行+表头+数据）");
-          // Skip title row and header row
-          const headers = jsonData[1].map(h => String(h).trim());
-          rawData = jsonData.slice(2).map(row => {
+          if (jsonData.length < 2) throw new Error("Excel 文件数据不足");
+          
+          // 检测是否有标题行（第1行是否包含标准列名）
+          const firstRow = jsonData[0].map(h => String(h || "").trim());
+          const hasStandardColumns = firstRow.some(h => 
+            h.includes("记录序号") || h.includes("电流") || h.includes("电压") || h.includes("工步")
+          );
+          
+          let headers, dataStartIndex;
+          if (hasStandardColumns) {
+            // 第1行就是列名（没有标题行）
+            headers = firstRow;
+            dataStartIndex = 1;
+          } else {
+            // 第1行是标题，第2行是列名
+            if (jsonData.length < 3) throw new Error("Excel 文件数据不足（需要标题行+表头+数据）");
+            headers = jsonData[1].map(h => String(h || "").trim());
+            dataStartIndex = 2;
+          }
+          
+          rawData = jsonData.slice(dataStartIndex).map(row => {
             const obj = {};
             headers.forEach((h, i) => obj[h] = row[i]);
             return obj;
