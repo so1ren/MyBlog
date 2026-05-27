@@ -1097,11 +1097,14 @@ function analyzeData() {
 
     if (!currentStep || currentStep !== stepNo) {
       if (stepData.length > 0) {
+        const isPulse = stepData.some(d => Math.abs(d.current) > threshold);
+        const isRelax = stepData.every(d => Math.abs(d.current) <= threshold);
+        console.log(`Pushing step ${currentStep}: isPulse=${isPulse}, isRelax=${isRelax}, currents=[${stepData.slice(0,3).map(d=>d.current).join(',')}], threshold=${threshold}`);
         steps.push({
           stepNo: currentStep,
           data: stepData,
-          isPulse: stepData.some(d => Math.abs(d.current) > threshold),
-          isRelax: stepData.every(d => Math.abs(d.current) <= threshold),
+          isPulse: isPulse,
+          isRelax: isRelax,
           status: stepData[0].status
         });
       }
