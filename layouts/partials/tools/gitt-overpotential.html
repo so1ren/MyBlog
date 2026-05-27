@@ -1083,17 +1083,17 @@ function analyzeData() {
     });
   }
 
-  // Pair pulse-relax steps
+  // Pair relax-pulse steps (correct order: relax[i-1] -> pulse[i])
   const analyzedData = [];
-  for (let i = 0; i < steps.length - 1; i++) {
+  for (let i = 1; i < steps.length; i++) {
+    const prevStep = steps[i - 1];
     const pulseStep = steps[i];
-    const relaxStep = steps[i + 1];
 
-    if (pulseStep.isPulse && relaxStep.isRelax) {
+    if (prevStep.isRelax && pulseStep.isPulse) {
+      const relaxData = prevStep.data;
       const pulseData = pulseStep.data;
-      const relaxData = relaxStep.data;
 
-      // V_OCV: last N points of relax
+      // V_OCV,before: last N points of previous relax
       const relaxSlice = relaxData.slice(-Math.min(relaxPoints, relaxData.length));
       const vOCV = relaxSlice.reduce((a, b) => a + b.voltage, 0) / relaxSlice.length;
 
@@ -1104,20 +1104,30 @@ function analyzeData() {
       // V_end: last point of pulse
       const vPulseEnd = pulseData[pulseData.length - 1].voltage;
 
-      const irDrop = Math.abs(vPulseStart - vOCV) * 1000;
-      const massTransfer = Math.abs(vPulseEnd - vPulseStart) * 1000;
-      const total = Math.abs(vPulseEnd - vOCV) * 1000;
+      // 判断充电/放电
+      const isCharging = pulseStep.status.includes("C") || pulseStep.status.includes("RateC") || pulseData[0].current > 0;
+      
+      // 金标准自检
+      const voltageValid = isCharging
+        ? (vPulseEnd >= vPulseStart && vPulseStart >= vOCV)
+        : (vPulseEnd <= vPulseStart && vPulseStart <= vOCV);
+
+      // 带符号计算（充电为正，放电为负）
+      const irDrop = (vPulseStart - vOCV) * 1000;
+      const massTransfer = (vPulseEnd - vPulseStart) * 1000;
+      const total = (vPulseEnd - vOCV) * 1000;
 
       analyzedData.push({
         stepIndex: analyzedData.length + 1,
         stepNo: pulseStep.stepNo,
-        type: pulseStep.status.includes("C") || pulseStep.status.includes("RateC") ? "充电" : "放电",
+        type: isCharging ? "充电" : "放电",
         vOCV: vOCV.toFixed(6),
         vPulseStart: vPulseStart.toFixed(6),
         vPulseEnd: vPulseEnd.toFixed(6),
         irDrop: irDrop.toFixed(3),
         massTransfer: massTransfer.toFixed(3),
-        total: total.toFixed(3)
+        total: total.toFixed(3),
+        valid: voltageValid
       });
     }
   }
