@@ -1020,6 +1020,31 @@ function renderPreview(data) {
 // ===================== Analysis =====================
 processBtn.addEventListener("click", analyzeData);
 
+function getStepDuration(stepData) {
+  // 尝试从原始数据中提取时间信息
+  const first = stepData[0].raw;
+  const last = stepData[stepData.length - 1].raw;
+  
+  // 尝试获取步骤时间列
+  const timeKeys = ["步骤时间", "StepTime", "步骤时间(s)", "时间", "Time", "记录时间", "RecordTime"];
+  let startTime = null, endTime = null;
+  
+  for (const key of timeKeys) {
+    if (first[key] !== undefined) {
+      startTime = parseFloat(first[key]);
+      endTime = parseFloat(last[key]);
+      break;
+    }
+  }
+  
+  if (startTime !== null && !isNaN(startTime) && !isNaN(endTime)) {
+    return (endTime - startTime).toFixed(1);
+  }
+  
+  // 如果没有时间列，返回数据点数作为参考
+  return stepData.length.toString();
+}
+
 function analyzeData() {
   if (!activeSample || !samples[activeSample]) {
     showMsg("请先选择样品", "error");
@@ -1121,6 +1146,8 @@ function analyzeData() {
         stepIndex: analyzedData.length + 1,
         stepNo: pulseStep.stepNo,
         type: isCharging ? "充电" : "放电",
+        cycle: pulseData[0].raw["循环序号"] || pulseData[0].raw["CycleNo"] || pulseData[0].raw["循环"] || "-",
+        duration: getStepDuration(pulseData),
         vOCV: vOCV.toFixed(6),
         vPulseStart: vPulseStart.toFixed(6),
         vPulseEnd: vPulseEnd.toFixed(6),
@@ -1313,9 +1340,9 @@ downloadChartBtn.addEventListener("click", () => {
 downloadDataBtn.addEventListener("click", () => {
   if (!activeSample || !samples[activeSample].analyzedData.length) return;
   const data = samples[activeSample].analyzedData;
-  const headers = ["Step", "Type", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
+  const headers = ["Step", "Type", "Cycle", "Duration(s)", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
   const csv = [headers.join(","), ...data.map(d =>
-    [d.stepIndex, d.type, d.vOCV, d.vPulseStart, d.vPulseEnd, d.irDrop, d.massTransfer, d.total].join(",")
+    [d.stepIndex, d.type, d.cycle, d.duration, d.vOCV, d.vPulseStart, d.vPulseEnd, d.irDrop, d.massTransfer, d.total].join(",")
   )].join("\n");
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
