@@ -881,9 +881,11 @@ function handleFiles(files) {
           
           // 检测是否有标题行（第1行是否包含标准列名）
           const firstRow = jsonData[0].map(h => String(h || "").trim());
+          console.log("Excel first row:", firstRow);
           const hasStandardColumns = firstRow.some(h => 
             h.includes("记录序号") || h.includes("电流") || h.includes("电压") || h.includes("工步")
           );
+          console.log("Has standard columns:", hasStandardColumns);
           
           let headers, dataStartIndex;
           if (hasStandardColumns) {
@@ -896,6 +898,9 @@ function handleFiles(files) {
             headers = jsonData[1].map(h => String(h || "").trim());
             dataStartIndex = 2;
           }
+          console.log("Headers:", headers);
+          console.log("Data start index:", dataStartIndex);
+          console.log("First data row:", jsonData[dataStartIndex]);
           
           rawData = jsonData.slice(dataStartIndex).map(row => {
             const obj = {};
