@@ -1092,7 +1092,7 @@ function analyzeData() {
     const status = row["工步状态"] || row["Status"] || row["status"] || row["工步状态"] || "";
     
     if (idx < 5) {
-      console.log(`Row ${idx}: stepNo=${stepNo}, current=${current}, voltage=${voltage}, status=${status}`);
+      console.log(`Row ${idx}: stepNo=${stepNo} (type=${typeof stepNo}), current=${current}, voltage=${voltage}, status=${status}`);
     }
 
     if (!currentStep || currentStep !== stepNo) {
@@ -1131,7 +1131,8 @@ function analyzeData() {
     status: s.status, 
     dataCount: s.data.length,
     firstCurrent: s.data[0]?.current,
-    lastCurrent: s.data[s.data.length-1]?.current
+    lastCurrent: s.data[s.data.length-1]?.current,
+    threshold: threshold
   })));
 
   // Pair relax-pulse steps (correct order: relax[i-1] -> pulse[i])
