@@ -1086,7 +1086,7 @@ function analyzeData() {
   let stepData = [];
 
   data.forEach((row, idx) => {
-    const stepNo = row["工步序号"] || row["StepNo"] || row["工步号"] || row["Step"] || row["step"] || row["工步"];
+    const stepNo = parseInt(row["工步序号"] || row["StepNo"] || row["工步号"] || row["Step"] || row["step"] || row["工步"] || 0);
     const current = parseFloat(row["电流/mA"] || row["电流"] || row["Current"] || row["current"] || row["Current(mA)"] || 0);
     const voltage = parseFloat(row["电压/V"] || row["电压"] || row["Voltage"] || row["voltage"] || row["Voltage(V)"] || 0);
     const status = row["工步状态"] || row["Status"] || row["status"] || row["工步状态"] || "";
