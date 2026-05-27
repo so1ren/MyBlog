@@ -1124,16 +1124,10 @@ function analyzeData() {
 
   // Debug: log steps info with details
   console.log("Total steps:", steps.length);
-  console.log("First 10 steps detailed:", steps.slice(0, 10).map(s => ({ 
-    stepNo: s.stepNo, 
-    isPulse: s.isPulse, 
-    isRelax: s.isRelax, 
-    status: s.status, 
-    dataCount: s.data.length,
-    firstCurrent: s.data[0]?.current,
-    lastCurrent: s.data[s.data.length-1]?.current,
-    threshold: threshold
-  })));
+  for (let i = 0; i < Math.min(10, steps.length); i++) {
+    const s = steps[i];
+    console.log(`Step ${i}: stepNo=${s.stepNo}, isPulse=${s.isPulse}, isRelax=${s.isRelax}, status=${s.status}, dataCount=${s.data.length}, firstCurrent=${s.data[0]?.current}, threshold=${threshold}`);
+  }
 
   // Pair relax-pulse steps (correct order: relax[i-1] -> pulse[i])
   const analyzedData = [];
