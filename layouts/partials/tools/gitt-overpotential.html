@@ -1148,6 +1148,7 @@ function analyzeData() {
         type: isCharging ? "充电" : "放电",
         cycle: pulseData[0].raw["循环序号"] || pulseData[0].raw["CycleNo"] || pulseData[0].raw["循环"] || "-",
         duration: getStepDuration(pulseData),
+        cumulativeTime: 0, // 将在后面累加
         vOCV: vOCV.toFixed(6),
         vPulseStart: vPulseStart.toFixed(6),
         vPulseEnd: vPulseEnd.toFixed(6),
@@ -1160,6 +1161,13 @@ function analyzeData() {
   }
 
   sample.analyzedData = analyzedData;
+
+  // 计算累计时间
+  let cumulative = 0;
+  analyzedData.forEach(d => {
+    d.cumulativeTime = cumulative.toFixed(1);
+    cumulative += parseFloat(d.duration);
+  });
 
   if (analyzedData.length === 0) {
     showMsg("未识别到有效的脉冲-弛豫对，请检查数据格式或电流阈值", "error");
@@ -1340,9 +1348,9 @@ downloadChartBtn.addEventListener("click", () => {
 downloadDataBtn.addEventListener("click", () => {
   if (!activeSample || !samples[activeSample].analyzedData.length) return;
   const data = samples[activeSample].analyzedData;
-  const headers = ["Step", "Type", "Cycle", "Duration(s)", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
+  const headers = ["Step", "Type", "Cycle", "Duration(s)", "CumulativeTime(s)", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
   const csv = [headers.join(","), ...data.map(d =>
-    [d.stepIndex, d.type, d.cycle, d.duration, d.vOCV, d.vPulseStart, d.vPulseEnd, d.irDrop, d.massTransfer, d.total].join(",")
+    [d.stepIndex, d.type, d.cycle, d.duration, d.cumulativeTime, d.vOCV, d.vPulseStart, d.vPulseEnd, d.irDrop, d.massTransfer, d.total].join(",")
   )].join("\n");
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
