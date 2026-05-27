@@ -1145,15 +1145,11 @@ function analyzeData() {
 
   // 计算累计时间（单位：小时）
   // GITT 序列：弛豫(0.5h) → 脉冲(0.167h) → 弛豫(0.5h) → 脉冲(0.167h) ...
-  // 累计时间从第一个弛豫段开始 = 0
   let cumulative = 0;
   analyzedData.forEach((d, idx) => {
-    // 当前脉冲的累计时间 = 之前所有脉冲+弛豫的总和
     d.cumulativeTime = cumulative.toFixed(3);
-    // 加上当前脉冲时长
-    cumulative += parseFloat(d.duration); // 0.167
-    // 加上脉冲后的弛豫时长（最后一个脉冲可能没有弛豫，但按标准GITT假设都有）
-    cumulative += 0.500;
+    cumulative += parseFloat(d.duration); // 脉冲 0.167h
+    cumulative += 0.500; // 脉冲后的弛豫 0.5h
   });
 
   if (analyzedData.length === 0) {
@@ -1335,7 +1331,7 @@ downloadChartBtn.addEventListener("click", () => {
 downloadDataBtn.addEventListener("click", () => {
   if (!activeSample || !samples[activeSample].analyzedData.length) return;
   const data = samples[activeSample].analyzedData;
-  const headers = ["Step", "Type", "Cycle", "Duration(s)", "CumulativeTime(s)", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
+  const headers = ["Step", "Type", "Cycle", "Duration(h)", "CumulativeTime(h)", "V_OCV(V)", "V_start(V)", "V_end(V)", "IR_Drop(mV)", "Mass_Transfer(mV)", "Total(mV)"];
   const csv = [headers.join(","), ...data.map(d =>
     [d.stepIndex, d.type, d.cycle, d.duration, d.cumulativeTime, d.vOCV, d.vPulseStart, d.vPulseEnd, d.irDrop, d.massTransfer, d.total].join(",")
   )].join("\n");
