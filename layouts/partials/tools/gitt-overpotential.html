@@ -1051,16 +1051,27 @@ function analyzeData() {
     });
   }
 
+  // Debug: log first few rows
+  if (data.length > 0) {
+    console.log("First row keys:", Object.keys(data[0]));
+    console.log("First row sample:", data[0]);
+    console.log("Total rows:", data.length);
+  }
+
   // Parse and group by step
   const steps = [];
   let currentStep = null;
   let stepData = [];
 
-  data.forEach(row => {
-    const stepNo = row["工步序号"] || row["StepNo"] || row["工步号"] || row["Step"];
-    const current = parseFloat(row["电流/mA"] || row["电流"] || row["Current"] || 0);
-    const voltage = parseFloat(row["电压/V"] || row["电压"] || row["Voltage"] || 0);
-    const status = row["工步状态"] || row["Status"] || "";
+  data.forEach((row, idx) => {
+    const stepNo = row["工步序号"] || row["StepNo"] || row["工步号"] || row["Step"] || row["step"] || row["工步"];
+    const current = parseFloat(row["电流/mA"] || row["电流"] || row["Current"] || row["current"] || row["Current(mA)"] || 0);
+    const voltage = parseFloat(row["电压/V"] || row["电压"] || row["Voltage"] || row["voltage"] || row["Voltage(V)"] || 0);
+    const status = row["工步状态"] || row["Status"] || row["status"] || row["工步状态"] || "";
+    
+    if (idx < 5) {
+      console.log(`Row ${idx}: stepNo=${stepNo}, current=${current}, voltage=${voltage}, status=${status}`);
+    }
 
     if (!currentStep || currentStep !== stepNo) {
       if (stepData.length > 0) {
@@ -1089,11 +1100,19 @@ function analyzeData() {
     });
   }
 
+  // Debug: log steps info
+  console.log("Total steps:", steps.length);
+  console.log("First 5 steps:", steps.slice(0, 5).map(s => ({ stepNo: s.stepNo, isPulse: s.isPulse, isRelax: s.isRelax, status: s.status, dataCount: s.data.length })));
+
   // Pair relax-pulse steps (correct order: relax[i-1] -> pulse[i])
   const analyzedData = [];
   for (let i = 1; i < steps.length; i++) {
     const prevStep = steps[i - 1];
     const pulseStep = steps[i];
+    
+    if (i <= 5) {
+      console.log(`Checking pair ${i}: prevStep.isRelax=${prevStep.isRelax}, pulseStep.isPulse=${pulseStep.isPulse}`);
+    }
 
     if (prevStep.isRelax && pulseStep.isPulse) {
       const relaxData = prevStep.data;
