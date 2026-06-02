@@ -39,3 +39,9 @@ Thumbs.db
 
 # Lock files
 .hugo_build.lock
+
+# Claude Code MCP config (local auth, not shared)
+.mcp.json
+
+# Claude Code session files
+.claude/

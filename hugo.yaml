@@ -1,7 +1,7 @@
 baseURL: "https://caiyu.life/"
 title: "Solren的网络自留地"
 theme: PaperMod
-languageCode: zh-cn
+locale: zh-cn
 
 hasCJKLanguage: true
 enableRobotsTXT: true
@@ -18,7 +18,7 @@ minify:
 
 languages:
   zh:
-     languageName: "中文"
+     label: "中文"
      taxonomies:
       series: series
 outputs:
