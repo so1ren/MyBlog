@@ -1,0 +1,368 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1780410760722,
+  "projectRoot": "D:\\Hugo\\sites\\MyBlog",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "assets",
+      "docs",
+      "public",
+      "static"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "archetypes": {
+      "path": "archetypes",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780410760679,
+      "keyFiles": [
+        "default.md"
+      ]
+    },
+    "archive": {
+      "path": "archive",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780410760680,
+      "keyFiles": []
+    },
+    "assets": {
+      "path": "assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1780410760681,
+      "keyFiles": []
+    },
+    "content": {
+      "path": "content",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1780410760681,
+      "keyFiles": [
+        "about.md",
+        "archives.md",
+        "searchs.md"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 0,
+      "lastAccessed": 1780410760682,
+      "keyFiles": []
+    },
+    "i18n": {
+      "path": "i18n",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780410760683,
+      "keyFiles": [
+        "zh-CN.yaml"
+      ]
+    },
+    "kant-offline-backline": {
+      "path": "kant-offline-backline",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1780410760684,
+      "keyFiles": [
+        "2026-04-11_康德纯粹理性批判精讲先验辩证论理性的幻相与限制.md",
+        "2026-04-11_康德纯粹理性批判精讲图型法与原理体系知性法则的系统展开.md"
+      ]
+    },
+    "kant-offline-backup": {
+      "path": "kant-offline-backup",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780410760684,
+      "keyFiles": []
+    },
+    "layouts": {
+      "path": "layouts",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780410760685,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 21,
+      "lastAccessed": 1780410760686,
+      "keyFiles": [
+        "404.html",
+        "aquarium.png",
+        "blueboy.jpg",
+        "bluehead.jpg",
+        "bluehead.png"
+      ]
+    },
+    "resources": {
+      "path": "resources",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780410760687,
+      "keyFiles": []
+    },
+    "static": {
+      "path": "static",
+      "purpose": "Static files",
+      "fileCount": 15,
+      "lastAccessed": 1780410760688,
+      "keyFiles": [
+        "aquarium.png",
+        "blueboy.jpg",
+        "bluehead.jpg",
+        "bluehead.png",
+        "cow.jpg"
+      ]
+    },
+    "themes": {
+      "path": "themes",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780410760690,
+      "keyFiles": []
+    },
+    "public\\assets": {
+      "path": "public\\assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1780410760696,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "layouts\\partials\\tools\\echem-analyzer.html",
+      "accessCount": 67,
+      "lastAccessed": 1780477632747,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\projects\\D--Hugo-sites-MyBlog\\memory\\project-constraints.md",
+      "accessCount": 7,
+      "lastAccessed": 1780490979781,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude-mem\\settings.json",
+      "accessCount": 6,
+      "lastAccessed": 1780450958445,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\cache\\thedotmack\\claude-mem\\13.4.0\\scripts\\worker-service.cjs",
+      "accessCount": 5,
+      "lastAccessed": 1780449956803,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 5,
+      "lastAccessed": 1780491100360,
+      "type": "file"
+    },
+    {
+      "path": ".claude\\settings.local.json",
+      "accessCount": 4,
+      "lastAccessed": 1780454877074,
+      "type": "file"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 4,
+      "lastAccessed": 1780491033486,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\daemon.log",
+      "accessCount": 3,
+      "lastAccessed": 1780454287132,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\settings.json",
+      "accessCount": 3,
+      "lastAccessed": 1780455847055,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\cache\\omc\\oh-my-claudecode\\4.14.4\\.mcp.json",
+      "accessCount": 3,
+      "lastAccessed": 1780456889540,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\cache\\thedotmack\\claude-mem\\13.4.0\\.mcp.json",
+      "accessCount": 3,
+      "lastAccessed": 1780456892329,
+      "type": "file"
+    },
+    {
+      "path": "TODO.md",
+      "accessCount": 3,
+      "lastAccessed": 1780490952945,
+      "type": "file"
+    },
+    {
+      "path": "docs\\plans\\2026-03-30-post-nav-links-to-left.md",
+      "accessCount": 3,
+      "lastAccessed": 1780491005967,
+      "type": "file"
+    },
+    {
+      "path": "docs\\plans\\2026-03-31-post-nav-compact-design.md",
+      "accessCount": 3,
+      "lastAccessed": 1780491006087,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\AppData\\Local\\Temp\\claude\\D--Hugo-sites-MyBlog\\c0a7bebf-df24-4438-8a39-2ec71a8d2a7d\\tasks\\bn50c4y09.output",
+      "accessCount": 2,
+      "lastAccessed": 1780448251883,
+      "type": "file"
+    },
+    {
+      "path": ".claude\\settings.json",
+      "accessCount": 2,
+      "lastAccessed": 1780454266373,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\settings.local.json",
+      "accessCount": 2,
+      "lastAccessed": 1780454267680,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\AppData\\Local\\Temp\\claude\\D--Hugo-sites-MyBlog\\f767a575-2c98-467b-afe0-c15d9d77e1aa\\tasks\\bt9e4hndp.output",
+      "accessCount": 2,
+      "lastAccessed": 1780456798438,
+      "type": "file"
+    },
+    {
+      "path": "static\\test_eis.txt",
+      "accessCount": 2,
+      "lastAccessed": 1780474193518,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\daemon.status.json",
+      "accessCount": 1,
+      "lastAccessed": 1780447659753,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\.session-stats.json",
+      "accessCount": 1,
+      "lastAccessed": 1780447660309,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\sessions\\32132.json",
+      "accessCount": 1,
+      "lastAccessed": 1780447680539,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude-mem\\PATCHES.md",
+      "accessCount": 1,
+      "lastAccessed": 1780450932827,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\projects\\D--Hugo-sites-MyBlog\\memory\\MEMORY.md",
+      "accessCount": 1,
+      "lastAccessed": 1780453231563,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\installed_plugins.json",
+      "accessCount": 1,
+      "lastAccessed": 1780454351753,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\daemon.log.bak",
+      "accessCount": 1,
+      "lastAccessed": 1780454352600,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\cache\\claude-plugins-official\\playwright\\unknown\\.mcp.json",
+      "accessCount": 1,
+      "lastAccessed": 1780454366911,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\cache\\claude-plugins-official\\aikido\\1.1.0\\.mcp.json",
+      "accessCount": 1,
+      "lastAccessed": 1780454368252,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\plugins\\cache\\omc\\oh-my-claudecode\\4.14.4\\bridge\\mcp-server.cjs",
+      "accessCount": 1,
+      "lastAccessed": 1780456232313,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\.claude\\mcp-launcher.js",
+      "accessCount": 1,
+      "lastAccessed": 1780456741996,
+      "type": "file"
+    },
+    {
+      "path": "content\\tools\\echem-analyzer.md",
+      "accessCount": 1,
+      "lastAccessed": 1780457802608,
+      "type": "file"
+    },
+    {
+      "path": "layouts\\tools\\single.html",
+      "accessCount": 1,
+      "lastAccessed": 1780457802701,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\62415\\AppData\\Local\\Temp\\claude\\D--Hugo-sites-MyBlog\\431c50c7-a8e0-447e-a92e-04f7d5ca6499\\tasks\\brkezq2fw.output",
+      "accessCount": 1,
+      "lastAccessed": 1780470986528,
+      "type": "file"
+    },
+    {
+      "path": "echem-analyzer-full.png",
+      "accessCount": 1,
+      "lastAccessed": 1780471050705,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

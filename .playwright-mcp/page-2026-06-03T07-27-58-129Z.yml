@@ -1,0 +1,86 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "← 回到首页" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e5] [cursor=pointer]:
+        - checkbox
+  - main [ref=e7]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "⚡ EChem Analyzer" [level=1] [ref=e11]
+        - paragraph [ref=e12]: 电化学测试数据自动化处理工具 — 支持 CV / EIS 数据提取与 Origin 格式输出
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - heading "📁 文件上传" [level=2] [ref=e16]
+            - generic [ref=e17] [cursor=pointer]:
+              - generic [ref=e18]: 📤
+              - paragraph [ref=e19]: 拖拽文件到此处，或点击选择
+              - generic [ref=e20]: 支持 .xlsx / .csv / .cor / .txt / .z
+          - generic [ref=e21]:
+            - heading "⚙️ 处理参数" [level=2] [ref=e22]
+            - generic [ref=e23]:
+              - generic [ref=e24]: 数据类型
+              - combobox [ref=e25]:
+                - option "🔍 自动识别" [selected]
+                - option "📉 循环伏安 (CV)"
+                - option "📊 交流阻抗 (EIS)"
+            - generic [ref=e26]:
+              - generic [ref=e27]: 样品质量 (g)
+              - spinbutton [ref=e28]
+              - generic [ref=e29]: 用于电流 / 阻抗的质量归一化 (A·g⁻¹ 或 Ω·g)
+            - button "🚀 处理数据" [disabled] [ref=e30]
+            - button "🔄 重置" [ref=e31] [cursor=pointer]
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - heading "📋 数据预览" [level=2] [ref=e34]
+            - table [ref=e36]:
+              - rowgroup [ref=e37]:
+                - row "请先上传文件" [ref=e38]:
+                  - generic [ref=e39]: 请先上传文件
+              - rowgroup
+          - generic [ref=e40]:
+            - heading "📤 输出结果 (Origin 格式)" [level=2] [ref=e41]
+            - textbox "处理后的数据将显示在这里... 可直接复制粘贴到 Origin 格式：制表符分隔，第一行为列标题" [ref=e43]:
+              - /placeholder: "处理后的数据将显示在这里...\n可直接复制粘贴到 Origin\n格式：制表符分隔，第一行为列标题"
+            - generic [ref=e44]:
+              - button "📋 复制到剪贴板" [ref=e45] [cursor=pointer]
+              - button "💾 下载 .txt" [ref=e46] [cursor=pointer]
+          - generic [ref=e47]:
+            - heading "📊 EIS 可视化" [level=2] [ref=e48]
+            - generic [ref=e49]:
+              - heading "Nyquist 图 (-Z''vs Z')" [level=3] [ref=e51]
+              - generic [ref=e53]:
+                - heading "Bode |Z| vs 频率" [level=3] [ref=e55]
+                - heading "Bode 相位角 vs 频率" [level=3] [ref=e58]
+            - generic [ref=e60]:
+              - heading "📑 对比数据" [level=3] [ref=e61]
+              - generic [ref=e63]:
+                - generic [ref=e64]: 📉
+                - paragraph [ref=e65]: 暂无对比数据。处理 EIS 数据后点击 "添加到 EIS 对比"
+            - generic [ref=e66]:
+              - heading "💾 保存当前数据" [level=3] [ref=e67]
+              - generic [ref=e68]:
+                - textbox "输入数据集名称，如：样品A_1C" [ref=e69]
+                - button "保存到浏览器" [ref=e70] [cursor=pointer]
+            - generic [ref=e71]:
+              - heading "🗂️ 已保存的数据" [level=3] [ref=e72]
+              - generic [ref=e74]:
+                - generic [ref=e75]: 🗃️
+                - paragraph [ref=e76]: 暂无已保存的数据
+              - button "🗑️ 清除所有已保存数据" [ref=e77] [cursor=pointer]
+      - generic [ref=e78]: EChem Analyzer · 本地处理，数据不上传服务器 · 专为电化学工作站数据设计
+  - contentinfo [ref=e79]:
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - generic [ref=e82]: Solren 的网络自留地
+        - generic [ref=e83]: 研究者的网络自留地
+      - generic [ref=e84]:
+        - link "文章" [ref=e85] [cursor=pointer]:
+          - /url: /posts/
+        - link "系列" [ref=e86] [cursor=pointer]:
+          - /url: /series/
+        - link "关于" [ref=e87] [cursor=pointer]:
+          - /url: /about/
+      - generic [ref=e88]: © 2026

@@ -1,0 +1,7 @@
+{
+  "tool_name": "mcp__plugin_playwright_playwright__browser_file_upload",
+  "tool_input_preview": "{\"paths\":[\"D:\\\\Hugo\\\\sites\\\\MyBlog\\\\static\\\\test_eis.txt\"]}",
+  "error": "### Error\nError: browserBackend.callTool: Execution context was destroyed, most likely because of a navigation",
+  "timestamp": "2026-06-03T08:10:23.566Z",
+  "retry_count": 1
+}
