@@ -1075,6 +1075,11 @@ processBtn.addEventListener('click', () => {
     processedData = data;
     outputArea.value = lines.join('\n');
     addCompareWrap.classList.remove('hidden');
+
+    // Auto-add to visualization
+    const autoName = fileName.replace(/\.[^.]+$/, '') + (compareDatasets.length ? ' (' + (compareDatasets.length + 1) + ')' : '');
+    addToCompare(data, autoName);
+
     showMsg('EIS 处理完成 — ' + data.length + ' 个频率点', 'success');
   }
 });
@@ -1327,25 +1332,43 @@ function updateCharts() {
   bodeZChart.data.datasets = bodeZDatasets;
   bodePhaseChart.data.datasets = bodePhaseDatasets;
 
-  // Equal aspect for Nyquist
+  // Nyquist axis: both start from zero, equal aspect via same max
   if (nyqDatasets.length && nyqDatasets.some(d => !d.hidden)) {
     const allPts = nyqDatasets.filter(d => !d.hidden).flatMap(d => d.data);
-    const xs = allPts.map(p => p.x);
-    const ys = allPts.map(p => p.y);
-    const minX = Math.min(...xs), maxX = Math.max(...xs);
-    const minY = Math.min(...ys), maxY = Math.max(...ys);
-    const range = Math.max(maxX - minX, maxY - minY);
-    const midX = (minX + maxX) / 2, midY = (minY + maxY) / 2;
-    const pad = range * 0.05 || 1;
-    nyquistChart.options.scales.x.min = midX - range/2 - pad;
-    nyquistChart.options.scales.x.max = midX + range/2 + pad;
-    nyquistChart.options.scales.y.min = midY - range/2 - pad;
-    nyquistChart.options.scales.y.max = midY + range/2 + pad;
+    const maxX = Math.max(...allPts.map(p => p.x));
+    const maxY = Math.max(...allPts.map(p => p.y));
+    const commonMax = Math.max(maxX, maxY) * 1.05 || 1;
+    nyquistChart.options.scales.x.min = 0;
+    nyquistChart.options.scales.x.max = commonMax;
+    nyquistChart.options.scales.y.min = 0;
+    nyquistChart.options.scales.y.max = commonMax;
   } else {
     delete nyquistChart.options.scales.x.min;
     delete nyquistChart.options.scales.x.max;
     delete nyquistChart.options.scales.y.min;
     delete nyquistChart.options.scales.y.max;
+  }
+
+  // Bode |Z| y-axis: start from data min (logarithmic)
+  if (bodeZDatasets.length && bodeZDatasets.some(d => !d.hidden)) {
+    const allZ = bodeZDatasets.filter(d => !d.hidden).flatMap(d => d.data).map(p => p.y);
+    const minZ = Math.min(...allZ);
+    bodeZChart.options.scales.y.min = minZ > 0 ? minZ * 0.9 : minZ;
+  } else {
+    delete bodeZChart.options.scales.y.min;
+  }
+
+  // Bode Phase y-axis: start from data min (linear)
+  if (bodePhaseDatasets.length && bodePhaseDatasets.some(d => !d.hidden)) {
+    const allPh = bodePhaseDatasets.filter(d => !d.hidden).flatMap(d => d.data).map(p => p.y);
+    const minPh = Math.min(...allPh);
+    const maxPh = Math.max(...allPh);
+    const phPad = (maxPh - minPh) * 0.05 || 1;
+    bodePhaseChart.options.scales.y.min = minPh - phPad;
+    bodePhaseChart.options.scales.y.max = maxPh + phPad;
+  } else {
+    delete bodePhaseChart.options.scales.y.min;
+    delete bodePhaseChart.options.scales.y.max;
   }
 
   nyquistChart.update('none');
