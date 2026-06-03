@@ -582,9 +582,6 @@
           <button class="btn btn-secondary" id="copyBtn" style="flex:1;">📋 复制到剪贴板</button>
           <button class="btn btn-secondary" id="downloadBtn" style="flex:1;">💾 下载 .txt</button>
         </div>
-        <div id="addCompareWrap" class="hidden" style="margin-top:0.75rem;">
-          <button class="btn btn-primary btn-block" id="addCompareBtn">📊 添加到 EIS 对比</button>
-        </div>
       </div>
 
       <!-- ===== EIS Visualization Panel ===== -->
@@ -668,8 +665,6 @@ const outputArea = document.getElementById('outputArea');
 const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const messageArea = document.getElementById('message-area');
-const addCompareWrap = document.getElementById('addCompareWrap');
-const addCompareBtn = document.getElementById('addCompareBtn');
 const datasetNameInput = document.getElementById('datasetName');
 const saveDatasetBtn = document.getElementById('saveDatasetBtn');
 const compareList = document.getElementById('compareList');
@@ -1074,7 +1069,6 @@ processBtn.addEventListener('click', () => {
 
     processedData = data;
     outputArea.value = lines.join('\n');
-    addCompareWrap.classList.remove('hidden');
 
     // Auto-add to visualization
     const autoName = fileName.replace(/\.[^.]+$/, '') + (compareDatasets.length ? ' (' + (compareDatasets.length + 1) + ')' : '');
@@ -1130,7 +1124,6 @@ resetBtn.addEventListener('click', () => {
   processBtn.disabled = true;
   dataType.value = 'auto';
   sampleMass.value = '';
-  addCompareWrap.classList.add('hidden');
   showMsg('已重置', 'info');
 });
 
@@ -1468,16 +1461,6 @@ function addToCompare(data, name) {
   updateCharts();
   showMsg('已添加到对比 — 共 ' + compareDatasets.length + ' 组数据', 'success');
 }
-
-addCompareBtn.addEventListener('click', () => {
-  const type = dataType.value === 'auto' ? detectedType : dataType.value;
-  if (!processedData.length || type !== 'eis') {
-    showMsg('没有可用的 EIS 数据', 'warn');
-    return;
-  }
-  const name = fileName.replace(/\.[^.]+$/, '') + (compareDatasets.length ? ' (' + (compareDatasets.length + 1) + ')' : '');
-  addToCompare(processedData, name);
-});
 
 // ===================== LocalStorage Save / Load =====================
 
