@@ -45,3 +45,8 @@ Thumbs.db
 
 # Claude Code session files
 .claude/
+
+# OMC / Playwright temp files
+.omc/
+.playwright-mcp/
+/*.png
