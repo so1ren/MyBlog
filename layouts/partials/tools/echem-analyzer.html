@@ -621,24 +621,6 @@
           </div>
         </div>
 
-        <div class="viz-section" style="margin-top:1.5rem;">
-          <h3>💾 保存当前数据</h3>
-          <div class="viz-toolbar">
-            <input type="text" id="datasetName" placeholder="输入数据集名称，如：样品A_1C">
-            <button class="btn btn-primary" id="saveDatasetBtn">保存到浏览器</button>
-          </div>
-        </div>
-
-        <div class="viz-section" style="margin-top:1.5rem;">
-          <h3>🗂️ 已保存的数据</h3>
-          <div id="savedList">
-            <div class="viz-empty">
-              <span class="icon">🗃️</span>
-              <p>暂无已保存的数据</p>
-            </div>
-          </div>
-          <button class="btn btn-secondary btn-block" id="clearAllSavedBtn" style="margin-top:0.75rem;">🗑️ 清除所有已保存数据</button>
-        </div>
       </div>
     </div>
   </div>
@@ -671,11 +653,7 @@ const outputArea = document.getElementById('outputArea');
 const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const messageArea = document.getElementById('message-area');
-const datasetNameInput = document.getElementById('datasetName');
-const saveDatasetBtn = document.getElementById('saveDatasetBtn');
 const compareList = document.getElementById('compareList');
-const savedList = document.getElementById('savedList');
-const clearAllSavedBtn = document.getElementById('clearAllSavedBtn');
 
 // EIS visualization state
 let compareDatasets = [];
@@ -1383,13 +1361,17 @@ function renderCompareList() {
 
   let html = '';
   compareDatasets.forEach((ds, idx) => {
+    const pinIcon = ds.pinned ? '📌' : '📍';
+    const pinTitle = ds.pinned ? '已固定（点击取消固定）' : '固定到浏览器';
     html += `
       <div class="dataset-bar ${ds.visible ? '' : 'hidden-ds'}" data-idx="${idx}">
         <input type="checkbox" class="ds-check" ${ds.visible ? 'checked' : ''} data-idx="${idx}" title="勾选以在图表中显示">
         <span class="color-dot" style="background:${ds.color}" data-idx="${idx}"></span>
-        <span class="ds-name">${escapeHtml(ds.name)}</span>
+        <span class="ds-name" data-idx="${idx}">${escapeHtml(ds.name)}</span>
         <span class="ds-pts">${ds.data.length} 点</span>
         <span class="ds-actions">
+          <button title="重命名" data-action="rename" data-idx="${idx}">✏️</button>
+          <button title="${pinTitle}" data-action="pin" data-idx="${idx}">${pinIcon}</button>
           <button title="删除" data-action="remove" data-idx="${idx}">🗑️</button>
         </span>
       </div>`;
@@ -1414,11 +1396,80 @@ function renderCompareList() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const idx = parseInt(btn.dataset.idx);
-      compareDatasets.splice(idx, 1);
-      renderCompareList();
-      updateCharts();
+      const action = btn.dataset.action;
+      if (action === 'remove') {
+        const ds = compareDatasets[idx];
+        if (ds.pinned) {
+          const list = getSavedDatasets().filter(x => x.id !== ds.id);
+          setSavedDatasets(list);
+        }
+        compareDatasets.splice(idx, 1);
+        renderCompareList();
+        updateCharts();
+      } else if (action === 'pin') {
+        togglePin(idx);
+      } else if (action === 'rename') {
+        startRename(idx);
+      }
     });
   });
+}
+
+function startRename(idx) {
+  const ds = compareDatasets[idx];
+  const nameEl = compareList.querySelector(`.ds-name[data-idx="${idx}"]`);
+  if (!nameEl) return;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = ds.name;
+  input.className = 'ds-rename-input';
+  input.style.cssText = 'flex:1;padding:0.2rem 0.5rem;font-size:0.9rem;border:1px solid var(--accent);border-radius:6px;background:var(--bg);color:var(--text);outline:none;min-width:0;';
+  nameEl.replaceWith(input);
+  input.focus();
+  input.select();
+
+  const finish = (save) => {
+    if (save) {
+      const newName = input.value.trim();
+      if (newName && newName !== ds.name) {
+        ds.name = newName;
+        if (ds.pinned) {
+          const list = getSavedDatasets().map(x => x.id === ds.id ? { ...x, name: ds.name } : x);
+          setSavedDatasets(list);
+        }
+      }
+    }
+    renderCompareList();
+    updateCharts();
+  };
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+    if (e.key === 'Escape') finish(false);
+  });
+  input.addEventListener('blur', () => finish(true));
+}
+
+function togglePin(idx) {
+  const ds = compareDatasets[idx];
+  ds.pinned = !ds.pinned;
+  if (ds.pinned) {
+    const list = getSavedDatasets().filter(x => x.id !== ds.id);
+    list.push({
+      id: ds.id,
+      name: ds.name,
+      data: ds.data.map(pt => ({ freq: pt.freq, zRe: pt.zRe, zIm: pt.zIm })),
+      negate: ds.negate,
+      savedAt: Date.now()
+    });
+    setSavedDatasets(list);
+    showMsg('已固定: ' + ds.name, 'success');
+  } else {
+    const list = getSavedDatasets().filter(x => x.id !== ds.id);
+    setSavedDatasets(list);
+    showMsg('已取消固定: ' + ds.name, 'info');
+  }
+  renderCompareList();
 }
 
 function escapeHtml(s) {
@@ -1464,7 +1515,8 @@ function addToCompare(data, name) {
     data: data.map(pt => ({ freq: pt.freq, zRe: pt.zRe, zIm: pt.zIm })),
     color: getNextColor(),
     visible: true,
-    negate: negate
+    negate: negate,
+    pinned: false
   });
   renderCompareList();
   updateCharts();
@@ -1484,80 +1536,24 @@ function setSavedDatasets(list) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
 
-function renderSavedList() {
-  const list = getSavedDatasets();
-  if (!list.length) {
-    savedList.innerHTML = '<div class="viz-empty"><span class="icon">🗃️</span><p>暂无已保存的数据</p></div>';
-    return;
-  }
-  let html = '';
-  list.forEach(item => {
-    const date = new Date(item.savedAt).toLocaleString('zh-CN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
-    html += `
-      <div class="saved-item">
-        <span class="si-name">${escapeHtml(item.name)}</span>
-        <span class="si-date">${date} · ${item.data.length}点</span>
-        <span class="si-actions">
-          <button title="加载到对比" data-action="load" data-id="${item.id}">📊</button>
-          <button title="删除" data-action="del" data-id="${item.id}">🗑️</button>
-        </span>
-      </div>`;
+// Init: load saved datasets into compare list on page load
+getSavedDatasets().forEach(item => {
+  // Avoid duplicates if already in compare list
+  if (compareDatasets.some(ds => ds.id === item.id)) return;
+  compareDatasets.push({
+    id: item.id,
+    name: item.name,
+    data: item.data.map(pt => ({ freq: pt.freq, zRe: pt.zRe, zIm: pt.zIm })),
+    color: getNextColor(),
+    visible: true,
+    negate: item.negate !== false,
+    pinned: true
   });
-  savedList.innerHTML = html;
-
-  savedList.querySelectorAll('.si-actions button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.id;
-      const action = btn.dataset.action;
-      const list = getSavedDatasets();
-      const item = list.find(x => x.id === id);
-      if (!item) return;
-      if (action === 'load') {
-        addToCompare(item.data, item.name);
-        showMsg('已加载: ' + item.name, 'success');
-      } else if (action === 'del') {
-        const filtered = list.filter(x => x.id !== id);
-        setSavedDatasets(filtered);
-        renderSavedList();
-        showMsg('已删除: ' + item.name, 'info');
-      }
-    });
-  });
+});
+if (compareDatasets.length) {
+  renderCompareList();
+  updateCharts();
 }
-
-saveDatasetBtn.addEventListener('click', () => {
-  if (!processedData.length) { showMsg('没有可保存的数据', 'warn'); return; }
-  const type = dataType.value === 'auto' ? detectedType : dataType.value;
-  if (type !== 'eis') { showMsg('只能保存 EIS 数据', 'warn'); return; }
-
-  const name = (datasetNameInput.value || fileName.replace(/\.[^.]+$/, '')).trim();
-  if (!name) { showMsg('请输入数据集名称', 'warn'); return; }
-
-  const negate = document.getElementById('imagOption').value === 'negate';
-  const list = getSavedDatasets();
-  list.push({
-    id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-    name: name,
-    data: processedData.map(pt => ({ freq: pt.freq, zRe: pt.zRe, zIm: pt.zIm })),
-    negate: negate,
-    savedAt: Date.now()
-  });
-  setSavedDatasets(list);
-  renderSavedList();
-  datasetNameInput.value = '';
-  showMsg('已保存到浏览器: ' + name, 'success');
-});
-
-clearAllSavedBtn.addEventListener('click', () => {
-  if (!getSavedDatasets().length) { showMsg('没有已保存的数据', 'info'); return; }
-  if (!confirm('确定要清除所有已保存的 EIS 数据吗？此操作不可恢复。')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  renderSavedList();
-  showMsg('已清除所有保存的数据', 'info');
-});
-
-// Init saved list on page load
-renderSavedList();
 
 // Watch for theme changes
 new MutationObserver(() => {
