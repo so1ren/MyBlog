@@ -332,6 +332,10 @@
       border-color: var(--accent);
       background: var(--accent-light);
     }
+    .btn-icon:active {
+      transform: scale(0.97);
+      transition: transform 0.08s ease;
+    }
 
     .chart-canvas-wrap {
       position: relative;
@@ -419,6 +423,10 @@
       background: var(--accent-hover);
       transform: translateY(-1px);
       box-shadow: var(--shadow);
+    }
+    .btn-overlay:active:not(:disabled) {
+      transform: scale(0.97);
+      transition: transform 0.08s ease;
     }
 
     .btn-overlay:disabled {

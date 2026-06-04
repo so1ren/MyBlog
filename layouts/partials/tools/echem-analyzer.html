@@ -77,9 +77,17 @@
     box-shadow: 0 2px 8px oklch(0% 0 0 / 0.04);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
-    animation: fadeInUp 0.4s var(--t-smooth) forwards;
+    opacity: 0;
+    animation: fadeInUp 0.4s ease forwards;
     margin-bottom: 2rem;
   }
+  /* stagger: 左列 */
+  .left-col .panel:nth-of-type(1) { animation-delay: 0.05s; }
+  .left-col .panel:nth-of-type(2) { animation-delay: 0.12s; }
+  /* stagger: 右列 */
+  .right-col .panel:nth-of-type(1) { animation-delay: 0.08s; }
+  .right-col .panel:nth-of-type(2) { animation-delay: 0.15s; }
+  .right-col .panel:nth-of-type(3) { animation-delay: 0.22s; }
   .panel h2 {
     font-size: 1.1rem;
     font-weight: 600;
@@ -100,10 +108,16 @@
     background: var(--surface);
     margin-bottom: 1.5rem;
   }
-  .dropzone:hover, .dropzone.dragover {
+  .dropzone:hover {
     border-color: var(--accent);
     background: var(--accent-light);
     box-shadow: var(--shadow);
+  }
+  .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    box-shadow: var(--shadow);
+    animation: pulse-border 1.2s ease infinite;
   }
   .dropzone .icon {
     font-size: 2.5rem;
@@ -113,6 +127,10 @@
   }
   .dropzone:hover .icon, .dropzone.dragover .icon {
     color: var(--accent);
+  }
+  @keyframes pulse-border {
+    0%, 100% { border-color: var(--accent); }
+    50% { border-color: oklch(65% 0.15 240); }
   }
   .dropzone p {
     color: var(--text2);
@@ -214,6 +232,10 @@
     border-color: var(--accent);
     background: var(--accent-light);
   }
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+    transition: transform 0.08s ease;
+  }
 
   .stats {
     display: grid;
@@ -288,6 +310,7 @@
   .msg-error { background: var(--surface2); border-left: 3px solid var(--danger); }
 
   .hidden { display: none !important; }
+  .fade-in { animation: fadeInUp 0.3s ease forwards; }
 
   .cycle-selector {
     display: flex;
@@ -758,6 +781,7 @@ function showFileInfo() {
   const tagClass = detectedType === 'cv' ? 'tag-cv' : 'tag-eis';
   fileInfo.innerHTML = '<strong>📄 ' + fileName + '</strong><span class="tag ' + tagClass + '">' + type + '</span><br><span style="color:var(--text2);">总行数: ' + rawData.length + ' 行</span>';
   fileInfo.classList.remove('hidden');
+  fileInfo.classList.add('fade-in');
 }
 
 // ===================== Preview =====================
@@ -793,6 +817,7 @@ function previewRaw() {
   statsArea.innerHTML = '<div class="stat"><div class="val">' + previewRows.length + '+</div><div class="lab">数据点</div></div>' +
     '<div class="stat"><div class="val">' + (type==='cv' ? (cycles.length || 1) + ' 圈' : 'Nyquist') + '</div><div class="lab">' + (type==='cv'?'循环':'类型') + '</div></div>';
   statsArea.classList.remove('hidden');
+  statsArea.classList.add('fade-in');
 }
 
 // ===================== CV extraction =====================
@@ -1097,9 +1122,11 @@ resetBtn.addEventListener('click', () => {
   cycles = [];
   fileInput.value = '';
   fileInfo.classList.add('hidden');
+  fileInfo.classList.remove('fade-in');
   fileInfo.innerHTML = '';
   previewTable.innerHTML = '<thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead><tbody></tbody>';
   statsArea.classList.add('hidden');
+  statsArea.classList.remove('fade-in');
   statsArea.innerHTML = '';
   outputArea.value = '';
   cycleSelector.innerHTML = '';

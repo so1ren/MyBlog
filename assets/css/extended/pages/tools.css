@@ -1,0 +1,128 @@
+/* ============================================================
+   tools.css — 工具箱列表页样式
+   克制微交互：hover 右移 + 箭头滑动 + 标题变色
+   ============================================================ */
+
+.tool-list-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-xl, 3rem) 1.5rem;
+}
+
+.tool-list-container > h1 {
+    font-size: var(--font-xl, 1.75rem);
+    font-weight: 700;
+    margin-bottom: var(--space-xs, 0.5rem);
+    color: var(--text-color);
+}
+
+.tool-list-container > p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl, 3rem);
+    font-size: var(--font-sm, 0.95rem);
+}
+
+.tool-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.tool-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md, 1.25rem);
+    padding: var(--space-md, 1.25rem) 0;
+    border-bottom: 1px solid var(--border-subtle, var(--border));
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left 0.2s ease, border-color 0.2s ease;
+}
+
+.tool-card:first-child {
+    border-top: 1px solid var(--border-subtle, var(--border));
+}
+
+.tool-card:hover {
+    padding-left: 8px;
+    border-bottom-color: var(--primary-color);
+}
+
+.tool-card:hover .tool-arrow {
+    transform: translateX(4px);
+    color: var(--primary-color);
+}
+
+.tool-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: 2.5rem;
+    text-align: center;
+    line-height: 1;
+}
+
+.tool-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.tool-info h3 {
+    font-size: var(--font-base, 1rem);
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+    transition: color 0.15s ease;
+}
+
+.tool-card:hover .tool-info h3 {
+    color: var(--primary-color);
+}
+
+.tool-info p {
+    font-size: var(--font-sm, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.tool-arrow {
+    margin-left: auto;
+    color: var(--text-tertiary);
+    font-size: var(--font-base, 1rem);
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+    .tool-list-container {
+        padding: var(--space-lg, 2rem) 1rem;
+    }
+
+    .tool-card {
+        gap: var(--space-sm, 0.75rem);
+        padding: var(--space-sm, 0.75rem) 0;
+    }
+
+    .tool-icon {
+        font-size: 1.25rem;
+        width: 2rem;
+    }
+
+    .tool-info h3 {
+        font-size: var(--font-sm, 0.95rem);
+    }
+
+    .tool-info p {
+        font-size: var(--font-xs, 0.85rem);
+    }
+}
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .tool-arrow,
+    .tool-info h3 {
+        transition: none !important;
+    }
+}

@@ -92,10 +92,20 @@
     transition: all 0.2s ease;
     background: var(--bg);
   }
-  .dropzone:hover, .dropzone.dragover {
+  .dropzone:hover {
     border-color: var(--accent);
     background: var(--accent-light);
     box-shadow: var(--shadow);
+  }
+  .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    box-shadow: var(--shadow);
+    animation: pulse-border 1.2s ease infinite;
+  }
+  @keyframes pulse-border {
+    0%, 100% { border-color: var(--accent); }
+    50% { border-color: oklch(65% 0.15 240); }
   }
   .dropzone .icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text2); }
   .dropzone:hover .icon { color: var(--accent); }
@@ -465,6 +475,10 @@
     background: var(--success);
     color: #fff;
   }
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+    transition: transform 0.08s ease;
+  }
 
   .cycle-selector {
     display: flex;
@@ -554,6 +568,7 @@
   .msg-error { background: var(--surface2); border-left: 3px solid var(--danger); }
 
   .hidden { display: none !important; }
+  .fade-in { animation: fadeInUp 0.3s ease forwards; }
 
   footer {
     text-align: center;
@@ -568,7 +583,19 @@
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .panel { animation: fadeInUp 0.4s ease forwards; }
+  .panel {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  /* stagger: 左列 */
+  .left-col .panel:nth-of-type(1) { animation-delay: 0.05s; }
+  .left-col .panel:nth-of-type(2) { animation-delay: 0.12s; }
+  .left-col .panel:nth-of-type(3) { animation-delay: 0.19s; }
+  /* stagger: 右列 */
+  .right-col .panel:nth-of-type(1) { animation-delay: 0.08s; }
+  .right-col .panel:nth-of-type(2) { animation-delay: 0.15s; }
+  .right-col .panel:nth-of-type(3) { animation-delay: 0.22s; }
+  .right-col .panel:nth-of-type(4) { animation-delay: 0.29s; }
 </style>
 
 <div class="container">
@@ -944,9 +971,11 @@ function parseCSV(text) {
 function updateFileInfo() {
   if (Object.keys(samples).length === 0) {
     fileInfo.classList.add("hidden");
+    fileInfo.classList.remove("fade-in");
     return;
   }
   fileInfo.classList.remove("hidden");
+  fileInfo.classList.add("fade-in");
   fileInfo.innerHTML = Object.values(samples).map(s =>
     `<div><span class="tag">GITT</span> ${s.fileName} (${s.rawData.length} 行)</div>`
   ).join("");
@@ -958,9 +987,11 @@ function updateSampleTabs() {
   if (names.length === 0) {
     sampleTabs.innerHTML = "";
     noSamples.classList.remove("hidden");
+    noSamples.classList.add("fade-in");
     return;
   }
   noSamples.classList.add("hidden");
+  noSamples.classList.remove("fade-in");
   sampleTabs.innerHTML = names.map(name =>
     `<button class="sample-tab ${name === activeSample ? "active" : ""}" data-name="${name}">${name}</button>`
   ).join("");
@@ -988,6 +1019,7 @@ function switchSample(name) {
 
 function clearResults() {
   statsArea.classList.add("hidden");
+  statsArea.classList.remove("fade-in");
   statsArea.innerHTML = "";
   if (chart) { chart.dispose(); chart = null; }
   chartContainer.innerHTML = "";
@@ -1202,6 +1234,7 @@ function displayResults(sample) {
 
   // Stats
   statsArea.classList.remove("hidden");
+  statsArea.classList.add("fade-in");
   const avgIR = (data.reduce((a, b) => a + parseFloat(b.irDrop), 0) / data.length).toFixed(2);
   const avgMT = (data.reduce((a, b) => a + parseFloat(b.massTransfer), 0) / data.length).toFixed(2);
   const avgTotal = (data.reduce((a, b) => a + parseFloat(b.total), 0) / data.length).toFixed(2);
@@ -1389,12 +1422,15 @@ resetBtn.addEventListener("click", () => {
   chartContainer.innerHTML = "";
   fileInput.value = "";
   fileInfo.classList.add("hidden");
+  fileInfo.classList.remove("fade-in");
   fileInfo.innerHTML = "";
   sampleTabs.innerHTML = "";
   noSamples.classList.remove("hidden");
+  noSamples.classList.add("fade-in");
   cycleSelector.innerHTML = "";
   cycleHint.textContent = "自动识别所有循环，点击选择";
   statsArea.classList.add("hidden");
+  statsArea.classList.remove("fade-in");
   statsArea.innerHTML = "";
   dataTable.innerHTML = `<thead><tr><th style="text-align:center;color:var(--text2);">请先上传并分析数据</th></tr></thead><tbody></tbody>`;
   previewTable.innerHTML = `<thead><tr><th style="text-align:center;color:var(--text2);">请先上传文件</th></tr></thead><tbody></tbody>`;
