@@ -209,7 +209,7 @@ def hello():
 
 ### 工具页
 - **TXT 数据可视化** (`/tools/txt-chart/`) — 拖拽上传 TXT 文件生成折线图
-- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：支持 CV / EIS 数据提取、循环分割、Origin 格式输出；EIS 数据自动绘制 Nyquist 图与 Bode 图（|Z|、相位角），**内置图例**，支持多组数据叠加对比、浏览器本地保存复用
+- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：支持 CV / EIS 数据提取、循环分割、Origin 格式输出；EIS 自动绘制 Nyquist 图，**内置图例**，多组数据叠加对比，浏览器本地保存复用；样品质量单位 mg（自动转 g 归一化）
 - **GITT Overpotential** (`/tools/gitt-overpotential/`) — GITT 过电位计算
 
 ---
