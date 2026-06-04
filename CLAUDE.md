@@ -38,7 +38,11 @@ MyBlog/
 ├── assets/
 │   └── css/
 │       └── extended/        # 自定义 CSS（覆盖主题样式）
-│           └── custom.css
+│           ├── custom.css
+│           ├── components/    # 组件级样式
+│           ├── layouts/       # 布局样式
+│           └── pages/         # 页面级样式
+│               └── tools.css  # 工具箱列表页样式
 ├── content/
 │   ├── posts/               # 📄 博客文章目录
 │   │   ├── 2026-04-26_电化学方法精讲第一讲电极过程概述.md
@@ -54,6 +58,9 @@ MyBlog/
 │   ├── about.md             # 关于页面
 │   └── archives.md          # 归档页面
 ├── data/                    # 数据文件（ Hugo 数据模板用）
+├── docs/                    # 📂 截图存档、开发计划
+│   ├── caiyu-life-screenshots/
+│   └── plans/
 ├── layouts/                 # HTML 模板（覆盖/扩展主题）
 │   ├── _default/            # 默认模板
 │   ├── partials/            # 模板片段
@@ -65,10 +72,17 @@ MyBlog/
 │   └── ...                  # 其他静态文件
 ├── themes/
 │   └── PaperMod/            # 主题（git submodule）
+├── archive/                 # 归档内容（旧版本讲义等，不入 git）
 ├── hugo.yaml                # Hugo 主配置文件
 ├── .gitmodules              # Git 子模块配置
-└── README.md                # 项目说明
+├── README.md                # 项目说明
+└── TODO.md                  # 待办清单
 ```
+
+> **其他目录**（非项目核心，不入 git）：
+> - `kant-offline-backline/`、`kant-offline-backup/` — 康德讲义离线备份
+> - `design-preview-*.html` — 主题调试时的设计稿预览，不影响生产构建
+> - `skills/` — RedSkill 外部技能安装目录（通过 `redskill install` 管理）
 
 ---
 
@@ -195,7 +209,7 @@ def hello():
 
 ### 工具页
 - **TXT 数据可视化** (`/tools/txt-chart/`) — 拖拽上传 TXT 文件生成折线图
-- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：支持 CV / EIS 数据提取、循环分割、Origin 格式输出；EIS 数据自动绘制 Nyquist 图与 Bode 图（|Z|、相位角），支持多组数据叠加对比、浏览器本地保存复用
+- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：支持 CV / EIS 数据提取、循环分割、Origin 格式输出；EIS 数据自动绘制 Nyquist 图与 Bode 图（|Z|、相位角），**内置图例**，支持多组数据叠加对比、浏览器本地保存复用
 - **GITT Overpotential** (`/tools/gitt-overpotential/`) — GITT 过电位计算
 
 ---
@@ -204,7 +218,7 @@ def hello():
 
 1. **不要提交 `public/` 目录**：Cloudflare Pages 会自动构建
 2. **不要提交 Hugo 构建产物**：如 `resources/_gen/`
-3. **主题更新**：PaperMod 通过 git submodule 管理，更新时注意保留自定义改动
+3. **主题更新**：PaperMod 是 fork 的版本（`so1ren/hugo-PaperMod`），通过 git submodule 管理。**不要建议更新子模块**——fork 包含自定义修改
 4. **Front matter 必须完整**：特别是 `date` 和 `title` 字段
 5. **图片路径**：使用绝对路径 `/images/xxx.jpg` 或相对路径 `./xxx.jpg`
 
@@ -219,4 +233,4 @@ def hello():
 
 ---
 
-*本文档最后更新: 2026-06-03*
+*本文档最后更新: 2026-06-04*

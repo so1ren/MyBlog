@@ -21,7 +21,7 @@
 ```
 MyBlog/
 ├── archetypes/          # 文章模板
-├── archive/             # 归档页面
+├── archive/             # 归档内容（旧版本讲义等，不入 git）
 ├── assets/              # 自定义 CSS/JS（Hugo 管道处理）
 ├── content/
 │   ├── posts/           # 博客文章
@@ -37,7 +37,8 @@ MyBlog/
 ├── themes/
 │   └── PaperMod/        # 主题（submodule）
 ├── hugo.yaml            # Hugo 配置
-└── README.md            # 本文件
+├── README.md            # 本文件
+└── TODO.md              # 待办清单
 ```
 
 ---
@@ -50,7 +51,7 @@ MyBlog/
 
 ### 工具页
 - **TXT 数据可视化** (`/tools/txt-chart/`) — 拖拽上传 TXT 文件，自动生成折线图。支持批量上传、多文件叠加对比、**X 轴范围裁剪**（单文件+叠加图均支持）、**交互式缩放**（Shift+拖动/滚轮）、底部数轴实时预览。叠加图 minimap 显示所有文件轮廓，选中范围以各自颜色高亮
-- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：CV / EIS 数据提取与 Origin 格式输出；EIS 自动绘制 Nyquist / Bode 图，多组叠加对比，浏览器本地保存复用
+- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：CV / EIS 数据提取与 Origin 格式输出；EIS 自动绘制 Nyquist / Bode 图，**内置图例**，多组叠加对比，浏览器本地保存复用
 - **GITT Overpotential** (`/tools/gitt-overpotential/`) — GITT 过电位计算
 
 工具页通过 Hugo 模板体系管理（`content/tools/` + `layouts/tools/`），自动继承网站导航栏和暗色切换。

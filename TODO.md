@@ -11,6 +11,6 @@
 - [ ] RSS 订阅入口引导
 - [ ] 友链页面
 - [ ] SEO 优化 (og:image, sitemap, canonical)
-- [ ] 阅读进度条
+- [x] 阅读进度条（已实现：`assets/css/extended/reading-progress.css`）
 - [ ] 网站地图页面
 
