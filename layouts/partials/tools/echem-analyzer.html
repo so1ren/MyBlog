@@ -1176,7 +1176,32 @@ function ensureCharts() {
     maintainAspectRatio: false,
     interaction: { mode: 'point', intersect: false },
     plugins: {
-      legend: { display: false },
+      legend: {
+        display: true,
+        position: 'top',
+        align: 'start',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle',
+          boxWidth: 8,
+          boxHeight: 8,
+          padding: 10,
+          font: { size: 11 },
+          color: textColor
+        },
+        onClick: (e, legendItem, legend) => {
+          const idx = legendItem.datasetIndex;
+          const ci = legend.chart;
+          if (ci.isDatasetVisible(idx)) {
+            ci.hide(idx);
+            compareDatasets[idx].visible = false;
+          } else {
+            ci.show(idx);
+            compareDatasets[idx].visible = true;
+          }
+          renderCompareList();
+        }
+      },
       tooltip: {
         backgroundColor: isDark ? 'rgba(40,40,50,0.95)' : 'rgba(30,30,30,0.9)',
         titleColor: isDark ? '#e0e0e0' : '#fff',
@@ -1305,6 +1330,10 @@ function applyChartTheme() {
         sc.grid.color = gridColor;
       }
     });
+    // 同步更新图例颜色
+    if (ch.options.plugins.legend) {
+      ch.options.plugins.legend.labels.color = textColor;
+    }
   });
 }
 
