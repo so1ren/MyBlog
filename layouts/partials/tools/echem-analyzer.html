@@ -369,7 +369,7 @@
     position: relative;
   }
   .viz-chart-box canvas { max-height: 360px; }
-  .viz-chart-box.nyquist canvas { max-height: 420px; }
+  .viz-chart-box.nyquist canvas { max-height: 600px; }
 
   .dataset-bar {
     display: flex;
@@ -515,14 +515,7 @@
   }
   .viz-empty .icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
 
-  .viz-bode-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  @media (max-width: 700px) {
-    .viz-bode-row { grid-template-columns: 1fr; }
-  }
+
 </style>
 
 <div class="container">
@@ -622,16 +615,6 @@
             <h3>Nyquist 图 (-Z'' vs Z')</h3>
             <canvas id="nyquistChart"></canvas>
           </div>
-          <div class="viz-bode-row">
-            <div class="viz-chart-box">
-              <h3>Bode |Z| vs 频率</h3>
-              <canvas id="bodeZChart"></canvas>
-            </div>
-            <div class="viz-chart-box">
-              <h3>Bode 相位角 vs 频率</h3>
-              <canvas id="bodePhaseChart"></canvas>
-            </div>
-          </div>
         </div>
 
         <div class="viz-section">
@@ -680,7 +663,7 @@ const compareList = document.getElementById('compareList');
 
 // EIS visualization state
 let compareDatasets = [];
-let nyquistChart = null, bodeZChart = null, bodePhaseChart = null;
+let nyquistChart = null;
 const STORAGE_KEY = 'echem-eis-datasets';
 const VIZ_COLORS = ['#e15759','#4e79a7','#59a14f','#edc948','#b07aa1','#76b7b2','#ff9da7','#9c755f','#bab0ac','#f28e2c'];
 
@@ -1148,6 +1131,10 @@ document.addEventListener('keydown', (e) => {
 // ===================== EIS Visualization =====================
 
 function getNextColor() {
+  const usedColors = new Set(compareDatasets.map(ds => ds.color));
+  for (const color of VIZ_COLORS) {
+    if (!usedColors.has(color)) return color;
+  }
   return VIZ_COLORS[compareDatasets.length % VIZ_COLORS.length];
 }
 
@@ -1239,53 +1226,6 @@ function ensureCharts() {
     }
   });
 
-  bodeZChart = new Chart(document.getElementById('bodeZChart'), {
-    type: 'scatter',
-    data: { datasets: [] },
-    options: {
-      ...commonOptions,
-      scales: {
-        x: { type: 'logarithmic', title: { display: true, text: '频率 (Hz)', ...axisOpts.title }, grid: axisOpts.grid, ticks: axisOpts.ticks },
-        y: { type: 'logarithmic', title: { display: true, text: '|Z| (Ω)', ...axisOpts.title }, grid: axisOpts.grid, ticks: axisOpts.ticks }
-      },
-      plugins: {
-        ...commonOptions.plugins,
-        tooltip: {
-          ...commonOptions.plugins.tooltip,
-          callbacks: {
-            label: (ctx) => {
-              const pt = ctx.raw;
-              return `f=${pt.freq.toExponential(2)}Hz  |Z|=${pt.y.toPrecision(4)}Ω`;
-            }
-          }
-        }
-      }
-    }
-  });
-
-  bodePhaseChart = new Chart(document.getElementById('bodePhaseChart'), {
-    type: 'scatter',
-    data: { datasets: [] },
-    options: {
-      ...commonOptions,
-      scales: {
-        x: { type: 'logarithmic', title: { display: true, text: '频率 (Hz)', ...axisOpts.title }, grid: axisOpts.grid, ticks: axisOpts.ticks },
-        y: { type: 'linear', title: { display: true, text: '相位角 (°)', ...axisOpts.title }, grid: axisOpts.grid, ticks: axisOpts.ticks }
-      },
-      plugins: {
-        ...commonOptions.plugins,
-        tooltip: {
-          ...commonOptions.plugins.tooltip,
-          callbacks: {
-            label: (ctx) => {
-              const pt = ctx.raw;
-              return `f=${pt.freq.toExponential(2)}Hz  φ=${pt.y.toFixed(2)}°`;
-            }
-          }
-        }
-      }
-    }
-  });
 }
 
 function buildChartData(ds) {
@@ -1321,7 +1261,7 @@ function applyChartTheme() {
   const isDark = document.documentElement.classList.contains('dark');
   const textColor = isDark ? '#c0c0c0' : '#555555';
   const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
-  [nyquistChart, bodeZChart, bodePhaseChart].forEach(ch => {
+  [nyquistChart].forEach(ch => {
     ['x', 'y'].forEach(axis => {
       const sc = ch.options.scales[axis];
       if (sc) {
@@ -1342,28 +1282,8 @@ function updateCharts() {
   applyChartTheme();
 
   const nyqDatasets = compareDatasets.map(ds => buildChartData(ds));
-  const bodeZDatasets = compareDatasets.map(ds => {
-    const base = buildChartData(ds);
-    return {
-      ...base,
-      data: base.data.map(p => ({ x: p.freq, y: p.zAbs, freq: p.freq })),
-      showLine: true,
-      pointRadius: 2
-    };
-  });
-  const bodePhaseDatasets = compareDatasets.map(ds => {
-    const base = buildChartData(ds);
-    return {
-      ...base,
-      data: base.data.map(p => ({ x: p.freq, y: p.phase, freq: p.freq })),
-      showLine: true,
-      pointRadius: 2
-    };
-  });
 
   nyquistChart.data.datasets = nyqDatasets;
-  bodeZChart.data.datasets = bodeZDatasets;
-  bodePhaseChart.data.datasets = bodePhaseDatasets;
 
   // Nyquist axis: both start from zero, equal aspect via same max
   if (nyqDatasets.length && nyqDatasets.some(d => !d.hidden)) {
@@ -1382,31 +1302,7 @@ function updateCharts() {
     delete nyquistChart.options.scales.y.max;
   }
 
-  // Bode |Z| y-axis: start from data min (logarithmic)
-  if (bodeZDatasets.length && bodeZDatasets.some(d => !d.hidden)) {
-    const allZ = bodeZDatasets.filter(d => !d.hidden).flatMap(d => d.data).map(p => p.y);
-    const minZ = Math.min(...allZ);
-    bodeZChart.options.scales.y.min = minZ > 0 ? minZ * 0.9 : minZ;
-  } else {
-    delete bodeZChart.options.scales.y.min;
-  }
-
-  // Bode Phase y-axis: start from data min (linear)
-  if (bodePhaseDatasets.length && bodePhaseDatasets.some(d => !d.hidden)) {
-    const allPh = bodePhaseDatasets.filter(d => !d.hidden).flatMap(d => d.data).map(p => p.y);
-    const minPh = Math.min(...allPh);
-    const maxPh = Math.max(...allPh);
-    const phPad = (maxPh - minPh) * 0.05 || 1;
-    bodePhaseChart.options.scales.y.min = minPh - phPad;
-    bodePhaseChart.options.scales.y.max = maxPh + phPad;
-  } else {
-    delete bodePhaseChart.options.scales.y.min;
-    delete bodePhaseChart.options.scales.y.max;
-  }
-
   nyquistChart.update('none');
-  bodeZChart.update('none');
-  bodePhaseChart.update('none');
 }
 
 function renderCompareList() {
@@ -1614,7 +1510,7 @@ if (compareDatasets.length) {
 // Watch for theme changes
 new MutationObserver(() => {
   applyChartTheme();
-  if (nyquistChart) { nyquistChart.update('none'); bodeZChart.update('none'); bodePhaseChart.update('none'); }
+  if (nyquistChart) { nyquistChart.update('none'); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 </script>
 
