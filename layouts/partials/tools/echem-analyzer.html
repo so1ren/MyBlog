@@ -1179,9 +1179,20 @@ processBtn.addEventListener('click', () => {
     renderOutputSettings();
     outputArea.value = generateOutput();
 
-    // Auto-add to visualization
-    const autoName = fileName.replace(/\.[^.]+$/, '') + (compareDatasets.length ? ' (' + (compareDatasets.length + 1) + ')' : '');
-    addToCompare(data, autoName);
+    // Auto-add to visualization (mass-normalized if applicable)
+    const massInMg = parseFloat(sampleMass.value);
+    let vizData = data;
+    let vizName = fileName.replace(/\.[^.]+$/, '');
+    if (massNorm && !isNaN(massInMg) && massInMg > 0) {
+      vizData = data.map(pt => ({
+        freq: pt.freq,
+        zRe: pt.zRe / massInMg,
+        zIm: pt.zIm / massInMg
+      }));
+      vizName += ' (' + sampleMass.value + 'mg)';
+    }
+    vizName += (compareDatasets.length ? ' (' + (compareDatasets.length + 1) + ')' : '');
+    addToCompare(vizData, vizName, massNorm, massInMg);
 
     showMsg('EIS 处理完成 — ' + data.length + ' 个频率点', 'success');
   }
@@ -1466,7 +1477,9 @@ function ensureCharts() {
           callbacks: {
             label: (ctx) => {
               const pt = ctx.raw;
-              return `f=${pt.freq.toExponential(2)}Hz  Z'=${pt.x.toPrecision(4)}  -Z''=${pt.y.toPrecision(4)}`;
+              const ds = compareDatasets[ctx.datasetIndex];
+              const unit = (ds && ds.massNormalized) ? 'Ω/mg' : 'Ω';
+              return `f=${pt.freq.toExponential(2)}Hz  Z'=${pt.x.toPrecision(4)} ${unit}  -Z''=${pt.y.toPrecision(4)} ${unit}`;
             }
           }
         }
@@ -1660,7 +1673,9 @@ function togglePin(idx) {
       name: ds.name,
       data: ds.data.map(pt => ({ freq: pt.freq, zRe: pt.zRe, zIm: pt.zIm })),
       negate: ds.negate,
-      savedAt: Date.now()
+      savedAt: Date.now(),
+      massNormalized: ds.massNormalized,
+      massInMg: ds.massInMg
     });
     setSavedDatasets(list);
     showMsg('已固定: ' + ds.name, 'success');
@@ -1707,7 +1722,7 @@ function showColorPicker(idx, anchorEl) {
   setTimeout(() => document.addEventListener('click', close), 10);
 }
 
-function addToCompare(data, name) {
+function addToCompare(data, name, massNormalized, massInMg) {
   const negate = document.getElementById('imagOption').value === 'negate';
   compareDatasets.push({
     id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
@@ -1716,7 +1731,9 @@ function addToCompare(data, name) {
     color: getNextColor(),
     visible: true,
     negate: negate,
-    pinned: false
+    pinned: false,
+    massNormalized: massNormalized || false,
+    massInMg: massInMg || null
   });
   renderCompareList();
   updateCharts();
@@ -1747,7 +1764,9 @@ getSavedDatasets().forEach(item => {
     color: getNextColor(),
     visible: true,
     negate: item.negate !== false,
-    pinned: true
+    pinned: true,
+    massNormalized: item.massNormalized || false,
+    massInMg: item.massInMg || null
   });
 });
 if (compareDatasets.length) {
