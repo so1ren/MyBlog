@@ -663,7 +663,7 @@
         <div class="param-group">
           <label>样品质量 (mg)</label>
           <input type="number" id="sampleMass" placeholder="留空则不进行质量归一化" step="0.1">
-          <div class="hint">用于电流 / 阻抗的质量归一化 (A·g⁻¹ 或 Ω·g)</div>
+          <div class="hint">用于电流 / 阻抗的质量归一化 (A·mg⁻¹ 或 Ω·mg)</div>
         </div>
 
         <div id="cvOptions" class="hidden">
@@ -1149,8 +1149,8 @@ function extractEIS() {
 // ===================== Processing =====================
 processBtn.addEventListener('click', () => {
   const type = dataType.value === 'auto' ? detectedType : dataType.value;
-  const mass = parseFloat(sampleMass.value) / 1000;
-  const massNorm = !isNaN(mass) && mass > 0;
+  const massInMg = parseFloat(sampleMass.value);
+  const massNorm = !isNaN(massInMg) && massInMg > 0;
 
   if (type === 'cv') {
     const allData = extractCV();
@@ -1232,7 +1232,7 @@ function renderOutputSettings() {
       { key: 'i', label: 'I(A/cm²)', default: true },
     ];
     if (massNorm) {
-      availableColumns.push({ key: 'i_g', label: 'I/g(A·g⁻¹)', default: true });
+      availableColumns.push({ key: 'i_mg', label: 'I/mg(A·mg⁻¹)', default: true });
     }
   } else if (type === 'eis') {
     const negate = document.getElementById('imagOption').value === 'negate';
@@ -1243,8 +1243,8 @@ function renderOutputSettings() {
     ];
     if (massNorm) {
       availableColumns.push(
-        { key: 'zRe_g', label: "Z'/g", default: true },
-        { key: 'zIm_g', label: negate ? "-Z''/g" : "Z''/g", default: true }
+        { key: 'zRe_mg', label: "Z'/mg", default: true },
+        { key: 'zIm_mg', label: negate ? "-Z''/mg" : "Z''/mg", default: true }
       );
     }
   }
@@ -1274,7 +1274,7 @@ function generateOutput() {
 
   const type = lastProcessedType;
   const massNorm = lastMassNorm;
-  const mass = parseFloat(sampleMass.value) / 1000;
+  const massInMg = parseFloat(sampleMass.value);
   const negate = document.getElementById('imagOption').value === 'negate';
 
   // Get selected columns
@@ -1307,8 +1307,8 @@ function generateOutput() {
         case 'i':
           v = pt.i.toExponential(6);
           break;
-        case 'i_g':
-          v = (pt.i / mass).toExponential(6);
+        case 'i_mg':
+          v = (pt.i / massInMg).toExponential(6);
           break;
         case 'freq':
           v = pt.freq.toExponential(4);
@@ -1319,11 +1319,11 @@ function generateOutput() {
         case 'zIm':
           v = (negate ? -pt.zIm : pt.zIm).toExponential(6);
           break;
-        case 'zRe_g':
-          v = (pt.zRe / mass).toExponential(6);
+        case 'zRe_mg':
+          v = (pt.zRe / massInMg).toExponential(6);
           break;
-        case 'zIm_g':
-          v = ((negate ? -pt.zIm : pt.zIm) / mass).toExponential(6);
+        case 'zIm_mg':
+          v = ((negate ? -pt.zIm : pt.zIm) / massInMg).toExponential(6);
           break;
       }
       vals.push(v);

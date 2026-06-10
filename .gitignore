@@ -50,3 +50,11 @@ Thumbs.db
 .omc/
 .playwright-mcp/
 /*.png
+
+# Backup / archive directories (local only, not for git)
+archive/
+kant-offline-backline/
+kant-offline-backup/
+
+# RedSkill external skills (installed via redskill CLI, not project code)
+skills/
