@@ -51,7 +51,7 @@ MyBlog/
 
 ### 工具页
 - **TXT 数据可视化** (`/tools/txt-chart/`) — 拖拽上传 TXT 文件，自动生成折线图。支持批量上传、多文件叠加对比、**X 轴范围裁剪**（单文件+叠加图均支持）、**交互式缩放**（Shift+拖动/滚轮）、底部数轴实时预览。叠加图 minimap 显示所有文件轮廓，选中范围以各自颜色高亮
-- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：CV / EIS 数据提取与 Origin 格式输出；EIS 自动绘制 Nyquist 图，**内置图例**，多组叠加对比，浏览器本地保存复用；样品质量单位 mg
+- **EChem Analyzer** (`/tools/echem-analyzer/`) — 电化学数据自动化处理：CV / EIS 数据提取与 Origin 格式输出；EIS 自动绘制 Nyquist 图，**内置图例**，多组叠加对比，浏览器本地保存复用；样品质量单位 mg；**输出设置面板支持自由选择数据列和表头开关**
 - **GITT Overpotential** (`/tools/gitt-overpotential/`) — GITT 过电位计算
 
 工具页通过 Hugo 模板体系管理（`content/tools/` + `layouts/tools/`），自动继承网站导航栏和暗色切换。
