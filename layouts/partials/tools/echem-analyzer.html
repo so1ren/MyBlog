@@ -515,6 +515,115 @@
   }
   .viz-empty .icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
 
+  /* ========== Output Settings ========== */
+  .output-settings {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .output-settings h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .col-select-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .col-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .col-checkbox:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .col-checkbox input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+  }
+  .col-checkbox.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .col-checkbox.disabled input {
+    cursor: not-allowed;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .toggle-switch .ts-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--border);
+    border-radius: 22px;
+    transition: background 0.2s ease;
+  }
+  .toggle-switch .ts-slider::before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: var(--surface);
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  .toggle-switch input:checked + .ts-slider {
+    background: var(--accent);
+  }
+  .toggle-switch input:checked + .ts-slider::before {
+    transform: translateX(18px);
+  }
+
+  .output-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .output-toolbar .btn { flex: 1; min-width: 140px; }
 
 </style>
 
@@ -595,14 +704,29 @@
 
       <div class="panel" style="margin-top: 2.5rem;">
         <h2>📤 输出结果 (Origin 格式)</h2>
+
+        <div class="output-settings" id="outputSettings">
+          <h3>⚙️ 输出设置</h3>
+          <div class="col-select-group" id="colSelectGroup">
+            <span style="color:var(--text2);font-size:0.85rem;width:100%;">请先处理数据</span>
+          </div>
+          <div class="toggle-row">
+            <label class="toggle-switch" for="includeHeader">
+              <input type="checkbox" id="includeHeader" checked>
+              <span class="ts-slider"></span>
+            </label>
+            <span>包含表头</span>
+          </div>
+        </div>
+
         <div class="output-area">
           <textarea id="outputArea" placeholder="处理后的数据将显示在这里...
 可直接复制粘贴到 Origin
 格式：制表符分隔，第一行为列标题"></textarea>
         </div>
-        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
-          <button class="btn btn-secondary" id="copyBtn" style="flex:1;">📋 复制到剪贴板</button>
-          <button class="btn btn-secondary" id="downloadBtn" style="flex:1;">💾 下载 .txt</button>
+        <div class="output-toolbar">
+          <button class="btn btn-secondary" id="copyBtn">📋 复制到剪贴板</button>
+          <button class="btn btn-secondary" id="downloadBtn">💾 下载 .txt</button>
         </div>
       </div>
 
@@ -642,6 +766,9 @@ let fileName = '';
 let detectedType = '';
 let processedData = [];
 let cycles = [];
+let availableColumns = [];
+let lastProcessedType = '';
+let lastMassNorm = false;
 
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('fileInput');
@@ -660,6 +787,9 @@ const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const messageArea = document.getElementById('message-area');
 const compareList = document.getElementById('compareList');
+const outputSettings = document.getElementById('outputSettings');
+const colSelectGroup = document.getElementById('colSelectGroup');
+const includeHeader = document.getElementById('includeHeader');
 
 // EIS visualization state
 let compareDatasets = [];
@@ -1032,35 +1162,22 @@ processBtn.addEventListener('click', () => {
     const c = cycles[cycleIdx];
     const cycleData = allData.slice(c.start, c.end + 1);
 
-    // Build output
-    const lines = ['E(V)\tI(A/cm²)' + (massNorm ? '\tI/g(A·g⁻¹)' : '')];
-    for (const pt of cycleData) {
-      let line = pt.e.toExponential(6) + '\t' + pt.i.toExponential(6);
-      if (massNorm) line += '\t' + (pt.i / mass).toExponential(6);
-      lines.push(line);
-    }
-
     processedData = cycleData;
-    outputArea.value = lines.join('\n');
+    lastProcessedType = 'cv';
+    lastMassNorm = massNorm;
+    renderOutputSettings();
+    outputArea.value = generateOutput();
     showMsg('CV 处理完成 — 已提取 ' + cycleData.length + ' 点 (' + c.label + ')', 'success');
 
   } else if (type === 'eis') {
     const data = extractEIS();
     if (!data.length) { showMsg('未提取到 EIS 数据', 'error'); return; }
 
-    const negate = document.getElementById('imagOption').value === 'negate';
-    const lines = ['Freq(Hz)\tZ\'(Ω)\t-Z\'\'(Ω)' + (massNorm ? '\tZ\'/g\t-Z\'\'/g' : '')];
-    for (const pt of data) {
-      const zImOut = negate ? -pt.zIm : pt.zIm;
-      let line = pt.freq.toExponential(4) + '\t' + pt.zRe.toExponential(6) + '\t' + zImOut.toExponential(6);
-      if (massNorm) {
-        line += '\t' + (pt.zRe / mass).toExponential(6) + '\t' + (zImOut / mass).toExponential(6);
-      }
-      lines.push(line);
-    }
-
     processedData = data;
-    outputArea.value = lines.join('\n');
+    lastProcessedType = 'eis';
+    lastMassNorm = massNorm;
+    renderOutputSettings();
+    outputArea.value = generateOutput();
 
     // Auto-add to visualization
     const autoName = fileName.replace(/\.[^.]+$/, '') + (compareDatasets.length ? ' (' + (compareDatasets.length + 1) + ')' : '');
@@ -1072,8 +1189,9 @@ processBtn.addEventListener('click', () => {
 
 // ===================== Output actions =====================
 copyBtn.addEventListener('click', () => {
-  if (!outputArea.value) { showMsg('没有可复制的内容', 'warn'); return; }
-  navigator.clipboard.writeText(outputArea.value).then(() => {
+  const text = generateOutput();
+  if (!text) { showMsg('没有可复制的内容', 'warn'); return; }
+  navigator.clipboard.writeText(text).then(() => {
     showMsg('已复制到剪贴板', 'success');
   }).catch(() => {
     showMsg('复制失败，请手动复制', 'error');
@@ -1081,8 +1199,9 @@ copyBtn.addEventListener('click', () => {
 });
 
 downloadBtn.addEventListener('click', () => {
-  if (!outputArea.value) { showMsg('没有可下载的内容', 'warn'); return; }
-  const blob = new Blob([outputArea.value], { type: 'text/plain;charset=utf-8' });
+  const text = generateOutput();
+  if (!text) { showMsg('没有可下载的内容', 'warn'); return; }
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -1096,6 +1215,131 @@ downloadBtn.addEventListener('click', () => {
   showMsg('文件已下载', 'success');
 });
 
+// ===================== Output Settings =====================
+function renderOutputSettings() {
+  const type = lastProcessedType;
+  const massNorm = lastMassNorm;
+
+  if (!type || !processedData.length) {
+    colSelectGroup.innerHTML = '<span style="color:var(--text2);font-size:0.85rem;width:100%;">请先处理数据</span>';
+    return;
+  }
+
+  // Define available columns based on type and mass normalization
+  if (type === 'cv') {
+    availableColumns = [
+      { key: 'e', label: 'E(V)', default: true },
+      { key: 'i', label: 'I(A/cm²)', default: true },
+    ];
+    if (massNorm) {
+      availableColumns.push({ key: 'i_g', label: 'I/g(A·g⁻¹)', default: true });
+    }
+  } else if (type === 'eis') {
+    const negate = document.getElementById('imagOption').value === 'negate';
+    availableColumns = [
+      { key: 'freq', label: 'Freq(Hz)', default: true },
+      { key: 'zRe', label: "Z'(Ω)", default: true },
+      { key: 'zIm', label: negate ? "-Z''(Ω)" : "Z''(Ω)", default: true },
+    ];
+    if (massNorm) {
+      availableColumns.push(
+        { key: 'zRe_g', label: "Z'/g", default: true },
+        { key: 'zIm_g', label: negate ? "-Z''/g" : "Z''/g", default: true }
+      );
+    }
+  }
+
+  // Render checkboxes
+  colSelectGroup.innerHTML = '';
+  availableColumns.forEach((col, idx) => {
+    const label = document.createElement('label');
+    label.className = 'col-checkbox';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = col.default;
+    cb.dataset.key = col.key;
+    cb.addEventListener('change', () => {
+      outputArea.value = generateOutput();
+    });
+    label.appendChild(cb);
+    const span = document.createElement('span');
+    span.textContent = col.label;
+    label.appendChild(span);
+    colSelectGroup.appendChild(label);
+  });
+}
+
+function generateOutput() {
+  if (!processedData.length || !availableColumns.length) return '';
+
+  const type = lastProcessedType;
+  const massNorm = lastMassNorm;
+  const mass = parseFloat(sampleMass.value) / 1000;
+  const negate = document.getElementById('imagOption').value === 'negate';
+
+  // Get selected columns
+  const selected = [];
+  colSelectGroup.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    if (cb.checked) {
+      const col = availableColumns.find(c => c.key === cb.dataset.key);
+      if (col) selected.push(col);
+    }
+  });
+
+  if (!selected.length) return '';
+
+  const lines = [];
+
+  // Header line
+  if (includeHeader.checked) {
+    lines.push(selected.map(c => c.label).join('\t'));
+  }
+
+  // Data lines
+  for (const pt of processedData) {
+    const vals = [];
+    for (const col of selected) {
+      let v = '';
+      switch (col.key) {
+        case 'e':
+          v = pt.e.toExponential(6);
+          break;
+        case 'i':
+          v = pt.i.toExponential(6);
+          break;
+        case 'i_g':
+          v = (pt.i / mass).toExponential(6);
+          break;
+        case 'freq':
+          v = pt.freq.toExponential(4);
+          break;
+        case 'zRe':
+          v = pt.zRe.toExponential(6);
+          break;
+        case 'zIm':
+          v = (negate ? -pt.zIm : pt.zIm).toExponential(6);
+          break;
+        case 'zRe_g':
+          v = (pt.zRe / mass).toExponential(6);
+          break;
+        case 'zIm_g':
+          v = ((negate ? -pt.zIm : pt.zIm) / mass).toExponential(6);
+          break;
+      }
+      vals.push(v);
+    }
+    lines.push(vals.join('\t'));
+  }
+
+  return lines.join('\n');
+}
+
+includeHeader.addEventListener('change', () => {
+  if (processedData.length) {
+    outputArea.value = generateOutput();
+  }
+});
+
 // ===================== Reset =====================
 resetBtn.addEventListener('click', () => {
   rawData = [];
@@ -1103,6 +1347,9 @@ resetBtn.addEventListener('click', () => {
   detectedType = '';
   processedData = [];
   cycles = [];
+  availableColumns = [];
+  lastProcessedType = '';
+  lastMassNorm = false;
   fileInput.value = '';
   fileInfo.classList.add('hidden');
   fileInfo.classList.remove('fade-in');
@@ -1112,6 +1359,7 @@ resetBtn.addEventListener('click', () => {
   statsArea.classList.remove('fade-in');
   statsArea.innerHTML = '';
   outputArea.value = '';
+  colSelectGroup.innerHTML = '<span style="color:var(--text2);font-size:0.85rem;width:100%;">请先处理数据</span>';
   cycleSelector.innerHTML = '';
   cvOptions.classList.add('hidden');
   eisOptions.classList.add('hidden');
