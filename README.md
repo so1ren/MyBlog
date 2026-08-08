@@ -1,6 +1,6 @@
 # MyBlog
 
-> 个人博客 · Hugo + PaperMod · caiyu.life
+> 个人博客 · Hugo + PaperMod · blog.abditory.top
 
 ---
 
@@ -12,7 +12,7 @@
 | **主题** | PaperMod（含自定义改动） |
 | **数学公式** | KaTeX + mhchem |
 | **部署** | Cloudflare Pages（GitHub 集成自动构建） |
-| **域名** | caiyu.life |
+| **域名** | blog.abditory.top |
 
 ---
 

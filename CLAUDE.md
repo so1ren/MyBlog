@@ -6,10 +6,10 @@
 
 ## 📌 项目概述
 
-- **网站地址**: https://caiyu.life
+- **网站地址**: https://blog.abditory.top
 - **GitHub 仓库**: https://github.com/so1ren/MyBlog
 - **构建部署**: Cloudflare Pages（GitHub 集成自动构建）
-- **域名**: caiyu.life
+- **域名**: blog.abditory.top
 - **作者**: So1ren
 - **邮箱**: caiyu2001@126.com
 
@@ -25,7 +25,7 @@
 | **评论系统** | Giscus（基于 GitHub Discussions） |
 | **搜索** | Fuse.js（客户端搜索） |
 | **部署** | Cloudflare Pages（GitHub 集成自动构建） |
-| **域名** | caiyu.life |
+| **域名** | blog.abditory.top |
 
 ---
 
@@ -155,7 +155,7 @@ def hello():
 
 | 参数 | 说明 |
 |------|------|
-| `baseURL` | 站点根 URL，必须为 `https://caiyu.life/` |
+| `baseURL` | 站点根 URL，必须为 `https://blog.abditory.top/` |
 | `defaultTheme` | `auto`（跟随系统暗色/亮色模式） |
 | `buildDrafts` | `false`（草稿不构建） |
 | `hasCJKLanguage` | `true`（中文内容优化） |
